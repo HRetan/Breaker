@@ -21,9 +21,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+        if (Input.GetAxisRaw("Horizontal") != 0)
         {
-            vector.Set(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), transform.position.z);
+            vector.Set(Input.GetAxisRaw("Horizontal"), 0, transform.position.z);
 
             if (vector.x != 0)
             {
@@ -47,9 +47,9 @@ public class PlayerController : MonoBehaviour
     {
         if(coll.gameObject.tag == "Wall")
         {
-            if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+            if (Input.GetAxisRaw("Horizontal") != 0)
             {
-                vector.Set(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), transform.position.z);
+                vector.Set(Input.GetAxisRaw("Horizontal"), 0, transform.position.z);
 
                 if (vector.x != 0)
                 {
