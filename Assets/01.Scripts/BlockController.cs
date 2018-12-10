@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockController : MonoBehaviour {
 
+
+public class BlockController : MonoBehaviour {
+  
     public float fSpeed = 100f;
 
     private SpriteRenderer sprite;

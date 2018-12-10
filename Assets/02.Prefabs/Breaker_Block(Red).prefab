@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212805737794040218}
   - component: {fileID: 61938547623756006}
   - component: {fileID: 114742612152920474}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Breaker_Block(Red)
   m_TagString: RedBlock
   m_Icon: {fileID: 0}
@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55fcdaefc7938dc43802f3102ed6f7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fSpeed: 100
 --- !u!212 &212805737794040218
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212568344336826478}
   - component: {fileID: 61896253420430178}
   - component: {fileID: 114673172488199198}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Breaker_Block(Orange)
   m_TagString: OrangeBlock
   m_Icon: {fileID: 0}
@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55fcdaefc7938dc43802f3102ed6f7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fSpeed: 100
 --- !u!212 &212568344336826478
 SpriteRenderer:
   m_ObjectHideFlags: 1
