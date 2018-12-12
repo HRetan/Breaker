@@ -15,20 +15,24 @@ public class BallController : MonoBehaviour
 {
 
     private float fSpeed = 60f;
-    private float fMoveSpeed = 0.1f;
+    public float fMoveSpeed = 3f;
     private Transform trans;
     private BALLSTATE state;
 
     private Rigidbody2D temp;
+    private CircleCollider2D collider;
 
     private GameObject BarObject;
     private GameObject ArrowObject;
     private Transform BarTrans;
-    private Vector3 vector;
-    private Vector3 dirVec;
 
-    private Vector3 angle;
-    private Vector3 rotVec = new Vector3(0f, 90f, 0f);
+    private Vector3 vector;
+    private Vector3 vecDir;
+    private Vector3 mousePt;
+
+    private Vector3 incidence;
+    private Vector3 normalVec;
+    private Vector3 startPosition;
 
     private float rotZ = 90f;
 
@@ -37,6 +41,7 @@ public class BallController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        collider = GetComponent<CircleCollider2D>();
         BarObject = GameObject.FindGameObjectWithTag("Player");
         BarTrans = BarObject.GetComponent<Transform>();
         trans = GetComponent<Transform>();
@@ -45,18 +50,22 @@ public class BallController : MonoBehaviour
         temp = GetComponent<Rigidbody2D>();
     }
 
+    void FixedUpdate()
+    {
+        //if(state == BALLSTATE.MOVE)
+            //temp.AddForce(trans.right * fMoveSpeed);
+
+    }
     // Update is called once per frame
     void Update()
     {
-        dirVec = -Vector3.up;
         switch (state)
         {
             case BALLSTATE.START:
                 StartBall();
                 break;
             case BALLSTATE.MOVE:
-                temp.AddForce(trans.right * fMoveSpeed);
-                //trans.Translate(trans.TransformDirection(dirVec) * fMoveSpeed * Time.deltaTime);
+                Move();
                 break;
             case BALLSTATE.TOUCH:
                 break;
@@ -82,58 +91,81 @@ public class BallController : MonoBehaviour
 
     void Move()
     {
-
+        temp.velocity = vecDir * fMoveSpeed;
     }
 
     void DirBall()
     {
-        if (Input.GetKey(KeyCode.UpArrow) && trans.rotation.eulerAngles.z <= 170f)
-        {
-            rotZ = Time.deltaTime * fSpeed;
-
-            trans.Rotate(0f, 0f, rotZ);
-        }
-        else if (Input.GetKey(KeyCode.DownArrow) && trans.rotation.eulerAngles.z >= 10f)
-        {
-            rotZ = -Time.deltaTime * fSpeed;
-            trans.Rotate(0f, 0f, rotZ);
-        }
-
-        //if (Input.GetKey(KeyCode.UpArrow) && rotVec.z <= 170f)
+        //키보드 조종
+        //if (Input.GetKey(KeyCode.UpArrow) && trans.rotation.eulerAngles.z <= 170f)
         //{
-        //    rotVec.z += Time.deltaTime * fSpeed;
-        //    //trans.Rotate(0f, 0f, rotZ);
-        //    angle = rotVec - dirVec;
-        //    angle.Normalize();
-        //    rotVec.Normalize();
-        //    ArrowObject.GetComponent<Transform>().Rotate(rotVec);
-        //    Debug.Log(rotVec.z);
+        //    rotZ = Time.deltaTime * fSpeed;
+
+        //    trans.Rotate(0f, 0f, rotZ);
         //}
-        //else if (Input.GetKey(KeyCode.DownArrow) && rotVec.z >= 10f)
+        //else if (Input.GetKey(KeyCode.DownArrow) && trans.rotation.eulerAngles.z >= 10f)
         //{
-        //    rotVec.z -= Time.deltaTime * fSpeed;
-        //    //trans.Rotate(0f, 0f, rotZ);
-        //    angle = rotVec - dirVec;
-        //    angle.Normalize();
-        //    rotVec.Normalize();
-        //    ArrowObject.GetComponent<Transform>().Rotate(rotVec);
-        //    Debug.Log(rotVec.z);
-
+        //    rotZ = -Time.deltaTime * fSpeed;
+        //    trans.Rotate(0f, 0f, rotZ);
         //}
 
-        if (Input.GetKey(KeyCode.Space))
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    //마우스 포인터 좌표를 받아와서 방향벡터를 뽑는다.
+        //    state = BALLSTATE.MOVE;
+        //    startPosition = trans.position;
+        //    temp.AddForce(trans.right * fMoveSpeed);
+        //    ArrowObject.SetActive(false);
+        //}
+
+
+        //마우스 조종
+        if(Input.GetMouseButton(0))
+        {
+            mousePt = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
+            vecDir = mousePt - trans.position;
+            vecDir = vecDir.normalized;
+            float angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
+
+            if (angle <= 170f && angle >= 10f)
+            {
+              
+                Vector3 angleVec = trans.rotation.eulerAngles;
+                trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
+            }
+        }
+        else if(Input.GetMouseButtonUp(0))
         {
             state = BALLSTATE.MOVE;
-            //ArrowObject.SetActive(false);
+            ArrowObject.SetActive(false);
+            startPosition = trans.position;
         }
     }
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        Debug.Log(trans.rotation.eulerAngles.z);
-
         Vector3 angleVec = trans.rotation.eulerAngles;
+        Vector2 point = coll.contacts[0].point;
+        temp.AddForce(Vector2.zero);
 
-        trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, 180f - angleVec.z);
+        incidence = (Vector3)point - startPosition;
+        normalVec = coll.contacts[0].normal;
+        vecDir = Vector3.Reflect(incidence, normalVec).normalized;
+        startPosition = point;
+
+        float angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
+        trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
+
+        //Debug.Log("충돌");
+    }
+
+    public void SetSpeed(float fSpeed)
+    {
+        if (fMoveSpeed >= 10f)
+            return;
+        if (fMoveSpeed <= 3f)
+            return;
+
+        fMoveSpeed += fSpeed;
     }
 }

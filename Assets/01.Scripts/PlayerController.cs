@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    public float fSpeed;
+    private float fSpeed = 0.05f;
 
     private Vector3 vector;
     private Transform trans;
@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         trans = gameObject.GetComponent<Transform>();
-        Debug.Log("호출");
     }
 
     void FixedUpdate()
@@ -66,5 +65,26 @@ public class PlayerController : MonoBehaviour
     void OnCollisionExit2D(Collision2D coll)
     {
 
+    }
+
+    public void SetSpeed(float Speed)
+    {
+        if (fSpeed >= 0.15f)
+            return;
+        if (fSpeed <= 0.025f)
+            return;
+
+        fSpeed += Speed;
+    }
+
+    public void SetSize(Vector3 vSize)
+    {
+        if (transform.localScale.x == 3f)
+            return;
+        if (transform.localScale.x == 0.5f)
+            return;
+
+        transform.localScale += vSize;
+        Debug.Log("사이즈 증가");
     }
 }
