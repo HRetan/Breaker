@@ -6,14 +6,11 @@ TagManager:
   tags:
   - Ball
   - Wall
-  - BlueBlock
-  - GrayBlock
-  - BrownBlock
-  - GreenBlock
-  - RedBlock
-  - PurpleBlock
-  - OrangeBlock
   - Arrow
+  - Tile
+  - Block
+  - ToolManager
+  - Manager
   layers:
   - Default
   - TransparentFX

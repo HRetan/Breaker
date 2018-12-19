@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private float fSpeed = 0.05f;
+    public float fSpeed = 0.05f;
 
     private Vector3 vector;
     private Transform trans;
