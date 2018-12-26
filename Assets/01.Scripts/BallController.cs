@@ -14,13 +14,11 @@ enum BALLSTATE
 public class BallController : MonoBehaviour
 {
 
-    private float fSpeed = 60f;
     public float fMoveSpeed = 3f;
     private Transform trans;
     private BALLSTATE state;
 
     private Rigidbody2D temp;
-    private CircleCollider2D collider;
 
     private GameObject BarObject;
     private GameObject ArrowObject;
@@ -34,14 +32,11 @@ public class BallController : MonoBehaviour
     private Vector3 normalVec;
     private Vector3 startPosition;
 
-    private float rotZ = 90f;
-
     private bool isFire = false;
 
     // Use this for initialization
     void Start()
     {
-        collider = GetComponent<CircleCollider2D>();
         BarObject = GameObject.FindGameObjectWithTag("Player");
         BarTrans = BarObject.GetComponent<Transform>();
         trans = GetComponent<Transform>();

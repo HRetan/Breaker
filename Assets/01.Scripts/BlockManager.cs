@@ -30,7 +30,7 @@ public class BlockManager : MonoBehaviour
         return m_listBlock;
     }
 
-    public void CreateBlock(Vector3 position, int blockID)
+    public void CreateBlock(GameObject parentObject, Vector3 position, int blockID)
     {
         GameObject goBlock = null;
 
@@ -70,6 +70,7 @@ public class BlockManager : MonoBehaviour
         {
             goBlock.GetComponent<Transform>().position = position;
             goBlock.GetComponent<BlockController>().SetBlockID(blockID);
+            goBlock.transform.parent = parentObject.transform;
         }
     }
 }

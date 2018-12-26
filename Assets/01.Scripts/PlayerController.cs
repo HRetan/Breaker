@@ -8,14 +8,11 @@ public class PlayerController : MonoBehaviour
     public float fSpeed = 0.05f;
 
     private Vector3 vector;
-    private Transform trans;
 
-    bool isRight = false;
 
     // Use this for initialization
     void Start()
     {
-        trans = gameObject.GetComponent<Transform>();
     }
 
     void FixedUpdate()
