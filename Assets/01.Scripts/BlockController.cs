@@ -16,17 +16,16 @@ public class BlockController : MonoBehaviour {
 
     [SerializeField]
     private int m_iBlockID = 0;
+    [SerializeField]
+    private int m_iIndex = 0;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         sprite = GetComponent<SpriteRenderer>();
         boxColl = GetComponent<BoxCollider2D>();
         trans = GetComponent<Transform>();
         color = new Color();
         color = sprite.color;
-
-   
-       
 	}
 	
 	// Update is called once per frame
@@ -120,5 +119,15 @@ public class BlockController : MonoBehaviour {
     public void SetBlockID(int iBlockID)
     {
         m_iBlockID = iBlockID;  
+    }
+
+    public int GetIndex()
+    {
+        return m_iIndex;
+    }
+
+    public void SetIndex(int iIndex)
+    {
+        m_iIndex = iIndex;
     }
 }

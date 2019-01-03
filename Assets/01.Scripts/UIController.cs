@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,21 +7,26 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
 
-    [SerializeField]
-    private List<GameObject> m_listButton;
-    private string m_strButton;
+    private static UIController Instance = null;
 
-	// Use this for initialization
-	void Start () {
-        m_strButton = "Stage";
-        for(int i = 1; i < 36; ++i)
-        m_listButton.Add(GameObject.Find(m_strButton + i));
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public static UIController GetInstance
+    {
+        get
+        {
+            if (Instance == null)
+            {
+                Instance = FindObjectOfType(typeof(UIController)) as UIController;
+
+                if (Instance == null)
+                {
+                    Debug.LogError("싱글톤 인스턴스 생성 실패");
+                }
+            }
+            return Instance;
+        }
+    }
+
+    private bool m_bUI = false;
 
     public void SceneChangeStart()
     {
@@ -42,5 +48,64 @@ public class UIController : MonoBehaviour {
     public void SceneChangeSelectStage()
     {
        
+    }
+
+    public void SaveUI()
+    {
+        GameObject goUI;
+        goUI = MonoBehaviour.Instantiate(Resources.Load("UI/SaveUI")) as GameObject;
+        goUI.name = "dynamicUI";
+
+        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => SaveApply());
+
+        m_bUI = true;
+    }
+
+    public void LoadUI()
+    {
+        GameObject goUI;
+        goUI = MonoBehaviour.Instantiate(Resources.Load("UI/LoadUI")) as GameObject;
+        goUI.name = "dynamicUI";
+
+        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => LoadApply());
+
+        m_bUI = true;
+    }
+
+    private void LoadApply()
+    {
+        Text ttName = GameObject.Find("LoadName").GetComponent<Text>();
+        Debug.Log(ttName.text);
+
+        SaveNLoad.GetInstance.LoadToolMap(ttName.text);
+        Destroy(GameObject.Find("dynamicUI"));
+        m_bUI = false;
+    }
+
+    public void DestroyUI()
+    {
+        Destroy(GameObject.Find("dynamicUI"));
+        m_bUI = false;
+    }
+
+    public void SaveApply()
+    {
+        Text ttName = GameObject.Find("SaveName").GetComponent<Text>();
+
+        SaveNLoad.GetInstance.SaveMap(ttName.text);
+        Destroy(GameObject.Find("dynamicUI"));
+        m_bUI = false;
+    }
+
+    public void SetUI(bool bUI)
+    {
+        m_bUI = bUI;
+    }
+
+    public bool GetUI()
+    {
+        return m_bUI;
     }
 }

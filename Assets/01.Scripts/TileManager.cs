@@ -6,7 +6,8 @@ public class TileManager : MonoBehaviour {
 
     private GameObject m_goTool;
     private GameObject m_goBlock = null;
-    private int iBlockNum = 0;
+    private int m_iBlockNum = 0;
+    private int m_iIndex = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -20,12 +21,12 @@ public class TileManager : MonoBehaviour {
 
     public GameObject CreateBlock(int BlockNum)
     {
-        iBlockNum = BlockNum;
+        m_iBlockNum = BlockNum;
 
         if (m_goBlock == null)
-            CreateObjectBlock(iBlockNum);
+            CreateObjectBlock(m_iBlockNum);
         else
-            ChangeObjectBlock(iBlockNum);
+            ChangeObjectBlock(m_iBlockNum);
 
         return m_goBlock;
     }
@@ -35,7 +36,7 @@ public class TileManager : MonoBehaviour {
         if (m_goBlock != null)
             return;
         
-        switch (iBlockNum)
+        switch (m_iBlockNum)
         {
             case 0:
                 m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Gray)")) as GameObject;
@@ -72,7 +73,8 @@ public class TileManager : MonoBehaviour {
         if (m_goBlock != null)
         {
             m_goBlock.transform.position = transform.position;
-            m_goBlock.GetComponent<BlockController>().SetBlockID(iBlockNum);
+            m_goBlock.GetComponent<BlockController>().SetBlockID(m_iBlockNum);
+            m_goBlock.GetComponent<BlockController>().SetIndex(m_iIndex);
             m_goBlock.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
@@ -81,7 +83,7 @@ public class TileManager : MonoBehaviour {
     {
         Destroy(m_goBlock);
         m_goTool.GetComponent<ToolManager>().RemoveList(m_goBlock);
-        switch (iBlockNum)
+        switch (m_iBlockNum)
         {
             case 0:
                 m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Gray)")) as GameObject;
@@ -119,8 +121,14 @@ public class TileManager : MonoBehaviour {
         if (m_goBlock != null)
         {
             m_goBlock.transform.position = transform.position;
-            m_goBlock.GetComponent<BlockController>().SetBlockID(iBlockNum);
+            m_goBlock.GetComponent<BlockController>().SetBlockID(m_iBlockNum);
+            m_goBlock.GetComponent<BlockController>().SetIndex(m_iIndex);
             m_goBlock.GetComponent<BoxCollider2D>().enabled = false;
         }
+    }
+
+    public void SetIndex(int iIndex)
+    {
+        m_iIndex = iIndex;
     }
 }

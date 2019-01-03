@@ -5,24 +5,21 @@ using UnityEngine;
 public class BlockManager : MonoBehaviour
 {
 
-    private SaveNLoad m_SaveNLoad;
-
     [SerializeField]
     private List<GameObject> m_listBlock;
 
     // Use this for initialization
     void Start()
     {
-        m_SaveNLoad = GetComponent<SaveNLoad>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            m_SaveNLoad.LoadMap();
-        }
+        //if (Input.GetKeyDown(KeyCode.F5))
+        //{
+        //    m_SaveNLoad.LoadMap();
+        //}
     }
 
     public List<GameObject> GetListBlock()

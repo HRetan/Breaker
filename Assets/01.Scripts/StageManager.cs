@@ -16,17 +16,17 @@ public class StageManager : MonoBehaviour {
 
     [SerializeField]
     private List<Stage> m_listStage = new List<Stage>();
-    private SaveNLoad m_saveNLoad;
 
     public static int staticInt = 0;
 
 	// Use this for initialization
 	void Start () {
-        m_saveNLoad = GetComponent<SaveNLoad>();
-        m_saveNLoad.LoadStage();
+
+        SaveNLoad.GetInstance.LoadStage();
         for (int i = 0; i < 35; ++i)
         {
             int iIndex = i + 1;
+
             m_listStage[i].goStage = GameObject.Find("Stage" + (i + 1));
             m_listStage[i].goStage.GetComponent<Button>().onClick.AddListener(() => PlayGameScene(iIndex));
         }
@@ -36,6 +36,12 @@ public class StageManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        //스테이지 초기화 저장시
+        //if(Input.GetKeyDown(KeyCode.F5))
+        //{
+        //    m_listStage[0].IsOpen = true;
+        //    m_jsonSaveNLoad.SaveStage();
+        //}
     }
 
     public void SceneChangeTitle()
@@ -64,7 +70,7 @@ public class StageManager : MonoBehaviour {
             return;
 
         Debug.Log("스테이지" + iIndex);
-        m_saveNLoad.SetStaticStageNum(iIndex);
+        SaveNLoad.GetInstance.SetStaticStageNum(iIndex);
         SceneManager.LoadScene(2);
     }
 }

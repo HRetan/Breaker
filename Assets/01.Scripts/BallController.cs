@@ -151,7 +151,14 @@ public class BallController : MonoBehaviour
         float angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
         trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
 
-        //Debug.Log("충돌");
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "DeadZone")
+        {
+            
+        }
     }
 
     public void SetSpeed(float fSpeed)

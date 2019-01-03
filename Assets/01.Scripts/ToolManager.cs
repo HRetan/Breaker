@@ -10,7 +10,6 @@ public class ToolManager : MonoBehaviour {
     private int m_iBlockNum = 0;
 
     private GameObject goTileManager;
-    private SaveNLoad m_SaveNLoad;
 
     [SerializeField]
     private List<GameObject> m_listBlock;
@@ -19,7 +18,7 @@ public class ToolManager : MonoBehaviour {
     void Start()
     {
         goTileManager = new GameObject("TileManager");
-        m_SaveNLoad = GetComponent<SaveNLoad>();
+
         for (int i = 0; i < 29; ++i)
         {
             for (int j = 0; j < 11; ++j)
@@ -31,6 +30,7 @@ public class ToolManager : MonoBehaviour {
                 tile.name = "MapTile(White)" + (i * 11 +j);
                 tile.transform.parent = goTileManager.transform;
                 tile.transform.position = new Vector2(fX - 2.67f, fY - 2.5f);
+                tile.GetComponent<TileManager>().SetIndex(i * 11 + j);
             }
         }
   
@@ -39,64 +39,43 @@ public class ToolManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //임시 ui만들기전 Test
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            m_iBlockNum = 0;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            m_iBlockNum = 1;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            m_iBlockNum = 2;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            m_iBlockNum = 3;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            m_iBlockNum = 4;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            m_iBlockNum = 5;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            m_iBlockNum = 6;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha7))
-            m_iBlockNum = 99;
-
         //클릭 시 타일 위치에 raycast를 통해 오브젝트 생성
-        if(Input.GetMouseButtonDown(0))
+        if (!UIController.GetInstance.GetUI())
         {
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mousePos = new Vector2(worldPos.x, worldPos.y);
-            Collider2D mouseCol = Physics2D.OverlapPoint(mousePos);
-            Debug.Log(mouseCol.gameObject);
-            if(mouseCol.gameObject.tag == "Tile")
+            if (Input.GetMouseButtonDown(0))
             {
-                GameObject goBlock = mouseCol.gameObject.GetComponent<TileManager>().CreateBlock(m_iBlockNum);
-                if (goBlock != null)
-                    m_listBlock.Add(goBlock);
-                else
-                    m_listBlock.Remove(goBlock);
+                Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 mousePos = new Vector2(worldPos.x, worldPos.y);
+                Collider2D mouseCol = Physics2D.OverlapPoint(mousePos);
+
+                if (mouseCol == null)
+                    return;
+
+                if (mouseCol.gameObject.tag == "Tile")
+                {
+                    GameObject goBlock = mouseCol.gameObject.GetComponent<TileManager>().CreateBlock(m_iBlockNum);
+                    if (goBlock != null)
+                        m_listBlock.Add(goBlock);
+                    else
+                        m_listBlock.Remove(goBlock);
+                }
             }
         }
-
+        //세이브 파일 생성
         if (Input.GetKeyDown(KeyCode.F6))
         {
-            m_SaveNLoad.SaveMap();
+            SaveNLoad.GetInstance.SaveMap("Stage" + SaveNLoad.GetInstance.GetStaticStageNum().ToString());
         }
     }
 
     public int GetBlockNum()
     {
         return m_iBlockNum;
+    }
+
+    public void SetBlockNum(int iBlockNum)
+    {
+        m_iBlockNum = iBlockNum;
     }
 
     public void RemoveList(GameObject goBlock)

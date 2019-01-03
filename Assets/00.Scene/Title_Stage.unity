@@ -3897,14 +3897,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de65a683f6f4294aa732969b8e03b27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_save:
-    clearCheck: 
-    stageIndex: 
-  m_data:
-    positionX: []
-    positionY: []
-    positionZ: []
-    blockID: 
 --- !u!114 &1101060732
 MonoBehaviour:
   m_ObjectHideFlags: 0
