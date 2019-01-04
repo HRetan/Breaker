@@ -50,25 +50,33 @@ public class SaveNLoad : MonoBehaviour
     [System.Serializable]
     public class Stage
     {
-        public List<bool> clearCheck;
-        public List<int> stageIndex;
+        public List<bool> clearCheck = new List<bool>();
+        public List<int> stageIndex = new List<int>();
     }
 
+    //현재 클리어한 Stage를 저장하기 위한 Func
+    //플랫폼 별 저장 경로를 다르게 지정해준다.
     public void SaveStage()
     {
-        StageManager m_stageManager;
 
         Stage m_save = new Stage();
-        m_stageManager = GameObject.Find("Main Camera").GetComponent<StageManager>();
-        Debug.Log(m_stageManager);
-        for (int i = 0; i < m_stageManager.GetStageList().Count; ++i)
+
+        for (int i = 0; i < StageManager.GetInstance.GetStageList().Count; ++i)
         {
-            m_save.clearCheck.Add(m_stageManager.GetStageList()[i].IsOpen);
-            m_save.stageIndex.Add(m_stageManager.GetStageList()[i].iStageIndex);
+            Debug.Log(i);
+            Debug.Log(StageManager.GetInstance.GetStageList().Count);
+            m_save.clearCheck.Add(StageManager.GetInstance.GetStageList()[i].IsOpen);
+            m_save.stageIndex.Add(StageManager.GetInstance.GetStageList()[i].iStageIndex);
         }
 
         BinaryFormatter bf = new BinaryFormatter();
+
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
         FileStream file = File.Create(Application.streamingAssetsPath + "/StageCheck.dat");
+#elif UNITY_ANDROID
+        FileStream file = File.Create(Application.persistentDataPath + "/StageCheck.dat");
+#elif UNITY_IOS
+#endif
 
         bf.Serialize(file, m_save);
         file.Close();
@@ -76,28 +84,45 @@ public class SaveNLoad : MonoBehaviour
         Debug.Log("저장완료");
     }
 
+    //현재 클리어한 Stage를 불러오기 위한 Func
+    //플랫폼 별 불러오는 경로를 다르게 지정해준다.
     public void LoadStage()
     {
-        StageManager m_stageManager;
         Stage m_save = new Stage();
 
-        m_stageManager = GameObject.Find("Main Camera").GetComponent<StageManager>();
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.streamingAssetsPath + "/StageCheck.dat", FileMode.Open);
-
-        Debug.Log("세이브파일을 찾습니다");
-        if (file != null && file.Length > 0)
+        FileStream file;
+        string strPath;
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+        //file = File.Open(Application.streamingAssetsPath + "/StageCheck.dat", FileMode.Open);
+        strPath = Application.streamingAssetsPath + "/StageCheck.dat";
+#elif UNITY_ANDROID
+        //file = File.Open(Application.persistentDataPath + "/StageCheck.dat", FileMode.Open);
+        strPath = Application.persistentDataPath + "/StageCheck.dat";
+#elif UNITY_IOS
+#endif
+        try
         {
-            m_save = (Stage)bf.Deserialize(file);
-
-            for (int i = 0; i < m_save.stageIndex.Count; ++i)
-            {
-                m_stageManager.SetAddStageList(m_save.stageIndex[i], m_save.clearCheck[i]);
-            }
+            file = new FileStream(strPath, FileMode.Open);
         }
-        else
+        catch (IOException)
         {
-            Debug.Log("저장된 세이브 파일이 없습니다.");
+            Debug.Log("불러오기 실패");
+            //for (int i = 1; i < 36; ++i)
+            //{
+            //    if(i == 1)
+            //        m_stageManager.SetAddStageList(i, true);
+            //    else
+            //        m_stageManager.SetAddStageList(i, false);
+            //}
+            return;
+        }
+
+        m_save = (Stage)bf.Deserialize(file);
+
+        for (int i = 0; i < m_save.stageIndex.Count; ++i)
+        {
+            StageManager.GetInstance.SetAddStageList(i, m_save.stageIndex[i], m_save.clearCheck[i]);
         }
 
         file.Close();
@@ -119,14 +144,14 @@ public class SaveNLoad : MonoBehaviour
 
         JsonData mapJson = JsonMapper.ToJson(m_listMap);
 
-        File.WriteAllText(Application.streamingAssetsPath + "/" + strFileName + ".json", mapJson.ToString());
+       // File.WriteAllText(Application.streamingAssetsPath + "/" + strFileName + ".json", mapJson.ToString());
 
-//#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
-//        File.WriteAllText(Application.streamingAssetsPath + "/" + strFileName + ".json", mapJson.ToString());
-//#elif UNITY_ANDROID
-//        File.WriteAllText("jar: file://" + Application.dataPath + "!/assets/" + strFileName + ".json", mapJson.ToString());
-//#elif UNITY_IOS
-//#endif
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+        File.WriteAllText(Application.streamingAssetsPath + "/" + strFileName + ".json", mapJson.ToString());
+#elif UNITY_ANDROID
+        File.WriteAllText(Application.persistentDataPath + "/" + strFileName + ".json", mapJson.ToString());
+#elif UNITY_IOS
+#endif
 
         Debug.Log("저장완료");
     }
@@ -169,26 +194,26 @@ public class SaveNLoad : MonoBehaviour
 
     }
 
+    //1.Tool에서 쓸 Func이기 때문에 안드로이드 자체에서 세이브한 경로를 받아와 호출한다.
+    //  현재 안드로이드에서만 사용할 수 있는 맵
+    //2.네트워크를 통해 세이브 로드하는 Func을 새로 만든다.
     public void LoadToolMap(string strFileName)
     {
         ToolManager m_toolManager;
 
         m_toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
 
-        string strPath = Application.streamingAssetsPath + "/" + strFileName + ".json";
+        string strPath = Application.persistentDataPath + "/" + strFileName + ".json";
 
         string strJson;
-
+        //Debug.Log(Application.persistentDataPath);
 #if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
 
         strJson = File.ReadAllText(strPath);
 
 
 #elif UNITY_ANDROID
-        WWW reader = new WWW(strPath);
-        while(!reader.isDone) {}
-
-        strJson = reader.text;
+        strJson = File.ReadAllText(strPath);
 
 #elif UNITY_IOS
 #endif

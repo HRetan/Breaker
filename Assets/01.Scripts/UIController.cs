@@ -28,6 +28,11 @@ public class UIController : MonoBehaviour {
 
     private bool m_bUI = false;
 
+    public void SceneChangeTitle()
+    {
+        SceneManager.LoadScene("Title");
+    }
+
     public void SceneChangeStart()
     {
         SceneManager.LoadScene("Title_Stage");
@@ -47,7 +52,7 @@ public class UIController : MonoBehaviour {
 
     public void SceneChangeSelectStage()
     {
-       
+        SceneManager.LoadScene("InGame");
     }
 
     public void SaveUI()
@@ -107,5 +112,27 @@ public class UIController : MonoBehaviour {
     public bool GetUI()
     {
         return m_bUI;
+    }
+
+    public void TitleQuitGame()
+    {        
+        GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/QuitApp")) as GameObject;
+
+        goDynamic.name = "dynamicUI";
+
+        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => EndGame());
+    }
+
+    public void EndGame()
+    {
+        Application.Quit();
+    }
+
+    public void ClearGame()
+    {
+        StageManager.GetInstance.GetStageList()[SaveNLoad.GetInstance.GetStaticStageNum()].IsOpen = true;
+        SaveNLoad.GetInstance.SaveStage();
+        SceneChangeStart();
     }
 }

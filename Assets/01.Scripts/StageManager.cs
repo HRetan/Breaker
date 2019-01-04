@@ -6,42 +6,55 @@ using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour {
 
+    private static StageManager Instance = null;
+
+    public static StageManager GetInstance
+    {
+        get
+        {
+            if (Instance == null)
+            {
+                Instance = FindObjectOfType(typeof(StageManager)) as StageManager;
+
+                if (Instance == null)
+                {
+                    Debug.LogError("싱글톤 인스턴스 생성 실패");
+                }
+            }
+            return Instance;
+        }
+    }
+
     [System.Serializable]
     public class Stage
     {
-        public int iStageIndex;
         public bool IsOpen;
-        public GameObject goStage;
+        public int iStageIndex;
     }
 
     [SerializeField]
-    private List<Stage> m_listStage = new List<Stage>();
+    static private List<Stage> m_listStage = new List<Stage>();
 
     public static int staticInt = 0;
 
 	// Use this for initialization
-	void Start () {
+	public void Initialize () {
 
-        SaveNLoad.GetInstance.LoadStage();
         for (int i = 0; i < 35; ++i)
         {
             int iIndex = i + 1;
 
-            m_listStage[i].goStage = GameObject.Find("Stage" + (i + 1));
-            m_listStage[i].goStage.GetComponent<Button>().onClick.AddListener(() => PlayGameScene(iIndex));
+            Stage stage = new Stage();
+            stage.iStageIndex = iIndex;
+            if (i == 0)
+                stage.IsOpen = true;
+            else
+                stage.IsOpen = false;
+
+            m_listStage.Add(stage);
         }
         //GameObject.Find("Stage" + 1).GetComponent<Button>().onClick.AddListener(() => PlayGameScene(1));
-
-    }
-
-    // Update is called once per frame
-    void Update () {
-        //스테이지 초기화 저장시
-        //if(Input.GetKeyDown(KeyCode.F5))
-        //{
-        //    m_listStage[0].IsOpen = true;
-        //    m_jsonSaveNLoad.SaveStage();
-        //}
+        SaveNLoad.GetInstance.LoadStage();
     }
 
     public void SceneChangeTitle()
@@ -54,13 +67,10 @@ public class StageManager : MonoBehaviour {
         return m_listStage;
     }
 
-    public void SetAddStageList(int iIndex, bool isCheck)
+    public void SetAddStageList(int iIndex, int iBlockIndex, bool isCheck)
     {
-        Stage stage = new Stage();
-        stage.iStageIndex = iIndex;
-        stage.IsOpen = isCheck;
-
-        m_listStage.Add(stage);
+        m_listStage[iIndex].IsOpen = isCheck;
+        m_listStage[iIndex].iStageIndex = iBlockIndex;
     }
 
     public void PlayGameScene(int iIndex)
@@ -71,6 +81,6 @@ public class StageManager : MonoBehaviour {
 
         Debug.Log("스테이지" + iIndex);
         SaveNLoad.GetInstance.SetStaticStageNum(iIndex);
-        SceneManager.LoadScene(2);
+        UIController.GetInstance.SceneChangeSelectStage();
     }
 }

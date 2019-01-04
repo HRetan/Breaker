@@ -39,6 +39,7 @@ public class ToolManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
         //클릭 시 타일 위치에 raycast를 통해 오브젝트 생성
         if (!UIController.GetInstance.GetUI())
         {

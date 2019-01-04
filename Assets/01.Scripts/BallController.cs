@@ -91,29 +91,6 @@ public class BallController : MonoBehaviour
 
     void DirBall()
     {
-        //키보드 조종
-        //if (Input.GetKey(KeyCode.UpArrow) && trans.rotation.eulerAngles.z <= 170f)
-        //{
-        //    rotZ = Time.deltaTime * fSpeed;
-
-        //    trans.Rotate(0f, 0f, rotZ);
-        //}
-        //else if (Input.GetKey(KeyCode.DownArrow) && trans.rotation.eulerAngles.z >= 10f)
-        //{
-        //    rotZ = -Time.deltaTime * fSpeed;
-        //    trans.Rotate(0f, 0f, rotZ);
-        //}
-
-        //if (Input.GetKey(KeyCode.Space))
-        //{
-        //    //마우스 포인터 좌표를 받아와서 방향벡터를 뽑는다.
-        //    state = BALLSTATE.MOVE;
-        //    startPosition = trans.position;
-        //    temp.AddForce(trans.right * fMoveSpeed);
-        //    ArrowObject.SetActive(false);
-        //}
-
-
         //마우스 조종
         if(Input.GetMouseButton(0))
         {
@@ -157,7 +134,7 @@ public class BallController : MonoBehaviour
     {
         if(collision.tag == "DeadZone")
         {
-            
+            Debug.Log("죽음");
         }
     }
 
