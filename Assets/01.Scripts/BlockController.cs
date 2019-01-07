@@ -9,6 +9,7 @@ public class BlockController : MonoBehaviour {
 
     private SpriteRenderer sprite;
     private BoxCollider2D boxColl;
+    private BlockManager blockManager;
     private Transform trans;
     private Color color;
     private bool isBreak = false;
@@ -26,10 +27,14 @@ public class BlockController : MonoBehaviour {
         trans = GetComponent<Transform>();
         color = new Color();
         color = sprite.color;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if (UIController.GetInstance.GetUI())
+            return;
+
         sprite.color = color;
         if (isBreak)
         {
@@ -39,6 +44,7 @@ public class BlockController : MonoBehaviour {
             
             if (fTime >= 1f)
             {
+                blockManager.GetListBlock().Remove(this.gameObject);
                 Destroy(gameObject);
             }
 

@@ -94,7 +94,6 @@ public class SaveNLoad : MonoBehaviour
         FileStream file;
         string strPath;
 #if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
-        //file = File.Open(Application.streamingAssetsPath + "/StageCheck.dat", FileMode.Open);
         strPath = Application.streamingAssetsPath + "/StageCheck.dat";
 #elif UNITY_ANDROID
         //file = File.Open(Application.persistentDataPath + "/StageCheck.dat", FileMode.Open);
@@ -108,13 +107,6 @@ public class SaveNLoad : MonoBehaviour
         catch (IOException)
         {
             Debug.Log("불러오기 실패");
-            //for (int i = 1; i < 36; ++i)
-            //{
-            //    if(i == 1)
-            //        m_stageManager.SetAddStageList(i, true);
-            //    else
-            //        m_stageManager.SetAddStageList(i, false);
-            //}
             return;
         }
 
@@ -143,8 +135,6 @@ public class SaveNLoad : MonoBehaviour
         }
 
         JsonData mapJson = JsonMapper.ToJson(m_listMap);
-
-       // File.WriteAllText(Application.streamingAssetsPath + "/" + strFileName + ".json", mapJson.ToString());
 
 #if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
         File.WriteAllText(Application.streamingAssetsPath + "/" + strFileName + ".json", mapJson.ToString());
@@ -206,7 +196,6 @@ public class SaveNLoad : MonoBehaviour
         string strPath = Application.persistentDataPath + "/" + strFileName + ".json";
 
         string strJson;
-        //Debug.Log(Application.persistentDataPath);
 #if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
 
         strJson = File.ReadAllText(strPath);

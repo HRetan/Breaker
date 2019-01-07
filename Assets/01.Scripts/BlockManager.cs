@@ -17,10 +17,14 @@ public class BlockManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.F5))
-        //{
-        //    m_SaveNLoad.LoadMap();
-        //}
+        if (UIController.GetInstance.GetUI())
+            return;
+
+        if(m_listBlock.Count == 0)
+        {
+            UIController.GetInstance.ResultUI(m_listBlock);
+        }
+
     }
 
     public List<GameObject> GetListBlock()
@@ -70,5 +74,7 @@ public class BlockManager : MonoBehaviour
             goBlock.GetComponent<BlockController>().SetBlockID(blockID);
             goBlock.transform.parent = parentObject.transform;
         }
+
+        m_listBlock.Add(goBlock);
     }
 }

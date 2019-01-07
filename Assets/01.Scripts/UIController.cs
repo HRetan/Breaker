@@ -129,10 +129,28 @@ public class UIController : MonoBehaviour {
         Application.Quit();
     }
 
-    public void ClearGame()
+    public void ClearGame(List<GameObject> listBlock)
     {
-        StageManager.GetInstance.GetStageList()[SaveNLoad.GetInstance.GetStaticStageNum()].IsOpen = true;
-        SaveNLoad.GetInstance.SaveStage();
+        if (listBlock.Count == 0)
+        {
+            StageManager.GetInstance.GetStageList()[SaveNLoad.GetInstance.GetStaticStageNum()].IsOpen = true;
+            SaveNLoad.GetInstance.SaveStage();
+        }
         SceneChangeStart();
+    }
+
+    public void ResultUI(List<GameObject> listBlock)
+    {
+        GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/GameOverUI")) as GameObject;
+        m_bUI = true;
+
+        goDynamic.name = "dynamicUI";
+
+        if (listBlock.Count == 0)
+            GameObject.Find("Result").GetComponent<Text>().text = "Clear";
+        else
+            GameObject.Find("Result").GetComponent<Text>().text = "Failed";
+
+        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(listBlock));
     }
 }

@@ -24,6 +24,8 @@ public class BallController : MonoBehaviour
     private GameObject ArrowObject;
     private Transform BarTrans;
 
+    private BlockManager blockManager;
+
     private Vector3 vector;
     private Vector3 vecDir;
     private Vector3 mousePt;
@@ -32,12 +34,11 @@ public class BallController : MonoBehaviour
     private Vector3 normalVec;
     private Vector3 startPosition;
 
-    private bool isFire = false;
-
     // Use this for initialization
     void Start()
     {
         BarObject = GameObject.FindGameObjectWithTag("Player");
+        blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
         BarTrans = BarObject.GetComponent<Transform>();
         trans = GetComponent<Transform>();
         state = BALLSTATE.START;
@@ -47,22 +48,26 @@ public class BallController : MonoBehaviour
 
     void FixedUpdate()
     {
-        //if(state == BALLSTATE.MOVE)
-            //temp.AddForce(trans.right * fMoveSpeed);
-
     }
     // Update is called once per frame
     void Update()
     {
+        if (UIController.GetInstance.GetUI())
+        {
+            temp.simulated = false;
+            return;
+        }
+
+        temp.simulated = true;
+
         switch (state)
         {
             case BALLSTATE.START:
+            case BALLSTATE.TOUCH:
                 StartBall();
                 break;
             case BALLSTATE.MOVE:
                 Move();
-                break;
-            case BALLSTATE.TOUCH:
                 break;
             case BALLSTATE.GRAP:
                 break;
@@ -76,12 +81,8 @@ public class BallController : MonoBehaviour
         vector.Set(BarTrans.position.x, BarTrans.position.y + 0.25f, BarTrans.position.z);
         trans.position = vector;
 
-        DirBall();
-
-        if (isFire)
-        {
-            state = BALLSTATE.MOVE;
-        }
+        if(BarObject.GetComponent<PlayerController>().GetPlayerMove() == 2)
+            DirBall();
     }
 
     void Move()
@@ -105,8 +106,10 @@ public class BallController : MonoBehaviour
                 Vector3 angleVec = trans.rotation.eulerAngles;
                 trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
             }
+            state = BALLSTATE.TOUCH;
         }
-        else if(Input.GetMouseButtonUp(0))
+
+        if (Input.GetMouseButtonUp(0) && state == BALLSTATE.TOUCH)
         {
             state = BALLSTATE.MOVE;
             ArrowObject.SetActive(false);
@@ -134,7 +137,7 @@ public class BallController : MonoBehaviour
     {
         if(collision.tag == "DeadZone")
         {
-            Debug.Log("죽음");
+            UIController.GetInstance.ResultUI(blockManager.GetListBlock());
         }
     }
 

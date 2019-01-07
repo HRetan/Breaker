@@ -21,13 +21,12 @@ public class GameManager : MonoBehaviour {
 
     void QuitApp()
     {
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UIController.GetInstance.TitleQuitGame();
         }
-
     }
+
     void ReturnTitle()
     {
         //백버튼 누를시 돌아가기
@@ -36,7 +35,6 @@ public class GameManager : MonoBehaviour {
         {
             UIController.GetInstance.SceneChangeTitle();
         }
-
     }
 }
 

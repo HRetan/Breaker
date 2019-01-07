@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private enum PLAYERMOVE
+    {
+        LEFTMOVE,
+        RIGHTMOVE,
+        NOMOVE
+    }
 
     [SerializeField]
     private float fSpeed = 2f;
@@ -12,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private bool m_bLeft = false;
     private bool m_bRight = false;
-
+    private PLAYERMOVE m_eMove = PLAYERMOVE.NOMOVE;
 
     // Use this for initialization
     void Start()
@@ -21,61 +27,43 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        //if (Input.GetAxisRaw("Horizontal") != 0)
-        //{
-        //    vector.Set(Input.GetAxisRaw("Horizontal"), 0, transform.position.z);
+        if (UIController.GetInstance.GetUI())
+            return;
 
-        //    if (vector.x != 0)
-        //    {
-        //        transform.Translate(vector.x * fSpeed, 0, 0);
-        //    }
-        //    else if (vector.y != 0)
-        //    {
-        //        transform.Translate(0, vector.y * fSpeed, 0);
-        //    }
-        //}
-        if (m_bLeft)
+        switch (m_eMove)
         {
+            case PLAYERMOVE.LEFTMOVE:
             transform.Translate(-fSpeed * Time.deltaTime, 0, 0);
-        }
-
-        if (m_bRight)
-        {
+                break;
+            case PLAYERMOVE.RIGHTMOVE:
             transform.Translate(fSpeed * Time.deltaTime, 0, 0);
+                break;
+            case PLAYERMOVE.NOMOVE:
+                break;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        if (UIController.GetInstance.GetUI())
+            return;
     }
 
     void OnCollisionStay2D(Collision2D coll)
     {
         if(coll.gameObject.tag == "Wall")
         {
-            //if (Input.GetAxisRaw("Horizontal") != 0)
-            //{
-            //    vector.Set(Input.GetAxisRaw("Horizontal"), 0, transform.position.z);
-
-            //    if (vector.x != 0)
-            //    {
-            //        transform.Translate(-vector.x * fSpeed, 0, 0);
-            //    }
-            //    else if (vector.y != 0)
-            //    {
-            //        transform.Translate(0, vector.y * fSpeed, 0);
-            //    }
-            //}
-            if (m_bLeft)
+            switch (m_eMove)
             {
-                transform.Translate(fSpeed * Time.deltaTime, 0, 0);
-            }
-
-            if (m_bRight)
-            {
-                transform.Translate(-fSpeed * Time.deltaTime, 0, 0);
+                case PLAYERMOVE.LEFTMOVE:
+                    transform.Translate(fSpeed * Time.deltaTime, 0, 0);
+                    break;
+                case PLAYERMOVE.RIGHTMOVE:
+                    transform.Translate(-fSpeed * Time.deltaTime, 0, 0);
+                    break;
+                case PLAYERMOVE.NOMOVE:
+                    break;
             }
         }
     }
@@ -108,20 +96,21 @@ public class PlayerController : MonoBehaviour
 
     public void LeftMoveOn()
     {
-        m_bLeft = true;
-        m_bRight = false;
+        m_eMove = PLAYERMOVE.LEFTMOVE;
     }
 
     public void MoveOff()
     {
-        m_bLeft = false;
-        m_bRight = false;
+        m_eMove = PLAYERMOVE.NOMOVE;
     }
 
     public void RightMoveOn()
     {
-        m_bLeft = false;
-        m_bRight = true;
+        m_eMove = PLAYERMOVE.RIGHTMOVE;
     }
 
+    public int GetPlayerMove()
+    {
+        return (int)m_eMove;
+    }
 }
