@@ -30,3 +30,8 @@ Save / Load 경로 변경 해야 할듯 (StreamingAssets(Android에서 Save가 �
 - Scroll을 통한 Stage설정
 
 3. InGame 터치를 통한 Player 이동 추가
+
+2019.01.07 note
+1. InGame Clear, Failed시 UI 출력 및 씬 전환
+- UI 출력시 모든 Update를 정지 시켜줌
+2. Block Break Effect 
