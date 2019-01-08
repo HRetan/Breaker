@@ -12,6 +12,7 @@ TagManager:
   - ToolManager
   - Manager
   - DeadZone
+  - Effect
   layers:
   - Default
   - TransparentFX

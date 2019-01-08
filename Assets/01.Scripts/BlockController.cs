@@ -59,8 +59,10 @@ public class BlockController : MonoBehaviour {
         {
             isBreak = true;
             boxColl.enabled = false;
-            Debug.Log(Time.deltaTime);
-            
+            GameObject Effect = MonoBehaviour.Instantiate(Resources.Load("Effect/Broken_Effect")) as GameObject;
+            Effect.name = "Broken_Effect";
+            Effect.transform.position = trans.position;
+
             if(m_iBlockID == 2)
             {
                 GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/Item(Brown)")) as GameObject;
