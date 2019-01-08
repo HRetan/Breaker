@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,12 +16,15 @@ public class PlayerController : MonoBehaviour
     private float fSpeed = 2f;
 
     private Vector3 vector;
-
+    private Scrollbar m_Scroll;
+    private float m_fSize = 4.4f;
     private PLAYERMOVE m_eMove = PLAYERMOVE.NOMOVE;
 
     // Use this for initialization
     void Start()
     {
+        m_Scroll = GameObject.Find("Scrollbar").GetComponent<Scrollbar>();
+        vector = transform.position;
     }
 
     void FixedUpdate()
@@ -39,6 +43,9 @@ public class PlayerController : MonoBehaviour
             case PLAYERMOVE.NOMOVE:
                 break;
         }
+
+        vector.x = m_Scroll.value * m_fSize - m_fSize * 0.5f;
+        transform.position = vector;
     }
 
     // Update is called once per frame
