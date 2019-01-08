@@ -46,6 +46,7 @@ public class StageManager : MonoBehaviour {
 
             Stage stage = new Stage();
             stage.iStageIndex = iIndex;
+            // True와 False 에 따른 이미지 변경 할 곳.
             if (i == 0)
                 stage.IsOpen = true;
             else

@@ -12,11 +12,16 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
+        if (UIController.GetInstance.GetUI())
+            return;
+
         Scene scene = SceneManager.GetActiveScene();
         if (scene == SceneManager.GetSceneByName("Title"))
             QuitApp();
         else if (scene == SceneManager.GetSceneByName("Title_Stage") || scene == SceneManager.GetSceneByName("MapTool"))
             ReturnTitle();
+        else if (scene == SceneManager.GetSceneByName("InGame"))
+            Option();
     }
 
     void QuitApp()
@@ -34,6 +39,16 @@ public class GameManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UIController.GetInstance.SceneChangeTitle();
+        }
+    }
+
+    void Option()
+    {
+        //백버튼 누를시 돌아가기
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UIController.GetInstance.MenuUI();
         }
     }
 }

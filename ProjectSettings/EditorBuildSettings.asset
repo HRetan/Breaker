@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/00.Scene/Title_Stage.unity
     guid: 92df5584072afea44ae97e67a968913a
   - enabled: 1
+    path: Assets/00.Scene/Title_UserMap.unity
+    guid: 72009b281cb78c345a4a2b1a99978698
+  - enabled: 1
     path: Assets/00.Scene/InGame.unity
     guid: 85f2e5a53ba96d2448ef21281f729779
   - enabled: 1

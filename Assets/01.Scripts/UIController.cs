@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIController : MonoBehaviour {
+public class UIController : MonoBehaviour
+{
 
     private static UIController Instance = null;
 
@@ -36,6 +37,10 @@ public class UIController : MonoBehaviour {
     public void SceneChangeStart()
     {
         SceneManager.LoadScene("Title_Stage");
+    }
+    public void SceneChangeUserMap()
+    {
+        SceneManager.LoadScene("Title_UserMap");
     }
     public void SceneChangeMapTool()
     {
@@ -115,10 +120,12 @@ public class UIController : MonoBehaviour {
     }
 
     public void TitleQuitGame()
-    {        
+    {
         GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/QuitApp")) as GameObject;
 
         goDynamic.name = "dynamicUI";
+
+        m_bUI = true;
 
         GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
         GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => EndGame());
@@ -152,5 +159,27 @@ public class UIController : MonoBehaviour {
             GameObject.Find("Result").GetComponent<Text>().text = "Failed";
 
         GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(listBlock));
+    }
+
+    public void MenuUI()
+    {
+        GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/MenuUI")) as GameObject;
+        m_bUI = true;
+
+        goDynamic.name = "dynamicUI";
+
+        GameObject.Find("Menu").GetComponent<Button>().onClick.AddListener(() => SceneChangeStart());
+        GameObject.Find("Retry").GetComponent<Button>().onClick.AddListener(() => SceneChangeSelectStage());
+        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+    }
+
+    public void MapList()
+    {
+        GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/MapList")) as GameObject;
+        m_bUI = true;
+
+        goDynamic.name = "dynamicUI";
+
+        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
     }
 }

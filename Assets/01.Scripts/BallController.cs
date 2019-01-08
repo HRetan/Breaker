@@ -14,7 +14,7 @@ enum BALLSTATE
 public class BallController : MonoBehaviour
 {
 
-    public float fMoveSpeed = 3f;
+    private float fMoveSpeed = 5f;
     private Transform trans;
     private BALLSTATE state;
 
