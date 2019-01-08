@@ -16,8 +16,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 vector;
 
-    private bool m_bLeft = false;
-    private bool m_bRight = false;
     private PLAYERMOVE m_eMove = PLAYERMOVE.NOMOVE;
 
     // Use this for initialization

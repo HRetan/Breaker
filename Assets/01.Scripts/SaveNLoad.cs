@@ -7,18 +7,11 @@ using LitJson;
 
 public class Map
 {
-    public double positionX;
-    public double positionY;
-    public double positionZ;
-
     public int blockID;
     public int iIndex;
 
-    public Map(double posX, double posY, double posZ, int ID, int Index)
+    public Map(int ID, int Index)
     {
-        positionX = posX;
-        positionY = posY;
-        positionZ = posZ;
         blockID = ID;
         iIndex = Index;
     }
@@ -46,12 +39,20 @@ public class SaveNLoad : MonoBehaviour
     }
 
     private static int staticStageNum = 0;
+    private static List<Vector2> m_listPos = new List<Vector2>();
 
     [System.Serializable]
     public class Stage
     {
         public List<bool> clearCheck = new List<bool>();
         public List<int> stageIndex = new List<int>();
+    }
+
+    [System.Serializable]
+    public class BlockPos
+    {
+        public List<float> posX = new List<float>();
+        public List<float> posY = new List<float>();
     }
 
     //현재 클리어한 Stage를 저장하기 위한 Func
@@ -63,8 +64,6 @@ public class SaveNLoad : MonoBehaviour
 
         for (int i = 0; i < StageManager.GetInstance.GetStageList().Count; ++i)
         {
-            Debug.Log(i);
-            Debug.Log(StageManager.GetInstance.GetStageList().Count);
             m_save.clearCheck.Add(StageManager.GetInstance.GetStageList()[i].IsOpen);
             m_save.stageIndex.Add(StageManager.GetInstance.GetStageList()[i].iStageIndex);
         }
@@ -127,11 +126,11 @@ public class SaveNLoad : MonoBehaviour
         ToolManager m_toolManager;
 
         m_toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
-        Debug.Log(m_toolManager);
+
         for (int i = 0; i < m_toolManager.GetListBlock().Count; ++i)
         {
             Transform ts = m_toolManager.GetListBlock()[i].GetComponent<Transform>();
-            m_listMap.Add(new Map(ts.position.x, ts.position.y, ts.position.z, m_toolManager.GetListBlock()[i].GetComponent<BlockController>().GetBlockID(), m_toolManager.GetListBlock()[i].GetComponent<BlockController>().GetIndex()));
+            m_listMap.Add(new Map(m_toolManager.GetListBlock()[i].GetComponent<BlockController>().GetBlockID(), m_toolManager.GetListBlock()[i].GetComponent<BlockController>().GetIndex()));
         }
 
         JsonData mapJson = JsonMapper.ToJson(m_listMap);
@@ -176,10 +175,7 @@ public class SaveNLoad : MonoBehaviour
 
         for (int i = 0; i < mapData.Count; ++i)
         {
-            Vector3 vecPos = new Vector3(float.Parse(mapData[i]["positionX"].ToString()), float.Parse(mapData[i]["positionY"].ToString())
-                , float.Parse(mapData[i]["positionZ"].ToString()));
-
-            m_blockManager.CreateBlock(goBlockManager, vecPos, int.Parse(mapData[i]["blockID"].ToString()));
+            m_blockManager.CreateBlock(goBlockManager, m_listPos[int.Parse(mapData[i]["iIndex"].ToString())], int.Parse(mapData[i]["blockID"].ToString()));
         }
 
     }
@@ -223,6 +219,56 @@ public class SaveNLoad : MonoBehaviour
             GameObject goBlock = GameObject.Find("MapTile(White)" + mapData[i]["iIndex"].ToString()).GetComponent<TileManager>().CreateBlock(int.Parse(mapData[i]["blockID"].ToString()));
             m_toolManager.GetListBlock().Add(goBlock);
         }
+    }
+
+    public void SavePos()
+    {
+        BlockPos save = new BlockPos();
+        ToolManager toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
+
+        for (int i = 0; i < toolManager.GetListTile().Count; ++i)
+        {
+            save.posX.Add(toolManager.GetListTile()[i].transform.position.x);
+            save.posY.Add(toolManager.GetListTile()[i].transform.position.y);
+        }
+
+        BinaryFormatter bf = new BinaryFormatter();
+
+        FileStream file = File.Create(Application.streamingAssetsPath + "/IndexPos.dat");
+
+        bf.Serialize(file, save);
+        file.Close();
+
+        Debug.Log("저장완료");
+    }
+
+    public void LoadPos()
+    {
+        BlockPos save = new BlockPos();
+
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file;
+        string strPath;
+        strPath = Application.streamingAssetsPath + "/IndexPos.dat";
+
+        try
+        {
+            file = new FileStream(strPath, FileMode.Open);
+        }
+        catch (IOException)
+        {
+            Debug.Log("불러오기 실패");
+            return;
+        }
+
+        save = (BlockPos)bf.Deserialize(file);
+
+        for (int i = 0; i < save.posY.Count; ++i)
+        {
+            m_listPos.Add(new Vector2(save.posX[i], save.posY[i]));
+        }
+
+        file.Close();
     }
 
     public int GetStaticStageNum()

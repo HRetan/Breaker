@@ -14,6 +14,8 @@ public class ToolManager : MonoBehaviour {
     [SerializeField]
     private List<GameObject> m_listBlock;
 
+    private List<GameObject> m_listTile = new List<GameObject>();
+
     // Use this for initialization
     void Start()
     {
@@ -31,6 +33,8 @@ public class ToolManager : MonoBehaviour {
                 tile.transform.parent = goTileManager.transform;
                 tile.transform.position = new Vector2(fX - 2.67f, fY - 2.5f);
                 tile.GetComponent<TileManager>().SetIndex(i * 11 + j);
+
+                m_listTile.Add(tile);
             }
         }
   
@@ -38,7 +42,9 @@ public class ToolManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        //Index Pos 저장용
+        if (Input.GetKeyDown(KeyCode.F9))
+            SaveNLoad.GetInstance.SavePos();
 
         //클릭 시 타일 위치에 raycast를 통해 오브젝트 생성
         if (!UIController.GetInstance.GetUI())
@@ -87,5 +93,10 @@ public class ToolManager : MonoBehaviour {
     public List<GameObject> GetListBlock()
     {
         return m_listBlock;
+    }
+
+    public List<GameObject> GetListTile()
+    {
+        return m_listTile;
     }
 }

@@ -47,9 +47,6 @@ public class BlockController : MonoBehaviour {
                 blockManager.GetListBlock().Remove(this.gameObject);
                 Destroy(gameObject);
             }
-
-            Debug.Log(fTime);
-            Debug.Log(color.a);
         }
 	}
 
