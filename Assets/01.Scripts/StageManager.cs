@@ -35,7 +35,7 @@ public class StageManager : MonoBehaviour {
     [SerializeField]
     static private List<Stage> m_listStage = new List<Stage>();
 
-    public static int staticInt = 0;
+    public static bool w_bStage = false;
 
 	// Use this for initialization
 	public void Initialize () {
@@ -68,6 +68,11 @@ public class StageManager : MonoBehaviour {
         return m_listStage;
     }
 
+    public bool GetStage()
+    {
+        return w_bStage;
+    }
+
     public void SetAddStageList(int iIndex, int iBlockIndex, bool isCheck)
     {
         m_listStage[iIndex].IsOpen = isCheck;
@@ -76,12 +81,21 @@ public class StageManager : MonoBehaviour {
 
     public void PlayGameScene(int iIndex)
     {
+        w_bStage = true;
         Debug.Log(iIndex);
         if (!m_listStage[iIndex - 1].IsOpen)
             return;
 
         Debug.Log("스테이지" + iIndex);
-        SaveNLoad.GetInstance.SetStaticStageNum(iIndex);
+        //SaveNLoad.GetInstance.SetStaticStageNum(iIndex);
+        SaveNLoad.GetInstance.SetStaticFileName("Stage" + iIndex);
+        UIController.GetInstance.SceneChangeSelectStage();
+    }
+
+    public void PlayGameScene(string strName)
+    {
+        w_bStage = false;
+        SaveNLoad.GetInstance.SetStaticFileName(strName);
         UIController.GetInstance.SceneChangeSelectStage();
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class UIController : MonoBehaviour
 {
@@ -136,14 +137,42 @@ public class UIController : MonoBehaviour
         Application.Quit();
     }
 
-    public void ClearGame(List<GameObject> listBlock)
+    public void DeleteFile(string strFileName)
     {
-        if (listBlock.Count == 0)
+        FileInfo fileDel;
+
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+        fileDel = new FileInfo(Application.streamingAssetsPath + "/" + strFileName + ".json");
+#elif UNITY_ANDROID
+        fileDel = new FileInfo(Application.persistentDataPath + "/" + strFileName + ".json");
+#elif UNITY_IOS
+#endif
+
+        if (fileDel.Exists) // 삭제할 파일이 있는지
         {
-            StageManager.GetInstance.GetStageList()[SaveNLoad.GetInstance.GetStaticStageNum()].IsOpen = true;
-            SaveNLoad.GetInstance.SaveStage();
+            fileDel.Delete(); // 없어도 에러안남
+            Destroy(GameObject.Find(strFileName));
+            Debug.Log("파일 삭제");
         }
-        SceneChangeStart();
+        else
+        Debug.Log("파일 삭제 실패");
+    }
+
+public void ClearGame(List<GameObject> listBlock)
+    {
+        if (StageManager.GetInstance.GetStage())
+        {
+            if (listBlock.Count == 0)
+            {
+                StageManager.GetInstance.GetStageList()[SaveNLoad.GetInstance.GetStaticStageNum()].IsOpen = true;
+                SaveNLoad.GetInstance.SaveStage();
+            }
+            SceneChangeStart();
+        }
+        else
+        {
+            SceneChangeUserMap();
+        }
     }
 
     public void ResultUI(List<GameObject> listBlock)
@@ -181,5 +210,7 @@ public class UIController : MonoBehaviour
         goDynamic.name = "dynamicUI";
 
         GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene(SaveNLoad.GetInstance.GetStaticFileName()));
+        GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
     }
 }

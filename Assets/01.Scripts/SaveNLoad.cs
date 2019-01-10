@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using LitJson;
@@ -39,6 +40,7 @@ public class SaveNLoad : MonoBehaviour
     }
 
     private static int staticStageNum = 0;
+    private static string w_strFileName = "";
     private static List<Vector2> m_listPos = new List<Vector2>();
 
     [System.Serializable]
@@ -180,6 +182,39 @@ public class SaveNLoad : MonoBehaviour
 
     }
 
+    public void LoadUserMap(string strFileName)
+    {
+        BlockManager m_blockManager;
+
+        m_blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+
+        string strPath = Application.persistentDataPath + "/" + strFileName + ".json";
+
+        string strJson;
+
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+
+        strJson = File.ReadAllText(strPath);
+
+
+#elif UNITY_ANDROID
+
+         strJson = File.ReadAllText(strPath);
+
+#elif UNITY_IOS
+#endif
+
+        JsonData mapData = JsonMapper.ToObject(strJson);
+
+        GameObject goBlockManager = new GameObject("BlockManager");
+
+        for (int i = 0; i < mapData.Count; ++i)
+        {
+            m_blockManager.CreateBlock(goBlockManager, m_listPos[int.Parse(mapData[i]["iIndex"].ToString())], int.Parse(mapData[i]["blockID"].ToString()));
+        }
+
+    }
+
     //1.Tool에서 쓸 Func이기 때문에 안드로이드 자체에서 세이브한 경로를 받아와 호출한다.
     //  현재 안드로이드에서만 사용할 수 있는 맵
     //2.네트워크를 통해 세이브 로드하는 Func을 새로 만든다.
@@ -247,28 +282,65 @@ public class SaveNLoad : MonoBehaviour
         BlockPos save = new BlockPos();
 
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file;
-        string strPath;
-        strPath = Application.streamingAssetsPath + "/IndexPos.dat";
 
-        try
+        string strPath = Application.streamingAssetsPath + "/IndexPos.dat";
+
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+        FileStream file = File.Open(strPath, FileMode.Open);
+
+        if (file != null && file.Length > 0)
         {
-            file = new FileStream(strPath, FileMode.Open);
-        }
-        catch (IOException)
-        {
-            Debug.Log("불러오기 실패");
-            return;
-        }
+            save = (BlockPos)bf.Deserialize(file);
 
-        save = (BlockPos)bf.Deserialize(file);
+            for (int i = 0; i < save.posY.Count; ++i)
+            {
+                m_listPos.Add(new Vector2(save.posX[i], save.posY[i]));
+            }
+        }
+        else
 
+        file.Close();
+#elif UNITY_ANDROID
+        WWW reader = new WWW(strPath);
+        while (!reader.isDone) { }
+        MemoryStream ms = new MemoryStream(reader.bytes);
+
+        save = (BlockPos)bf.Deserialize(ms);
+        
         for (int i = 0; i < save.posY.Count; ++i)
         {
             m_listPos.Add(new Vector2(save.posX[i], save.posY[i]));
         }
 
-        file.Close();
+        ms.Close();
+#elif UNITY_IOS
+#endif
+    }
+
+    public void FindFileStage(List<string> listFile)
+    {
+        string dirPath;
+
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+
+        dirPath = Application.streamingAssetsPath;
+
+#elif UNITY_ANDROID
+        dirPath = Application.persistentDataPath;
+
+#elif UNITY_IOS
+#endif
+
+        if (Directory.Exists(dirPath))
+        {
+            DirectoryInfo di = new DirectoryInfo(dirPath);
+
+            foreach(var file in di.GetFiles())
+            {
+                if (file.Extension == ".json")
+                    listFile.Add(file.Name.Substring(0, file.Name.Length - 5));
+            }
+        }
     }
 
     public int GetStaticStageNum()
@@ -279,5 +351,15 @@ public class SaveNLoad : MonoBehaviour
     public void SetStaticStageNum(int iStageNum)
     {
         staticStageNum = iStageNum;
+    }
+
+    public string GetStaticFileName()
+    {
+        return w_strFileName;
+    }
+
+    public void SetStaticFileName(string strFileName)
+    {
+        w_strFileName = strFileName;
     }
 }

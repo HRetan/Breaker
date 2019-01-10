@@ -11,7 +11,11 @@ public class BlockManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SaveNLoad.GetInstance.LoadMap("Stage" + SaveNLoad.GetInstance.GetStaticStageNum().ToString());
+        if(StageManager.GetInstance.GetStage())
+            SaveNLoad.GetInstance.LoadMap(SaveNLoad.GetInstance.GetStaticFileName());
+        else
+            SaveNLoad.GetInstance.LoadUserMap(SaveNLoad.GetInstance.GetStaticFileName());
+
     }
 
     // Update is called once per frame
