@@ -16,6 +16,7 @@ public class BallController : MonoBehaviour
 
     private float fMoveSpeed = 5f;
     private Transform trans;
+    [SerializeField]
     private BALLSTATE state;
 
     private Rigidbody2D temp;
@@ -34,6 +35,13 @@ public class BallController : MonoBehaviour
     private Vector3 normalVec;
     private Vector3 startPosition;
 
+    [SerializeField]
+    private bool m_bIsGrap = false;
+    [SerializeField]
+    private float m_fItemTime = 0f;
+    [SerializeField]
+    private float m_fColX = 0f;
+
     // Use this for initialization
     void Start()
     {
@@ -48,6 +56,7 @@ public class BallController : MonoBehaviour
 
     void FixedUpdate()
     {
+
     }
     // Update is called once per frame
     void Update()
@@ -60,16 +69,22 @@ public class BallController : MonoBehaviour
 
         temp.simulated = true;
 
+        if(m_bIsGrap)
+        {
+            m_fItemTime += Time.deltaTime;
+            if (m_fItemTime >= 10f)
+                m_bIsGrap = false;
+        }
+
         switch (state)
         {
             case BALLSTATE.START:
             case BALLSTATE.TOUCH:
+            case BALLSTATE.GRAP:
                 StartBall();
                 break;
             case BALLSTATE.MOVE:
                 Move();
-                break;
-            case BALLSTATE.GRAP:
                 break;
             case BALLSTATE.DEAD:
                 break;
@@ -78,11 +93,16 @@ public class BallController : MonoBehaviour
 
     void StartBall()
     {
-        vector.Set(BarTrans.position.x, BarTrans.position.y + 0.25f, BarTrans.position.z);
-        trans.position = vector;
+        if (!m_bIsGrap)
+            vector.Set(BarTrans.position.x, BarTrans.position.y + 0.25f, BarTrans.position.z);
+        else
+            vector.Set(BarTrans.position.x + m_fColX, BarTrans.position.y + 0.25f, BarTrans.position.z);
 
-        if(BarObject.GetComponent<PlayerController>().GetPlayerMove() == 2)
+        trans.position = vector;
+        Debug.Log("기본");
+        if (BarObject.GetComponent<PlayerController>().GetPlayerMove() == 2)
             DirBall();
+
     }
 
     void Move()
@@ -93,7 +113,7 @@ public class BallController : MonoBehaviour
     void DirBall()
     {
         //마우스 조종
-        if(Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
             mousePt = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
             vecDir = mousePt - trans.position;
@@ -102,10 +122,11 @@ public class BallController : MonoBehaviour
 
             if (angle <= 170f && angle >= 10f)
             {
-              
+
                 Vector3 angleVec = trans.rotation.eulerAngles;
                 trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
             }
+            
             state = BALLSTATE.TOUCH;
         }
 
@@ -119,6 +140,18 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
+        if (coll.gameObject.tag == "Player" && m_bIsGrap)
+        {
+            m_fColX = Mathf.Abs(BarTrans.position.x - coll.contacts[0].point.x);
+            if (BarTrans.position.x >= coll.contacts[0].point.x)
+                m_fColX *= -1;
+
+            temp.AddForce(Vector2.zero);
+            ArrowObject.SetActive(true);
+            state = BALLSTATE.GRAP;
+            Debug.Log(m_fColX);
+        }
+
         Vector3 angleVec = trans.rotation.eulerAngles;
         Vector2 point = coll.contacts[0].point;
         temp.AddForce(Vector2.zero);
@@ -133,9 +166,19 @@ public class BallController : MonoBehaviour
 
     }
 
+
+    //void OnCollisionStay2D(Collision2D coll)
+    //{
+    //    if (coll.gameObject.tag == "Player" && m_bIsGrap)
+    //    {
+    //        m_fColX = coll.contacts[0].point.x;
+    //        state = BALLSTATE.GRAP;
+    //    }
+    //}
+
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "DeadZone")
+        if (collision.tag == "DeadZone")
         {
             UIController.GetInstance.ResultUI(blockManager.GetListBlock());
         }
@@ -149,5 +192,10 @@ public class BallController : MonoBehaviour
             return;
 
         fMoveSpeed += fSpeed;
+    }
+
+    public void SetGrap()
+    {
+        m_bIsGrap = true;
     }
 }

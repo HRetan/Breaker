@@ -55,10 +55,10 @@ public class ItemManager : MonoBehaviour{
                 goBar.SetSize(new Vector3(0.5f, 0f, 0f));
                 break;
             case ITEMSTATE.PURPLE:
-                goBar.SetSpeed(0.025f);
+                goBall.SetGrap();
                 break;
             case ITEMSTATE.YELLOW:
-                goBar.SetSpeed(-0.025f);
+                //goBar.SetSpeed(-0.025f);
                 break;
             case ITEMSTATE.GREEN:
                 goBar.SetSize(new Vector3(-0.5f, 0f, 0f));

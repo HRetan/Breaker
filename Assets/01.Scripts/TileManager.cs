@@ -66,7 +66,7 @@ public class TileManager : MonoBehaviour {
                 m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Green)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Green)";
                 break;
-            case 99:
+            case 7:
                 break;
         }
         //충돌처리 꺼주고 저장할 때 다시 켜준다
@@ -113,7 +113,7 @@ public class TileManager : MonoBehaviour {
                 m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Green)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Green)";
                 break;
-            case 99:
+            case 7:
                 m_goBlock = null;
                 break;
         }

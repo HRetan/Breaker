@@ -28,8 +28,8 @@ public class ScrollUI : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        m_rtBlock = new Button[7];
-        for (int i = 0; i < 7; ++i)
+        m_rtBlock = new Button[8];
+        for (int i = 0; i < 8; ++i)
         {
             int iIndex = i + 1;
             int iIndex2 = i;

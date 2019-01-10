@@ -155,10 +155,10 @@ public class UIController : MonoBehaviour
             Debug.Log("파일 삭제");
         }
         else
-        Debug.Log("파일 삭제 실패");
+            Debug.Log("파일 삭제 실패");
     }
 
-public void ClearGame(List<GameObject> listBlock)
+    public void ClearGame(List<GameObject> listBlock)
     {
         if (StageManager.GetInstance.GetStage())
         {
