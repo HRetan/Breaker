@@ -59,41 +59,28 @@ public class BlockController : MonoBehaviour {
             GameObject Effect = MonoBehaviour.Instantiate(Resources.Load("Effect/Broken_Effect")) as GameObject;
             Effect.name = "Broken_Effect";
             Effect.transform.position = trans.position;
-
-            if(m_iBlockID == 2)
+            switch (m_iBlockID)
             {
-                GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/Item(Brown)")) as GameObject;
-                item.name = "Item(Brown)";
-                item.transform.position = trans.position;
-                item.GetComponent<ItemManager>().SetState(0);
-            }
-            else if (m_iBlockID == 3)
-            {
-                GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/Item(Purple)")) as GameObject;
-                item.name = "Item(Purple)";
-                item.transform.position = trans.position;
-                item.GetComponent<ItemManager>().SetState(1);
-            }
-            else if (m_iBlockID == 5)
-            {
-                GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/Item(Yellow)")) as GameObject;
-                item.name = "Item(Yellow)";
-                item.transform.position = trans.position;
-                item.GetComponent<ItemManager>().SetState(2);
-            }
-            else if (m_iBlockID == 6)
-            {
-                GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/Item(Green)")) as GameObject;
-                item.name = "Item(Green)";
-                item.transform.position = trans.position;
-                item.GetComponent<ItemManager>().SetState(3);
-            }
-            else if (m_iBlockID == 4)
-            {
-                GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/Item(Red)")) as GameObject;
-                item.name = "Item(Red)";
-                item.transform.position = trans.position;
-                item.GetComponent<ItemManager>().SetState(4);
+                case 0:
+                    break;
+                case 1:
+                    CreateItem("Item(Blue)", 5);
+                    break;
+                case 2:
+                    CreateItem("Item(Brown)", 0);
+                    break;
+                case 3:
+                    CreateItem("Item(Purple)", 1);
+                    break;
+                case 4:
+                    CreateItem("Item(Red)", 4);
+                    break;
+                case 5:
+                    CreateItem("Item(Yellow)", 2);
+                    break;
+                case 6:
+                    CreateItem("Item(Green)", 3);
+                    break;
             }
         }
     }
@@ -114,6 +101,14 @@ public class BlockController : MonoBehaviour {
             m_iBlockID = 5;
         else if (name.ToString() == "Breaker_Block(Green)")
             m_iBlockID = 6;
+    }
+
+    void CreateItem(string strName, int iIndex)
+    {
+        GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/" + strName)) as GameObject;
+        item.name = strName;
+        item.transform.position = trans.position;
+        item.GetComponent<ItemManager>().SetState(iIndex);
     }
 
     public int GetBlockID()

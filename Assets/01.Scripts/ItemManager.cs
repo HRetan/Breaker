@@ -12,6 +12,7 @@ public class ItemManager : MonoBehaviour{
         YELLOW,
         GREEN,
         RED,
+        BLUE,
         NOITEM
     }
 
@@ -65,6 +66,9 @@ public class ItemManager : MonoBehaviour{
             case ITEMSTATE.RED:
                 goBall.SetSpeed(1f);
                 break;
+            case ITEMSTATE.BLUE:
+                goBall.SetPenet();
+                break;
         }
     }
 
@@ -88,6 +92,9 @@ public class ItemManager : MonoBehaviour{
                 break;
             case 4:
                 eState = ITEMSTATE.RED;
+                break;
+            case 5:
+                eState = ITEMSTATE.BLUE;
                 break;
         }
 }

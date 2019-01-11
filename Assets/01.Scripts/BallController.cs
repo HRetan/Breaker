@@ -17,20 +17,17 @@ public class BallController : MonoBehaviour
 
     private float fMoveSpeed = 5f;
     private Transform trans;
-    [SerializeField]
     private BALLSTATE state = BALLSTATE.START;
 
     private Rigidbody2D temp;
 
     private GameObject BarObject;
-    [SerializeField]
     private GameObject ArrowObject;
     private Transform BarTrans;
 
     private BlockManager blockManager;
 
     private Vector3 vector;
-    [SerializeField]
     private Vector3 vecDir;
     private Vector3 mousePt;
 
@@ -38,11 +35,9 @@ public class BallController : MonoBehaviour
     private Vector3 normalVec;
     private Vector3 startPosition;
 
-    [SerializeField]
     private bool m_bIsGrap = false;
-    [SerializeField]
+    public bool m_bIsPenet = false;
     private float m_fItemTime = 0f;
-    [SerializeField]
     private float m_fColX = 0f;
 
     void Awake()
@@ -144,6 +139,9 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
+        if (m_bIsPenet && coll.gameObject.tag == "Block")
+            return;
+
         if (coll.gameObject.tag == "Player" && m_bIsGrap)
         {
             m_fColX = Mathf.Abs(BarTrans.position.x - coll.contacts[0].point.x);
@@ -201,11 +199,7 @@ public class BallController : MonoBehaviour
             ++m_iBallLive;
             goBall[i] = Instantiate(Resources.Load("Ball/Breaker_Ball(Red)")) as GameObject;
             BallController ball = goBall[i].GetComponent<BallController>();
-            goBall[i].name = "Breaker_Ball(Red)";
-            goBall[i].transform.position = trans.position;
-            ball.state = BALLSTATE.MOVE;
-            ball.ArrowObject.SetActive(false);
-            ball.startPosition = trans.position;
+            CloneVar(goBall[i], ball);
         }
 
         goBall[0].transform.rotation = Quaternion.Euler(trans.rotation.x, trans.rotation.y, trans.rotation.z + 45f);
@@ -213,6 +207,19 @@ public class BallController : MonoBehaviour
         goBall[0].GetComponent<BallController>().vecDir = goBall[0].transform.rotation * vecDir;
         goBall[1].GetComponent<BallController>().vecDir = goBall[1].transform.rotation * vecDir;
      
+    }
+
+    void CloneVar(GameObject goBall, BallController ballCon)
+    {
+        goBall.name = "Breaker_Ball(Red)";
+        goBall.transform.position = trans.position;
+        ballCon.state = BALLSTATE.MOVE;
+        ballCon.ArrowObject.SetActive(false);
+        ballCon.startPosition = trans.position;
+        ballCon.m_bIsGrap = m_bIsGrap;
+        ballCon.m_fColX = m_fColX;
+        ballCon.m_bIsPenet = m_bIsPenet;
+        ballCon.m_fItemTime = m_fItemTime;
     }
 
     public void SetSpeed(float fSpeed)
@@ -228,5 +235,10 @@ public class BallController : MonoBehaviour
     public void SetGrap()
     {
         m_bIsGrap = true;
+    }
+
+    public void SetPenet()
+    {
+        m_bIsPenet = true;
     }
 }
