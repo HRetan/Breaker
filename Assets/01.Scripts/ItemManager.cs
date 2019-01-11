@@ -55,7 +55,7 @@ public class ItemManager : MonoBehaviour{
                 goBar.SetSize(new Vector3(0.5f, 0f, 0f));
                 break;
             case ITEMSTATE.PURPLE:
-                goBall.SetGrap();
+                goBall.SetItemPlay(0);
                 break;
             case ITEMSTATE.YELLOW:
                 goBall.CreateBall();
@@ -67,7 +67,7 @@ public class ItemManager : MonoBehaviour{
                 goBall.SetSpeed(1f);
                 break;
             case ITEMSTATE.BLUE:
-                goBall.SetPenet();
+                goBall.SetItemPlay(1);
                 break;
         }
     }

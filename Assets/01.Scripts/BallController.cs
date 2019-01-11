@@ -11,6 +11,19 @@ enum BALLSTATE
     DEAD
 }
 
+public struct itemState
+{
+    public bool bIsPlay;
+    public float fTime;
+
+    public itemState(bool play, float time)
+    {
+        bIsPlay = play;
+        fTime = time;
+    }
+}
+
+
 public class BallController : MonoBehaviour
 {
     private static int m_iBallLive = 1;
@@ -36,9 +49,12 @@ public class BallController : MonoBehaviour
     private Vector3 startPosition;
 
     private bool m_bIsGrap = false;
-    public bool m_bIsPenet = false;
-    private float m_fItemTime = 0f;
+    private bool m_bIsPenet = false;
+    private float m_fGrapTime = 0f;
+    private float m_fPenetTime = 0f;
     private float m_fColX = 0f;
+
+    private itemState[] m_tState = new itemState[2];
 
     void Awake()
     {
@@ -48,6 +64,11 @@ public class BallController : MonoBehaviour
         trans = GetComponent<Transform>();
         ArrowObject = transform.Find("Arrow").gameObject;
         temp = GetComponent<Rigidbody2D>();
+        for (int i = 0; i < 2; ++i)
+        {
+            m_tState[i].bIsPlay = false;
+            m_tState[i].fTime = 0f;
+        }
     }
     // Use this for initialization
     void Start()
@@ -69,11 +90,17 @@ public class BallController : MonoBehaviour
 
         temp.simulated = true;
 
-        if(m_bIsGrap)
+        for(int i = 0; i <2; ++i)
         {
-            m_fItemTime += Time.deltaTime;
-            if (m_fItemTime >= 10f)
-                m_bIsGrap = false;
+            if(m_tState[i].bIsPlay)
+            {
+                if(m_tState[i].fTime >= 10f)
+                {
+                    m_tState[i].bIsPlay = false;
+                    m_tState[i].fTime = 0f;
+                }
+                m_tState[i].fTime += Time.deltaTime;
+            }
         }
 
         switch (state)
@@ -93,7 +120,7 @@ public class BallController : MonoBehaviour
 
     void StartBall()
     {
-        if (!m_bIsGrap)
+        if (!m_tState[0].bIsPlay)
             vector.Set(BarTrans.position.x, BarTrans.position.y + 0.25f, BarTrans.position.z);
         else
             vector.Set(BarTrans.position.x + m_fColX, BarTrans.position.y + 0.25f, BarTrans.position.z);
@@ -139,7 +166,7 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (m_bIsPenet && coll.gameObject.tag == "Block")
+        if (m_tState[0].bIsPlay && coll.gameObject.tag == "Block")
             return;
 
         if (coll.gameObject.tag == "Player" && m_bIsGrap)
@@ -167,16 +194,6 @@ public class BallController : MonoBehaviour
         trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
 
     }
-
-
-    //void OnCollisionStay2D(Collision2D coll)
-    //{
-    //    if (coll.gameObject.tag == "Player" && m_bIsGrap)
-    //    {
-    //        m_fColX = coll.contacts[0].point.x;
-    //        state = BALLSTATE.GRAP;
-    //    }
-    //}
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -219,7 +236,7 @@ public class BallController : MonoBehaviour
         ballCon.m_bIsGrap = m_bIsGrap;
         ballCon.m_fColX = m_fColX;
         ballCon.m_bIsPenet = m_bIsPenet;
-        ballCon.m_fItemTime = m_fItemTime;
+        ballCon.m_fGrapTime = m_fGrapTime;
     }
 
     public void SetSpeed(float fSpeed)
@@ -232,13 +249,8 @@ public class BallController : MonoBehaviour
         fMoveSpeed += fSpeed;
     }
 
-    public void SetGrap()
+    public void SetItemPlay(int iIndex)
     {
-        m_bIsGrap = true;
-    }
-
-    public void SetPenet()
-    {
-        m_bIsPenet = true;
+        m_tState[iIndex].bIsPlay = true;
     }
 }
