@@ -48,10 +48,6 @@ public class BallController : MonoBehaviour
     private Vector3 normalVec;
     private Vector3 startPosition;
 
-    private bool m_bIsGrap = false;
-    private bool m_bIsPenet = false;
-    private float m_fGrapTime = 0f;
-    private float m_fPenetTime = 0f;
     private float m_fColX = 0f;
 
     private itemState[] m_tState = new itemState[2];
@@ -166,10 +162,10 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (m_tState[0].bIsPlay && coll.gameObject.tag == "Block")
+        if (m_tState[1].bIsPlay && coll.gameObject.tag == "Block")
             return;
 
-        if (coll.gameObject.tag == "Player" && m_bIsGrap)
+        if (coll.gameObject.tag == "Player" && m_tState[0].bIsPlay)
         {
             m_fColX = Mathf.Abs(BarTrans.position.x - coll.contacts[0].point.x);
             if (BarTrans.position.x >= coll.contacts[0].point.x)
@@ -233,10 +229,12 @@ public class BallController : MonoBehaviour
         ballCon.state = BALLSTATE.MOVE;
         ballCon.ArrowObject.SetActive(false);
         ballCon.startPosition = trans.position;
-        ballCon.m_bIsGrap = m_bIsGrap;
         ballCon.m_fColX = m_fColX;
-        ballCon.m_bIsPenet = m_bIsPenet;
-        ballCon.m_fGrapTime = m_fGrapTime;
+  
+        for(int i =0; i < 2; ++i)
+        {
+            ballCon.m_tState[i] = m_tState[i];
+        }
     }
 
     public void SetSpeed(float fSpeed)

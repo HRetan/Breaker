@@ -85,7 +85,7 @@ public class StageManager : MonoBehaviour {
         if (!m_listStage[iIndex - 1].IsOpen)
             return;
 
-        //SaveNLoad.GetInstance.SetStaticStageNum(iIndex);
+        SaveNLoad.GetInstance.SetStaticStageNum(iIndex);
         SaveNLoad.GetInstance.SetStaticFileName("Stage" + iIndex);
         UIController.GetInstance.SceneChangeSelectStage();
     }
