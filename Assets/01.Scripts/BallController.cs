@@ -13,21 +13,24 @@ enum BALLSTATE
 
 public class BallController : MonoBehaviour
 {
+    private static int m_iBallLive = 1;
 
     private float fMoveSpeed = 5f;
     private Transform trans;
     [SerializeField]
-    private BALLSTATE state;
+    private BALLSTATE state = BALLSTATE.START;
 
     private Rigidbody2D temp;
 
     private GameObject BarObject;
+    [SerializeField]
     private GameObject ArrowObject;
     private Transform BarTrans;
 
     private BlockManager blockManager;
 
     private Vector3 vector;
+    [SerializeField]
     private Vector3 vecDir;
     private Vector3 mousePt;
 
@@ -42,16 +45,18 @@ public class BallController : MonoBehaviour
     [SerializeField]
     private float m_fColX = 0f;
 
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
         BarObject = GameObject.FindGameObjectWithTag("Player");
         blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
         BarTrans = BarObject.GetComponent<Transform>();
         trans = GetComponent<Transform>();
-        state = BALLSTATE.START;
-        ArrowObject = GameObject.FindGameObjectWithTag("Arrow");
+        ArrowObject = transform.Find("Arrow").gameObject;
         temp = GetComponent<Rigidbody2D>();
+    }
+    // Use this for initialization
+    void Start()
+    {
     }
 
     void FixedUpdate()
@@ -99,7 +104,6 @@ public class BallController : MonoBehaviour
             vector.Set(BarTrans.position.x + m_fColX, BarTrans.position.y + 0.25f, BarTrans.position.z);
 
         trans.position = vector;
-        Debug.Log("기본");
         if (BarObject.GetComponent<PlayerController>().GetPlayerMove() == 2)
             DirBall();
 
@@ -180,8 +184,35 @@ public class BallController : MonoBehaviour
     {
         if (collision.tag == "DeadZone")
         {
-            UIController.GetInstance.ResultUI(blockManager.GetListBlock());
+            m_iBallLive -= 1;
+
+            if (m_iBallLive == 0)
+                UIController.GetInstance.ResultUI(blockManager.GetListBlock());
+            else
+                Destroy(this.gameObject);
         }
+    }
+
+    public void CreateBall()
+    {
+        GameObject[] goBall = new GameObject[2];
+        for(int i = 0; i < 2; ++i)
+        {
+            ++m_iBallLive;
+            goBall[i] = Instantiate(Resources.Load("Ball/Breaker_Ball(Red)")) as GameObject;
+            BallController ball = goBall[i].GetComponent<BallController>();
+            goBall[i].name = "Breaker_Ball(Red)";
+            goBall[i].transform.position = trans.position;
+            ball.state = BALLSTATE.MOVE;
+            ball.ArrowObject.SetActive(false);
+            ball.startPosition = trans.position;
+        }
+
+        goBall[0].transform.rotation = Quaternion.Euler(trans.rotation.x, trans.rotation.y, trans.rotation.z + 45f);
+        goBall[1].transform.rotation = Quaternion.Euler(trans.rotation.x, trans.rotation.y, trans.rotation.z - 45f);
+        goBall[0].GetComponent<BallController>().vecDir = goBall[0].transform.rotation * vecDir;
+        goBall[1].GetComponent<BallController>().vecDir = goBall[1].transform.rotation * vecDir;
+     
     }
 
     public void SetSpeed(float fSpeed)

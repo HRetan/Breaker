@@ -43,7 +43,6 @@ public class ItemManager : MonoBehaviour{
         {
             ItemApply();
             Destroy(gameObject);
-            Debug.Log("충돌1");
         }
     }
 
@@ -58,7 +57,7 @@ public class ItemManager : MonoBehaviour{
                 goBall.SetGrap();
                 break;
             case ITEMSTATE.YELLOW:
-                //goBar.SetSpeed(-0.025f);
+                goBall.CreateBall();
                 break;
             case ITEMSTATE.GREEN:
                 goBar.SetSize(new Vector3(-0.5f, 0f, 0f));
