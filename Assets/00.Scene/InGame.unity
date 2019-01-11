@@ -192,12 +192,8 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114780429963853556, guid: cd2a7ba7fea03ce489404bc90a172df2,
-        type: 2}
-      propertyPath: fSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 61189312469833446, guid: cd2a7ba7fea03ce489404bc90a172df2, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: cd2a7ba7fea03ce489404bc90a172df2, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &997959333
@@ -445,7 +441,7 @@ GameObject:
   - component: {fileID: 1354907675}
   - component: {fileID: 1354907676}
   - component: {fileID: 1354907677}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: GameManager
   m_TagString: Manager
   m_Icon: {fileID: 0}
@@ -751,10 +747,6 @@ Prefab:
     - target: {fileID: 4971840709360782, guid: 27b79caa94b8bec4699615602faed0be, type: 2}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1511453524515482, guid: 27b79caa94b8bec4699615602faed0be, type: 2}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27b79caa94b8bec4699615602faed0be, type: 2}

@@ -52,7 +52,7 @@ public class BlockController : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if(coll.gameObject.tag == "Ball")
+        if(coll.gameObject.tag == "Ball" || coll.gameObject.tag == "Bullet")
         {
             isBreak = true;
             boxColl.enabled = false;
@@ -81,7 +81,13 @@ public class BlockController : MonoBehaviour {
                 case 6:
                     CreateItem("Item(Green)", 3);
                     break;
+                case 7:
+                    CreateItem("Item(Pink)", 6);
+                    break;
             }
+
+            if (coll.gameObject.tag == "Bullet")
+                Destroy(coll.gameObject);
         }
     }
 
@@ -101,6 +107,8 @@ public class BlockController : MonoBehaviour {
             m_iBlockID = 5;
         else if (name.ToString() == "Breaker_Block(Green)")
             m_iBlockID = 6;
+        else if (name.ToString() == "Breaker_Block(Pink)")
+            m_iBlockID = 7;
     }
 
     void CreateItem(string strName, int iIndex)

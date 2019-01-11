@@ -70,6 +70,10 @@ public class BlockManager : MonoBehaviour
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Green)")) as GameObject;
                 goBlock.name = "Breaker_Block(Green)";
                 break;
+            case 7:
+                goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Pink)")) as GameObject;
+                goBlock.name = "Breaker_Block(Pink)";
+                break;
         }
 
         if (goBlock != null)

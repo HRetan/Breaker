@@ -13,6 +13,7 @@ public class ItemManager : MonoBehaviour{
         GREEN,
         RED,
         BLUE,
+        PINK,
         NOITEM
     }
 
@@ -69,6 +70,9 @@ public class ItemManager : MonoBehaviour{
             case ITEMSTATE.BLUE:
                 goBall.SetItemPlay(1);
                 break;
+            case ITEMSTATE.PINK:
+                goBar.SetBulletPlay();
+                break;
         }
     }
 
@@ -95,6 +99,9 @@ public class ItemManager : MonoBehaviour{
                 break;
             case 5:
                 eState = ITEMSTATE.BLUE;
+                break;
+            case 6:
+                eState = ITEMSTATE.PINK;
                 break;
         }
 }

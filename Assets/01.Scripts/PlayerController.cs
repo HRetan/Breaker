@@ -20,10 +20,18 @@ public class PlayerController : MonoBehaviour
     private float m_fSize = 4.4f;
     private PLAYERMOVE m_eMove = PLAYERMOVE.NOMOVE;
 
+    private GameObject[] m_goBulletPoint = new GameObject[2];
+
+    private bool m_bBullet = false;
+    private float m_fBulletTime = 0f;
+    private float m_fItem = 0f;
+
     // Use this for initialization
     void Start()
     {
         m_Scroll = GameObject.Find("Scrollbar").GetComponent<Scrollbar>();
+        m_goBulletPoint[0] = transform.Find("BulletPoint1").gameObject;
+        m_goBulletPoint[1] = transform.Find("BulletPoint2").gameObject;
         vector = transform.position;
     }
 
@@ -53,6 +61,22 @@ public class PlayerController : MonoBehaviour
     {
         if (UIController.GetInstance.GetUI())
             return;
+
+        if(m_bBullet)
+        {
+            if(m_fBulletTime >= 1f)
+            {
+                m_fBulletTime = 0;
+                CreateBullet();
+            }
+            if(m_fItem >= 10f)
+            {
+                m_fItem = 0f;
+                m_bBullet = false;
+            }
+            m_fBulletTime += Time.deltaTime;
+            m_fItem += Time.deltaTime;
+        }
     }
 
     void OnCollisionStay2D(Collision2D coll)
@@ -117,5 +141,20 @@ public class PlayerController : MonoBehaviour
     public int GetPlayerMove()
     {
         return (int)m_eMove;
+    }
+
+    public void SetBulletPlay()
+    {
+        m_bBullet = true;
+    }
+
+    void CreateBullet()
+    {
+        for(int i = 0; i < 2; ++i)
+        {
+            GameObject goBullet = MonoBehaviour.Instantiate(Resources.Load("Bullet/Bullet")) as GameObject;
+            goBullet.name = "Bullet";
+            goBullet.transform.position = m_goBulletPoint[i].transform.position;
+        }
     }
 }

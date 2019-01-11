@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212546083565398728}
   - component: {fileID: 61059779820073776}
   - component: {fileID: 114131405814592260}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Breaker_Block(Gray)
   m_TagString: Block
   m_Icon: {fileID: 0}
@@ -78,6 +78,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55fcdaefc7938dc43802f3102ed6f7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_iBlockID: 0
+  m_iIndex: 0
 --- !u!212 &212546083565398728
 SpriteRenderer:
   m_ObjectHideFlags: 1
