@@ -20,7 +20,7 @@ public class BlockManager : MonoBehaviour
 
         SkinManager.GetInstance.MySkin();
     }
-
+   
     // Update is called once per frame
     void Update()
     {

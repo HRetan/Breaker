@@ -28,6 +28,7 @@ public class BallController : MonoBehaviour
 {
     private static int m_iBallLive = 1;
 
+    [SerializeField]
     private float fMoveSpeed = 5f;
     private Transform trans;
     private BALLSTATE state = BALLSTATE.START;
