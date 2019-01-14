@@ -158,11 +158,11 @@ public class UIController : MonoBehaviour
             Debug.Log("파일 삭제 실패");
     }
 
-    public void ClearGame(List<GameObject> listBlock)
+    public void ClearGame(int iBlockCount)
     {
         if (StageManager.GetInstance.GetStage())
         {
-            if (listBlock.Count == 0)
+            if (iBlockCount == 0)
             {
                 StageManager.GetInstance.GetStageList()[SaveNLoad.GetInstance.GetStaticStageNum()].IsOpen = true;
                 SaveNLoad.GetInstance.SaveStage();
@@ -175,19 +175,19 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void ResultUI(List<GameObject> listBlock)
+    public void ResultUI(int iBlockCount)
     {
         GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/GameOverUI")) as GameObject;
         m_bUI = true;
 
         goDynamic.name = "dynamicUI";
 
-        if (listBlock.Count == 0)
+        if (iBlockCount == 0)
             GameObject.Find("Result").GetComponent<Text>().text = "Clear";
         else
             GameObject.Find("Result").GetComponent<Text>().text = "Failed";
 
-        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(listBlock));
+        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount));
     }
 
     public void MenuUI()

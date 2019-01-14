@@ -20,6 +20,7 @@ public class ScrollUI : MonoBehaviour {
     private float[] m_fDis;             // 센터와의 거리
     private int m_iBttnDis;             // 블락 간의 거리를 유지
     private int m_iMinBttnNum;          // 고정 시킨 버튼의 인덱스 번호
+    private int m_iBlockCount = 12;     // Block 갯수
 
     [SerializeField]
     private SCROLLSTATE m_eScroll = SCROLLSTATE.NOTOUCH;
@@ -28,8 +29,8 @@ public class ScrollUI : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        m_rtBlock = new Button[9];
-        for (int i = 0; i < 9; ++i)
+        m_rtBlock = new Button[m_iBlockCount];
+        for (int i = 0; i < m_iBlockCount; ++i)
         {
             int iIndex = i + 1;
             int iIndex2 = i;

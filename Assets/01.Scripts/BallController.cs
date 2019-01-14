@@ -165,6 +165,14 @@ public class BallController : MonoBehaviour
         if (m_tState[1].bIsPlay && coll.gameObject.tag == "Block")
             return;
 
+        Vector3 angleVec = trans.rotation.eulerAngles;
+
+        trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, SetAngle(coll));
+
+    }
+
+    float SetAngle(Collision2D coll)
+    {
         if (coll.gameObject.tag == "Player" && m_tState[0].bIsPlay)
         {
             m_fColX = Mathf.Abs(BarTrans.position.x - coll.contacts[0].point.x);
@@ -176,19 +184,22 @@ public class BallController : MonoBehaviour
             state = BALLSTATE.GRAP;
             Debug.Log(m_fColX);
         }
-
-        Vector3 angleVec = trans.rotation.eulerAngles;
+        float angle = 0f;
         Vector2 point = coll.contacts[0].point;
         temp.AddForce(Vector2.zero);
 
         incidence = (Vector3)point - startPosition;
         normalVec = coll.contacts[0].normal;
-        vecDir = Vector3.Reflect(incidence, normalVec).normalized;
+        vecDir = Vector3.Reflect(incidence, normalVec);
+
+        if (coll.gameObject.tag == "Block" && coll.gameObject.GetComponent<BlockController>().GetBlockID() == 9)
+        {
+            vecDir = new Vector3(Random.Range(0f, 360f), Random.Range(0f, 360f), 0f);
+        }
+        vecDir = vecDir.normalized;
         startPosition = point;
 
-        float angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
-        trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
-
+        return angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -198,7 +209,7 @@ public class BallController : MonoBehaviour
             m_iBallLive -= 1;
 
             if (m_iBallLive == 0)
-                UIController.GetInstance.ResultUI(blockManager.GetListBlock());
+                UIController.GetInstance.ResultUI(blockManager.GetBlockCount());
             else
                 Destroy(this.gameObject);
         }

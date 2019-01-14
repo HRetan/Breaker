@@ -7,6 +7,8 @@ public class BlockManager : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> m_listBlock;
+    [SerializeField]
+    private int m_iBlockCount = 0;
 
     // Use this for initialization
     void Start()
@@ -24,16 +26,34 @@ public class BlockManager : MonoBehaviour
         if (UIController.GetInstance.GetUI())
             return;
 
-        if(m_listBlock.Count == 0)
+        if(m_iBlockCount == 0)
         {
-            UIController.GetInstance.ResultUI(m_listBlock);
+            UIController.GetInstance.ResultUI(m_iBlockCount);
         }
 
+    }
+
+    void SetBlock(GameObject goBlock, string strName, int iLife, int iCount)
+    {
+        goBlock.name = strName;
+        goBlock.GetComponent<BlockController>().SetLife(iLife);
+        m_iBlockCount += iCount;
     }
 
     public List<GameObject> GetListBlock()
     {
         return m_listBlock;
+    }
+
+    public int GetBlockCount()
+    {
+        return m_iBlockCount;
+    }
+
+    public void SetBlockCount()
+    {
+
+        m_iBlockCount -= 1;
     }
 
     public void CreateBlock(GameObject parentObject, Vector3 position, int blockID)
@@ -44,35 +64,47 @@ public class BlockManager : MonoBehaviour
         {
             case 0:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Gray)")) as GameObject;
-                goBlock.name = "Breaker_Block(Gray)";
+                SetBlock(goBlock, "Breaker_Block(Gray)", 1, 1);
                 break;
             case 1:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Blue)")) as GameObject;
-                goBlock.name = "Breaker_Block(Blue)";
+                SetBlock(goBlock, "Breaker_Block(Blue)", 1, 1);
                 break;
             case 2:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Brown)")) as GameObject;
-                goBlock.name = "Breaker_Block(Brown)";
+                SetBlock(goBlock, "Breaker_Block(Brown)", 1, 1);
                 break;
             case 3:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Purple)")) as GameObject;
-                goBlock.name = "Breaker_Block(Purple)";
+                SetBlock(goBlock, "Breaker_Block(Purple)", 1, 1);
                 break;
             case 4:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Red)")) as GameObject;
-                goBlock.name = "Breaker_Block(Red)";
+                SetBlock(goBlock, "Breaker_Block(Red)", 1, 1);
                 break;
             case 5:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Orange)")) as GameObject;
-                goBlock.name = "Breaker_Block(Orange)";
+                SetBlock(goBlock, "Breaker_Block(Orange)", 1, 1);
                 break;
             case 6:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Green)")) as GameObject;
-                goBlock.name = "Breaker_Block(Green)";
+                SetBlock(goBlock, "Breaker_Block(Green)", 1, 1);
                 break;
             case 7:
                 goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Pink)")) as GameObject;
-                goBlock.name = "Breaker_Block(Pink)";
+                SetBlock(goBlock, "Breaker_Block(Pink)", 1, 1);
+                break;
+            case 8:
+                goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(SkyBlue)")) as GameObject;
+                SetBlock(goBlock, "Breaker_Block(SkyBlue)", 2, 1);
+                break;
+            case 9:
+                goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Yellow)")) as GameObject;
+                SetBlock(goBlock, "Breaker_Block(Yellow)", 1, 1);
+                break;
+            case 10:
+                goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Black)")) as GameObject;
+                SetBlock(goBlock, "Breaker_Block(Black)", 1, 0);
                 break;
         }
 

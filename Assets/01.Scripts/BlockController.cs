@@ -12,13 +12,13 @@ public class BlockController : MonoBehaviour {
     private BlockManager blockManager;
     private Transform trans;
     private Color color;
-    private bool isBreak = false;
     private float fTime;
 
     [SerializeField]
     private int m_iBlockID = 0;
     [SerializeField]
     private int m_iIndex = 0;
+    private int m_iBlockLife = 1;
 
     // Use this for initialization
     void Start () {
@@ -36,7 +36,8 @@ public class BlockController : MonoBehaviour {
             return;
 
         sprite.color = color;
-        if (isBreak)
+
+        if (m_iBlockLife <= 0)
         {
             fTime += Time.deltaTime * fSpeed;
 
@@ -45,7 +46,8 @@ public class BlockController : MonoBehaviour {
             if (fTime >= 1f)
             {
                 blockManager.GetListBlock().Remove(this.gameObject);
-                Destroy(gameObject);
+                blockManager.SetBlockCount();
+                Destroy(this.gameObject);
             }
         }
 	}
@@ -54,37 +56,7 @@ public class BlockController : MonoBehaviour {
     {
         if(coll.gameObject.tag == "Ball" || coll.gameObject.tag == "Bullet")
         {
-            isBreak = true;
-            boxColl.enabled = false;
-            GameObject Effect = MonoBehaviour.Instantiate(Resources.Load("Effect/Broken_Effect")) as GameObject;
-            Effect.name = "Broken_Effect";
-            Effect.transform.position = trans.position;
-            switch (m_iBlockID)
-            {
-                case 0:
-                    break;
-                case 1:
-                    CreateItem("Item(Blue)", 5);
-                    break;
-                case 2:
-                    CreateItem("Item(Brown)", 0);
-                    break;
-                case 3:
-                    CreateItem("Item(Purple)", 1);
-                    break;
-                case 4:
-                    CreateItem("Item(Red)", 4);
-                    break;
-                case 5:
-                    CreateItem("Item(Yellow)", 2);
-                    break;
-                case 6:
-                    CreateItem("Item(Green)", 3);
-                    break;
-                case 7:
-                    CreateItem("Item(Pink)", 6);
-                    break;
-            }
+            BlockState();
 
             if (coll.gameObject.tag == "Bullet")
                 Destroy(coll.gameObject);
@@ -109,6 +81,58 @@ public class BlockController : MonoBehaviour {
             m_iBlockID = 6;
         else if (name.ToString() == "Breaker_Block(Pink)")
             m_iBlockID = 7;
+        else if (name.ToString() == "Breaker_Block(SkyBlue)")
+            m_iBlockID = 8;
+        else if (name.ToString() == "Breaker_Block(Yellow)")
+            m_iBlockID = 9;
+        else if (name.ToString() == "Breaker_Block(Black)")
+            m_iBlockID = 10;
+    }
+
+    void BlockState()
+    {
+        if (m_iBlockID != 10)
+        {
+            Damage();
+            boxColl.enabled = false;
+            GameObject Effect = MonoBehaviour.Instantiate(Resources.Load("Effect/Broken_Effect")) as GameObject;
+            Effect.name = "Broken_Effect";
+            Effect.transform.position = trans.position;
+        }
+
+        switch (m_iBlockID)
+        {
+            case 0:
+                break;
+            case 1:
+                CreateItem("Item(Blue)", 5);
+                break;
+            case 2:
+                CreateItem("Item(Brown)", 0);
+                break;
+            case 3:
+                CreateItem("Item(Purple)", 1);
+                break;
+            case 4:
+                CreateItem("Item(Red)", 4);
+                break;
+            case 5:
+                CreateItem("Item(Yellow)", 2);
+                break;
+            case 6:
+                CreateItem("Item(Green)", 3);
+                break;
+            case 7:
+                CreateItem("Item(Pink)", 6);
+                break;
+            case 8:
+                DamageBlock();
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+        }
     }
 
     void CreateItem(string strName, int iIndex)
@@ -117,6 +141,15 @@ public class BlockController : MonoBehaviour {
         item.name = strName;
         item.transform.position = trans.position;
         item.GetComponent<ItemManager>().SetState(iIndex);
+    }
+
+    void DamageBlock()
+    {
+        if(m_iBlockLife == 1)
+        {
+            Sprite spt = Resources.Load("Block/Breaker_Block(SkyBlue)_Damage") as Sprite;
+            gameObject.GetComponent<SpriteRenderer>().sprite = spt;
+        }
     }
 
     public int GetBlockID()
@@ -137,5 +170,15 @@ public class BlockController : MonoBehaviour {
     public void SetIndex(int iIndex)
     {
         m_iIndex = iIndex;
+    }
+
+    void Damage()
+    {
+        m_iBlockLife -= 1;
+    }
+
+    public void SetLife(int iLife)
+    {
+        m_iBlockLife = iLife;
     }
 }
