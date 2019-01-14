@@ -18,6 +18,7 @@ public class BlockController : MonoBehaviour {
     private int m_iBlockID = 0;
     [SerializeField]
     private int m_iIndex = 0;
+    [SerializeField]
     private int m_iBlockLife = 1;
 
     // Use this for initialization
@@ -39,6 +40,8 @@ public class BlockController : MonoBehaviour {
 
         if (m_iBlockLife <= 0)
         {
+            boxColl.enabled = false;
+
             fTime += Time.deltaTime * fSpeed;
 
             color.a = Mathf.Lerp(1, 0, fTime);
@@ -94,7 +97,6 @@ public class BlockController : MonoBehaviour {
         if (m_iBlockID != 10)
         {
             Damage();
-            boxColl.enabled = false;
             GameObject Effect = MonoBehaviour.Instantiate(Resources.Load("Effect/Broken_Effect")) as GameObject;
             Effect.name = "Broken_Effect";
             Effect.transform.position = trans.position;
@@ -147,7 +149,7 @@ public class BlockController : MonoBehaviour {
     {
         if(m_iBlockLife == 1)
         {
-            Sprite spt = Resources.Load("Block/Breaker_Block(SkyBlue)_Damage") as Sprite;
+            Sprite spt = Resources.Load("Block/Breaker_Block(SkyBlue)_Damage", typeof(Sprite)) as Sprite;
             gameObject.GetComponent<SpriteRenderer>().sprite = spt;
         }
     }
