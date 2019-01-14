@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00.Scene/MapTool.unity
     guid: 6233554b0cc4e56459f99934e76a2487
+  - enabled: 1
+    path: Assets/00.Scene/Title_Skin.unity
+    guid: a5d734cfe9835fc4b8a02bcd11955ab6
   m_configObjects: {}

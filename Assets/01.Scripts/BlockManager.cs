@@ -18,6 +18,7 @@ public class BlockManager : MonoBehaviour
         else
             SaveNLoad.GetInstance.LoadUserMap(SaveNLoad.GetInstance.GetStaticFileName());
 
+        SkinManager.GetInstance.MySkin();
     }
 
     // Update is called once per frame

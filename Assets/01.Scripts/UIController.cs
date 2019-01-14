@@ -21,7 +21,7 @@ public class UIController : MonoBehaviour
 
                 if (Instance == null)
                 {
-                    Debug.LogError("싱글톤 인스턴스 생성 실패");
+                    Debug.LogError("UIController     생성 실패");
                 }
             }
             return Instance;
