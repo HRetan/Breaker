@@ -120,7 +120,6 @@ public class PlayerController : MonoBehaviour
             return;
 
         transform.localScale += vSize;
-        Debug.Log("사이즈 증가");
     }
 
     public void LeftMoveOn()

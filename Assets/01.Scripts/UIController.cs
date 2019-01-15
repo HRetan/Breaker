@@ -28,7 +28,26 @@ public class UIController : MonoBehaviour
         }
     }
 
+    static private string w_strBlockPath = "Block/Ver1/Breaker_Block";
+
+    public string GetPath()
+    {
+        return w_strBlockPath;
+    }
+
     private bool m_bUI = false;
+
+    void Update()
+    {
+        //Block Image 변경
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            if (w_strBlockPath == "Block/Ver1/Breaker_Block")
+                w_strBlockPath = "Block/Ver2/Breaker_Block_Ver2";
+            else
+                w_strBlockPath = "Block/Ver1/Breaker_Block";
+        }
+    }
 
     public void SceneChangeTitle()
     {

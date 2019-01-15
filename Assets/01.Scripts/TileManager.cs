@@ -69,47 +69,47 @@ public class TileManager : MonoBehaviour {
         switch (m_iBlockNum)
         {
             case 0:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Gray)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Gray)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Gray)";
                 break;
             case 1:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Blue)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Blue)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Blue)";
                 break;
             case 2:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Brown)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Brown)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Brown)";
                 break;
             case 3:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Purple)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Purple)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Purple)";
                 break;
             case 4:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Red)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Red)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Red)";
                 break;
             case 5:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Orange)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Orange)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Orange)";
                 break;
             case 6:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Green)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Green)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Green)";
                 break;
             case 7:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Pink)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Pink)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Pink)";
                 break;
             case 8:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(SkyBlue)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(SkyBlue)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(SkyBlue)";
                 break;
             case 9:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Yellow)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Yellow)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Yellow)";
                 break;
             case 10:
-                m_goBlock = MonoBehaviour.Instantiate(Resources.Load("Block/Breaker_Block(Black)")) as GameObject;
+                m_goBlock = MonoBehaviour.Instantiate(Resources.Load(UIController.GetInstance.GetPath() + "(Black)")) as GameObject;
                 m_goBlock.name = "Breaker_Block(Black)";
                 break;
             case 11:

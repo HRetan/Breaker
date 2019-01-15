@@ -11,6 +11,13 @@ enum BALLSTATE
     DEAD
 }
 
+enum BALLITEM
+{
+    CLONE,
+    PENETRATE,
+    ITEMEND
+}
+
 public struct itemState
 {
     public bool bIsPlay;
@@ -27,6 +34,7 @@ public struct itemState
 public class BallController : MonoBehaviour
 {
     private static int m_iBallLive = 1;
+    private static int w_iBallAtk = 1;
 
     private float fMoveSpeed = 5f;
     private Transform trans;
@@ -50,7 +58,7 @@ public class BallController : MonoBehaviour
 
     private float m_fColX = 0f;
 
-    private itemState[] m_tState = new itemState[2];
+    private itemState[] m_tState = new itemState[(int)BALLITEM.ITEMEND];
 
     void Awake()
     {
@@ -163,8 +171,14 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (m_tState[1].bIsPlay && coll.gameObject.tag == "Block")
-            return;
+        if (m_tState[(int)BALLITEM.PENETRATE].bIsPlay && coll.gameObject.tag == "Block")
+        {
+            if (coll.gameObject.GetComponent<BlockController>().GetBlockID() != 10)
+            {
+                coll.gameObject.GetComponent<BlockController>().SetLife(0);
+                return;
+            }
+        }
 
         Vector3 angleVec = trans.rotation.eulerAngles;
 
@@ -174,7 +188,7 @@ public class BallController : MonoBehaviour
 
     float SetAngle(Collision2D coll)
     {
-        if (coll.gameObject.tag == "Player" && m_tState[0].bIsPlay)
+        if (coll.gameObject.tag == "Player" && m_tState[(int)BALLITEM.CLONE].bIsPlay)
         {
             m_fColX = Mathf.Abs(BarTrans.position.x - coll.contacts[0].point.x);
             if (BarTrans.position.x >= coll.contacts[0].point.x)
@@ -207,7 +221,6 @@ public class BallController : MonoBehaviour
     {
         if (collision.tag == "DeadZone")
         {
-            Debug.Log("충돌");
             m_iBallLive -= 1;
 
             if (m_iBallLive == 0)
@@ -266,5 +279,10 @@ public class BallController : MonoBehaviour
     public void SetItemPlay(int iIndex)
     {
         m_tState[iIndex].bIsPlay = true;
+    }
+
+    public int GetBallAtk()
+    {
+        return w_iBallAtk;
     }
 }

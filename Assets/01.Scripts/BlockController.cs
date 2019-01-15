@@ -14,11 +14,8 @@ public class BlockController : MonoBehaviour {
     private Color color;
     private float fTime;
 
-    [SerializeField]
     private int m_iBlockID = 0;
-    [SerializeField]
     private int m_iIndex = 0;
-    [SerializeField]
     private int m_iBlockLife = 1;
 
     // Use this for initialization
@@ -149,7 +146,7 @@ public class BlockController : MonoBehaviour {
     {
         if(m_iBlockLife == 1)
         {
-            Sprite spt = Resources.Load("Block/Breaker_Block(SkyBlue)_Damage", typeof(Sprite)) as Sprite;
+            Sprite spt = Resources.Load(UIController.GetInstance.GetPath() + "(SkyBlue)_Damage", typeof(Sprite)) as Sprite;
             gameObject.GetComponent<SpriteRenderer>().sprite = spt;
         }
     }
