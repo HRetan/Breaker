@@ -28,7 +28,6 @@ public class BallController : MonoBehaviour
 {
     private static int m_iBallLive = 1;
 
-    [SerializeField]
     private float fMoveSpeed = 5f;
     private Transform trans;
     private BALLSTATE state = BALLSTATE.START;
@@ -70,6 +69,7 @@ public class BallController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Debug.Log(m_iBallLive);
     }
 
     void FixedUpdate()
@@ -207,10 +207,14 @@ public class BallController : MonoBehaviour
     {
         if (collision.tag == "DeadZone")
         {
+            Debug.Log("충돌");
             m_iBallLive -= 1;
 
             if (m_iBallLive == 0)
+            {
                 UIController.GetInstance.ResultUI(blockManager.GetBlockCount());
+                m_iBallLive = 1;
+            }
             else
                 Destroy(this.gameObject);
         }
