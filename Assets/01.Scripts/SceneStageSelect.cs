@@ -17,7 +17,7 @@ public class SceneStageSelect : MonoBehaviour {
             m_listBlock[i].GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene(iIndex));
         }
 
-        StageManager.GetInstance.Initialize();
+        StageManager.GetInstance.Initialize(m_listBlock);
     }
 	
 	// Update is called once per frame

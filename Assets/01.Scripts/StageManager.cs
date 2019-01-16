@@ -38,7 +38,7 @@ public class StageManager : MonoBehaviour {
     public static bool w_bStage = false;
 
 	// Use this for initialization
-	public void Initialize () {
+	public void Initialize (List<GameObject> listBlock) {
 
         for (int i = 0; i < 35; ++i)
         {
@@ -48,14 +48,17 @@ public class StageManager : MonoBehaviour {
             stage.iStageIndex = iIndex;
             // True와 False 에 따른 이미지 변경 할 곳.
             if (i == 0)
+            {
                 stage.IsOpen = true;
+                listBlock[0].transform.Find("Lock").gameObject.SetActive(false);
+            }
             else
                 stage.IsOpen = false;
 
             m_listStage.Add(stage);
         }
         //GameObject.Find("Stage" + 1).GetComponent<Button>().onClick.AddListener(() => PlayGameScene(1));
-        SaveNLoad.GetInstance.LoadStage();
+        SaveNLoad.GetInstance.LoadStage(listBlock);
     }
 
     public void SceneChangeTitle()
@@ -73,10 +76,13 @@ public class StageManager : MonoBehaviour {
         return w_bStage;
     }
 
-    public void SetAddStageList(int iIndex, int iBlockIndex, bool isCheck)
+    public void SetAddStageList(int iIndex, int iBlockIndex, bool isCheck, GameObject goBlock)
     {
         m_listStage[iIndex].IsOpen = isCheck;
         m_listStage[iIndex].iStageIndex = iBlockIndex;
+        if (isCheck)
+            goBlock.transform.Find("Lock").gameObject.SetActive(false);
+
     }
 
     public void PlayGameScene(int iIndex)

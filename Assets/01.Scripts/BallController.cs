@@ -74,6 +74,7 @@ public class BallController : MonoBehaviour
             m_tState[i].fTime = 0f;
         }
     }
+
     // Use this for initialization
     void Start()
     {
@@ -284,5 +285,10 @@ public class BallController : MonoBehaviour
     public int GetBallAtk()
     {
         return w_iBallAtk;
+    }
+
+    public void SetBallLife()
+    {
+        m_iBallLive = 1;
     }
 }

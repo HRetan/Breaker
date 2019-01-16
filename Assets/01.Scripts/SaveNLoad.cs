@@ -87,7 +87,7 @@ public class SaveNLoad : MonoBehaviour
 
     //현재 클리어한 Stage를 불러오기 위한 Func
     //플랫폼 별 불러오는 경로를 다르게 지정해준다.
-    public void LoadStage()
+    public void LoadStage(List<GameObject> listBlock)
     {
         Stage m_save = new Stage();
 
@@ -115,7 +115,7 @@ public class SaveNLoad : MonoBehaviour
 
         for (int i = 0; i < m_save.stageIndex.Count; ++i)
         {
-            StageManager.GetInstance.SetAddStageList(i, m_save.stageIndex[i], m_save.clearCheck[i]);
+            StageManager.GetInstance.SetAddStageList(i, m_save.stageIndex[i], m_save.clearCheck[i], listBlock[i]);
         }
 
         file.Close();

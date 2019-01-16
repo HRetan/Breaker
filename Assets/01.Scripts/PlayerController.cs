@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 vector;
     private Scrollbar m_Scroll;
+    private BallController m_scBall;
     private float m_fSize = 4.4f;
     private PLAYERMOVE m_eMove = PLAYERMOVE.NOMOVE;
 
@@ -29,10 +30,13 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        m_scBall = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallController>();
         m_Scroll = GameObject.Find("Scrollbar").GetComponent<Scrollbar>();
         m_goBulletPoint[0] = transform.Find("BulletPoint1").gameObject;
         m_goBulletPoint[1] = transform.Find("BulletPoint2").gameObject;
         vector = transform.position;
+
+        m_scBall.SetBallLife();
     }
 
     void FixedUpdate()
