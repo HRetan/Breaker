@@ -9,6 +9,7 @@ public class BlockManager : MonoBehaviour
     private List<GameObject> m_listBlock;
     [SerializeField]
     private int m_iBlockCount = 0;
+    public ScoreUI m_scScore;
 
     // Use this for initialization
     void Start()
@@ -19,6 +20,7 @@ public class BlockManager : MonoBehaviour
             SaveNLoad.GetInstance.LoadUserMap(SaveNLoad.GetInstance.GetStaticFileName());
 
         SkinManager.GetInstance.MySkin();
+        m_scScore = FindObjectOfType(typeof(ScoreUI)) as ScoreUI;
     }
    
     // Update is called once per frame
@@ -29,7 +31,14 @@ public class BlockManager : MonoBehaviour
 
         if(m_iBlockCount == 0)
         {
-            UIController.GetInstance.ResultUI(m_iBlockCount);
+            if (StageManager.GetInstance.GetStage())
+            {
+                m_scScore.StarCheck();
+                UIController.GetInstance.ResultUI(m_iBlockCount, m_scScore.GetStarCount(), m_scScore.GetScore());
+            }
+            else
+                UIController.GetInstance.ResultUI(m_iBlockCount, m_scScore.GetScore());
+
         }
 
     }

@@ -30,6 +30,8 @@ public class StageManager : MonoBehaviour {
     {
         public bool IsOpen;
         public int iStageIndex;
+        public int iStarCount;
+        public int iScore;
     }
 
     [SerializeField]
@@ -46,6 +48,8 @@ public class StageManager : MonoBehaviour {
 
             Stage stage = new Stage();
             stage.iStageIndex = iIndex;
+            stage.iStarCount = 0;
+            stage.iScore = 0;
             // True와 False 에 따른 이미지 변경 할 곳.
             if (i == 0)
             {
@@ -57,7 +61,6 @@ public class StageManager : MonoBehaviour {
 
             m_listStage.Add(stage);
         }
-        //GameObject.Find("Stage" + 1).GetComponent<Button>().onClick.AddListener(() => PlayGameScene(1));
         SaveNLoad.GetInstance.LoadStage(listBlock);
     }
 
@@ -76,12 +79,33 @@ public class StageManager : MonoBehaviour {
         return w_bStage;
     }
 
-    public void SetAddStageList(int iIndex, int iBlockIndex, bool isCheck, GameObject goBlock)
+    public void SetAddStageList(int iIndex, bool isCheck, int iBlockIndex, int iStarCount, int iScore, GameObject goBlock)
     {
         m_listStage[iIndex].IsOpen = isCheck;
         m_listStage[iIndex].iStageIndex = iBlockIndex;
+        m_listStage[iIndex].iStarCount = iStarCount;
+        m_listStage[iIndex].iScore = iScore;
         if (isCheck)
+        {
             goBlock.transform.Find("Lock").gameObject.SetActive(false);
+            Sprite spt = null;
+            switch(iStarCount)
+            {
+                case 0:
+                    spt = Resources.Load("Score/Star_0", typeof(Sprite)) as Sprite;
+                    break;
+                case 1:
+                    spt = Resources.Load("Score/Star_1", typeof(Sprite)) as Sprite;
+                    break;
+                case 2:
+                    spt = Resources.Load("Score/Star_2", typeof(Sprite)) as Sprite;
+                    break;
+                case 3:
+                    spt = Resources.Load("Score/Star_3", typeof(Sprite)) as Sprite;
+                    break;
+            }
+            goBlock.transform.Find("Star").gameObject.GetComponent<Image>().sprite = spt;
+        }
 
     }
 

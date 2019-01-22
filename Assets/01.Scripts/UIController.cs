@@ -28,7 +28,7 @@ public class UIController : MonoBehaviour
         }
     }
 
-    static private string w_strBlockPath = "Block/Ver1/Breaker_Block";
+    static private string w_strBlockPath = "Block/Ver2/Breaker_Block_Ver2";
 
     public string GetPath()
     {
@@ -107,7 +107,7 @@ public class UIController : MonoBehaviour
     private void LoadApply()
     {
         Text ttName = GameObject.Find("LoadName").GetComponent<Text>();
-        Debug.Log(ttName.text);
+        //Debug.Log(ttName.text);
 
         SaveNLoad.GetInstance.LoadToolMap(ttName.text);
         Destroy(GameObject.Find("dynamicUI"));
@@ -177,13 +177,19 @@ public class UIController : MonoBehaviour
             Debug.Log("파일 삭제 실패");
     }
 
-    public void ClearGame(int iBlockCount)
+    public void ClearGame(int iBlockCount, int iScore)
     {
         if (StageManager.GetInstance.GetStage())
         {
             if (iBlockCount == 0)
             {
-                StageManager.GetInstance.GetStageList()[SaveNLoad.GetInstance.GetStaticStageNum()].IsOpen = true;
+                int iIndex = SaveNLoad.GetInstance.GetStaticStageNum();
+
+                StageManager.GetInstance.GetStageList()[iIndex].IsOpen = true;
+
+                if (StageManager.GetInstance.GetStageList()[iIndex - 1].iScore <= iScore)
+                    StageManager.GetInstance.GetStageList()[iIndex - 1].iScore = iScore;
+
                 SaveNLoad.GetInstance.SaveStage();
             }
             SceneChangeStart();
@@ -194,7 +200,32 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void ResultUI(int iBlockCount)
+    public void ClearGame(int iBlockCount, int iStarCount, int iScore)
+    {
+        if (StageManager.GetInstance.GetStage())
+        {
+            if (iBlockCount == 0)
+            {
+                int iIndex = SaveNLoad.GetInstance.GetStaticStageNum();
+
+                StageManager.GetInstance.GetStageList()[iIndex].IsOpen = true;
+
+                if(StageManager.GetInstance.GetStageList()[iIndex - 1].iStarCount <= iStarCount)
+                 StageManager.GetInstance.GetStageList()[iIndex - 1].iStarCount = iStarCount;
+                if (StageManager.GetInstance.GetStageList()[iIndex - 1].iScore <= iScore)
+                    StageManager.GetInstance.GetStageList()[iIndex - 1].iScore = iScore;
+
+                SaveNLoad.GetInstance.SaveStage();
+            }
+            SceneChangeStart();
+        }
+        else
+        {
+            SceneChangeUserMap();
+        }
+    }
+
+    public void ResultUI(int iBlockCount, int iStarCount, int iScore)
     {
         GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/GameOverUI")) as GameObject;
         m_bUI = true;
@@ -206,7 +237,22 @@ public class UIController : MonoBehaviour
         else
             GameObject.Find("Result").GetComponent<Text>().text = "Failed";
 
-        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount));
+        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount, iStarCount, iScore));
+    }
+
+    public void ResultUI(int iBlockCount, int iScore)
+    {
+        GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/GameOverUI")) as GameObject;
+        m_bUI = true;
+
+        goDynamic.name = "dynamicUI";
+
+        if (iBlockCount == 0)
+            GameObject.Find("Result").GetComponent<Text>().text = "Clear";
+        else
+            GameObject.Find("Result").GetComponent<Text>().text = "Failed";
+
+        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount, iScore));
     }
 
     public void MenuUI()

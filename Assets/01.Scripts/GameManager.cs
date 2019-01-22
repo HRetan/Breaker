@@ -7,9 +7,6 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        if (UIController.GetInstance.GetUI())
-            return;
-
         Scene scene = SceneManager.GetActiveScene();
         if (scene == SceneManager.GetSceneByName("Title"))
             QuitApp();
@@ -43,7 +40,13 @@ public class GameManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIController.GetInstance.MenuUI();
+            if (!UIController.GetInstance.GetUI())
+                UIController.GetInstance.MenuUI();
+            else
+            {
+                UIController.GetInstance.DestroyUI();
+                Debug.Log("종료");
+            }
         }
     }
 }

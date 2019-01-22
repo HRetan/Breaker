@@ -21,7 +21,7 @@ public class ToolManager : MonoBehaviour {
     {
         goTileManager = new GameObject("TileManager");
 
-        for (int i = 0; i < 29; ++i)
+        for (int i = 0; i < 25; ++i)
         {
             for (int j = 0; j < 11; ++j)
             {

@@ -35,6 +35,7 @@ public class BallController : MonoBehaviour
 {
     private static int m_iBallLive = 1;
     private static int w_iBallAtk = 1;
+    private static int w_iCount = 0;
 
     private float fMoveSpeed = 5f;
     private Transform trans;
@@ -47,6 +48,7 @@ public class BallController : MonoBehaviour
     private Transform BarTrans;
 
     private BlockManager blockManager;
+    private ScoreUI m_scScoreUI;
 
     private Vector3 vector;
     private Vector3 vecDir;
@@ -57,6 +59,7 @@ public class BallController : MonoBehaviour
     private Vector3 startPosition;
 
     private float m_fColX = 0f;
+    public float m_fTestAngle = 0f;
 
     private itemState[] m_tState = new itemState[(int)BALLITEM.ITEMEND];
 
@@ -78,7 +81,8 @@ public class BallController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Debug.Log(m_iBallLive);
+        //Debug.Log(m_iBallLive);
+        m_scScoreUI = GameObject.Find("ScoreUI").GetComponent<ScoreUI>();
     }
 
     void FixedUpdate()
@@ -96,11 +100,11 @@ public class BallController : MonoBehaviour
 
         temp.simulated = true;
 
-        for(int i = 0; i <2; ++i)
+        for (int i = 0; i < 2; ++i)
         {
-            if(m_tState[i].bIsPlay)
+            if (m_tState[i].bIsPlay)
             {
-                if(m_tState[i].fTime >= 10f)
+                if (m_tState[i].fTime >= 10f)
                 {
                     m_tState[i].bIsPlay = false;
                     m_tState[i].fTime = 0f;
@@ -158,7 +162,7 @@ public class BallController : MonoBehaviour
                 Vector3 angleVec = trans.rotation.eulerAngles;
                 trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, angle);
             }
-            
+
             state = BALLSTATE.TOUCH;
         }
 
@@ -172,13 +176,18 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
+        if (coll.gameObject.tag == "Block")
+        {
+            w_iCount += 1;
+            m_scScoreUI.ScoreCheck(w_iCount);
+        }
+        else
+            w_iCount = 0;
+
         if (m_tState[(int)BALLITEM.PENETRATE].bIsPlay && coll.gameObject.tag == "Block")
         {
-            if (coll.gameObject.GetComponent<BlockController>().GetBlockID() != 10)
-            {
-                coll.gameObject.GetComponent<BlockController>().SetLife(0);
-                return;
-            }
+            coll.gameObject.GetComponent<BlockController>().SetLife(0);
+            return;
         }
 
         Vector3 angleVec = trans.rotation.eulerAngles;
@@ -198,7 +207,7 @@ public class BallController : MonoBehaviour
             temp.AddForce(Vector2.zero);
             ArrowObject.SetActive(true);
             state = BALLSTATE.GRAP;
-            Debug.Log(m_fColX);
+            //Debug.Log(m_fColX);
         }
         float angle = 0f;
         Vector2 point = coll.contacts[0].point;
@@ -215,7 +224,19 @@ public class BallController : MonoBehaviour
         vecDir = vecDir.normalized;
         startPosition = point;
 
-        return angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
+        angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
+
+        if (Mathf.Abs(angle) >= 170 || Mathf.Abs(angle) <= 10)
+        {
+            if (angle < 0)
+            {
+                angle += 50;
+            }
+            else
+                angle -= 50;
+        }
+
+        return m_fTestAngle = angle;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -226,7 +247,7 @@ public class BallController : MonoBehaviour
 
             if (m_iBallLive == 0)
             {
-                UIController.GetInstance.ResultUI(blockManager.GetBlockCount());
+                UIController.GetInstance.ResultUI(blockManager.GetBlockCount(), m_scScoreUI.GetScore());
                 m_iBallLive = 1;
             }
             else
@@ -237,7 +258,7 @@ public class BallController : MonoBehaviour
     public void CreateBall()
     {
         GameObject[] goBall = new GameObject[2];
-        for(int i = 0; i < 2; ++i)
+        for (int i = 0; i < 2; ++i)
         {
             ++m_iBallLive;
             goBall[i] = Instantiate(Resources.Load("Ball/Breaker_Ball(Red)")) as GameObject;
@@ -249,7 +270,7 @@ public class BallController : MonoBehaviour
         goBall[1].transform.rotation = Quaternion.Euler(trans.rotation.x, trans.rotation.y, trans.rotation.z - 45f);
         goBall[0].GetComponent<BallController>().vecDir = goBall[0].transform.rotation * vecDir;
         goBall[1].GetComponent<BallController>().vecDir = goBall[1].transform.rotation * vecDir;
-     
+
     }
 
     void CloneVar(GameObject goBall, BallController ballCon)
@@ -260,8 +281,8 @@ public class BallController : MonoBehaviour
         ballCon.ArrowObject.SetActive(false);
         ballCon.startPosition = trans.position;
         ballCon.m_fColX = m_fColX;
-  
-        for(int i =0; i < 2; ++i)
+
+        for (int i = 0; i < 2; ++i)
         {
             ballCon.m_tState[i] = m_tState[i];
         }

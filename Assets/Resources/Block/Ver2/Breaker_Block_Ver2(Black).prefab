@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114292460383673480}
   m_Layer: 0
   m_Name: Breaker_Block_Ver2(Black)
-  m_TagString: Block
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,9 +78,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55fcdaefc7938dc43802f3102ed6f7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_iBlockID: 0
-  m_iIndex: 0
-  m_iBlockLife: 1
 --- !u!212 &212520942789198494
 SpriteRenderer:
   m_ObjectHideFlags: 1

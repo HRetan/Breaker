@@ -36,6 +36,11 @@ public class ItemManager : MonoBehaviour{
 	
 	// Update is called once per frame
 	void Update () {
+        if (UIController.GetInstance.GetUI())
+        {
+            return;
+        }
+
         trans.Translate(-Vector3.up * fSpeed * Time.deltaTime);
 	}
 
@@ -45,6 +50,10 @@ public class ItemManager : MonoBehaviour{
         {
             ItemApply();
             Destroy(gameObject);
+        }
+        else if (coll.tag == "DeadZone")
+        {
+            Destroy(this.gameObject);
         }
     }
 

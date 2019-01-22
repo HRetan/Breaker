@@ -48,6 +48,8 @@ public class SaveNLoad : MonoBehaviour
     {
         public List<bool> clearCheck = new List<bool>();
         public List<int> stageIndex = new List<int>();
+        public List<int> starCount = new List<int>();
+        public List<int> maxScore = new List<int>();
     }
 
     [System.Serializable]
@@ -68,6 +70,8 @@ public class SaveNLoad : MonoBehaviour
         {
             m_save.clearCheck.Add(StageManager.GetInstance.GetStageList()[i].IsOpen);
             m_save.stageIndex.Add(StageManager.GetInstance.GetStageList()[i].iStageIndex);
+            m_save.starCount.Add(StageManager.GetInstance.GetStageList()[i].iStarCount);
+            m_save.maxScore.Add(StageManager.GetInstance.GetStageList()[i].iScore);
         }
 
         BinaryFormatter bf = new BinaryFormatter();
@@ -115,7 +119,7 @@ public class SaveNLoad : MonoBehaviour
 
         for (int i = 0; i < m_save.stageIndex.Count; ++i)
         {
-            StageManager.GetInstance.SetAddStageList(i, m_save.stageIndex[i], m_save.clearCheck[i], listBlock[i]);
+            StageManager.GetInstance.SetAddStageList(i, m_save.clearCheck[i], m_save.stageIndex[i], m_save.starCount[i], m_save.maxScore[i], listBlock[i]);
         }
 
         file.Close();
