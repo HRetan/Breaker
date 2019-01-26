@@ -37,6 +37,7 @@ public class BlockController : MonoBehaviour {
 
         if (m_iBlockLife <= 0)
         {
+            if(boxColl.enabled)
             boxColl.enabled = false;
 
             fTime += Time.deltaTime * fSpeed;

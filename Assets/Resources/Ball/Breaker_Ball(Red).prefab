@@ -83,8 +83,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1514285569787930}
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 10.52, y: -0.02, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalPosition: {x: 2.35, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 4495557214021450}
   m_RootOrder: 0
@@ -97,7 +97,7 @@ Transform:
   m_GameObject: {fileID: 1641761409425472}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -3, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4446197290403658}
   - {fileID: 4319109543970422}
@@ -138,7 +138,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.1
 --- !u!114 &114372299635412612
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361568c489c00654992b533b0b0d2a77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_bIsPenet: 0
+  m_fTestAngle: 0
 --- !u!198 &198977178690361474
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -4776,7 +4776,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 50e69d3e173332e40967f9c1506221c5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8aba63396ca5ea34caabfea4ac967508, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

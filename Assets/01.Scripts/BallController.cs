@@ -180,16 +180,17 @@ public class BallController : MonoBehaviour
         {
             w_iCount += 1;
             m_scScoreUI.ScoreCheck(w_iCount);
+
+            if(m_tState[(int)BALLITEM.PENETRATE].bIsPlay)
+            {
+                coll.gameObject.GetComponent<BlockController>().SetLife(0);
+                coll.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                return;
+            }
         }
         else
             w_iCount = 0;
-
-        if (m_tState[(int)BALLITEM.PENETRATE].bIsPlay && coll.gameObject.tag == "Block")
-        {
-            coll.gameObject.GetComponent<BlockController>().SetLife(0);
-            return;
-        }
-
+        
         Vector3 angleVec = trans.rotation.eulerAngles;
 
         trans.rotation = Quaternion.Euler(angleVec.x, angleVec.y, SetAngle(coll));

@@ -278,4 +278,9 @@ public class UIController : MonoBehaviour
         GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene(SaveNLoad.GetInstance.GetStaticFileName()));
         GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
     }
+
+   public void EnableSelector()
+    {
+
+    }
 }

@@ -128,4 +128,12 @@ public class SkinManager : MonoBehaviour {
                 break;
         }
     }
+
+    public void SetTestSkin(GameObject goSkin)
+    {
+        GameObject goSelect = GameObject.Find("Selector");
+
+        goSelect.transform.parent = goSkin.transform;
+        goSelect.GetComponent<RectTransform>().position = goSkin.GetComponent<RectTransform>().position;
+    }
 }
