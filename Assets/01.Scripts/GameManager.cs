@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-using GoogleMobileAds.Api;
+//using GoogleMobileAds.Api;
 
 public class GameManager : MonoBehaviour {
 
     private Scene m_Scene;
-    static bool m_bIsAdsBanner = false;
+  //  static bool m_bIsAdsBanner = false;
 
     void Start()
     {
         m_Scene = SceneManager.GetActiveScene();
 
-        if(m_Scene == SceneManager.GetSceneByName("Title_Stage"))
-        {
-            if (!m_bIsAdsBanner)
-                RequestBanner();
-        }
+        //if(m_Scene == SceneManager.GetSceneByName("Title_Stage"))
+        //{
+        //    if (!m_bIsAdsBanner)
+        //        RequestBanner();
+        //}
     }
 
     void Update()
@@ -65,31 +65,31 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    // 애드몹 설정
-    private void RequestBanner()
+//    // 애드몹 설정
+//    private void RequestBanner()
 
-    {
-        Debug.Log("들어오나여");
-#if UNITY_ANDROID
+//    {
+//        Debug.Log("들어오나여");
+//#if UNITY_ANDROID
 
-        string AdUnitID = "ca-app-pub-8475559446490862/7818072623";
+//        string AdUnitID = "ca-app-pub-8475559446490862/7818072623";
 
-#else
+//#else
 
-        string AdUnitID = "unDefind";
+//        string AdUnitID = "unDefind";
 
-#endif
+//#endif
 
-        BannerView banner = new BannerView(AdUnitID, AdSize.Banner, AdPosition.Top);
+//        BannerView banner = new BannerView(AdUnitID, AdSize.Banner, AdPosition.Top);
 
 
 
-        AdRequest request = new AdRequest.Builder().AddTestDevice(AdRequest.TestDeviceSimulator).AddTestDevice("0DE6974EAB3FD00430C1BD4763A64F21").Build();
+//        AdRequest request = new AdRequest.Builder().AddTestDevice(AdRequest.TestDeviceSimulator).AddTestDevice("0DE6974EAB3FD00430C1BD4763A64F21").Build();
 
-        banner.LoadAd(request);
+//        banner.LoadAd(request);
 
-        m_bIsAdsBanner = true;
+//        m_bIsAdsBanner = true;
 
-    }
+//    }
 }
 

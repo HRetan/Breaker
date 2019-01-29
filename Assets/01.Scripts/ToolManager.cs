@@ -31,13 +31,14 @@ public class ToolManager : MonoBehaviour {
                 GameObject tile = MonoBehaviour.Instantiate(Resources.Load("Tile/MapTile(White)")) as GameObject;
                 tile.name = "MapTile(White)" + (i * 11 +j);
                 tile.transform.parent = goTileManager.transform;
-                tile.transform.position = new Vector2(fX - 2.67f, fY - 2.5f);
+                tile.transform.position = new Vector2(fX - 2.67f, fY - 3.0f);
                 tile.GetComponent<TileManager>().SetIndex(i * 11 + j);
 
                 m_listTile.Add(tile);
             }
         }
-  
+
+        SaveNLoad.GetInstance.SavePos();
     }
 	
 	// Update is called once per frame
