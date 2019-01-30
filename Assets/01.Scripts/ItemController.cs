@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class ItemManager : MonoBehaviour{
+public class ItemController : MonoBehaviour {
 
     enum ITEMSTATE
     {
@@ -16,7 +15,6 @@ public class ItemManager : MonoBehaviour{
         PINK,
         NOITEM
     }
-
     private BallController goBall;
     private PlayerController goBar;
 
@@ -24,29 +22,30 @@ public class ItemManager : MonoBehaviour{
     private ITEMSTATE eState = ITEMSTATE.NOITEM;
     private Transform trans;
 
-    [SerializeField]
-    private float fSpeed = 0.5f;
+    private float fSpeed = 1f;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         trans = GetComponent<Transform>();
         goBall = GameObject.FindWithTag("Ball").GetComponent<BallController>();
         goBar = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (UIController.GetInstance.GetUI())
         {
             return;
         }
 
         trans.Translate(-Vector3.up * fSpeed * Time.deltaTime);
-	}
+    }
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if(coll.tag == "Player")
+        if (coll.tag == "Player")
         {
             ItemApply();
             Destroy(gameObject);
@@ -59,7 +58,7 @@ public class ItemManager : MonoBehaviour{
 
     void ItemApply()
     {
-        switch(eState)
+        switch (eState)
         {
             case ITEMSTATE.BROWN:
                 goBar.SetSize(new Vector3(0.5f, 0f, 0f));
@@ -113,5 +112,5 @@ public class ItemManager : MonoBehaviour{
                 eState = ITEMSTATE.PINK;
                 break;
         }
-}
+    }
 }

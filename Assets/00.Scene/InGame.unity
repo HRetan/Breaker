@@ -1327,6 +1327,7 @@ GameObject:
   - component: {fileID: 1354907676}
   - component: {fileID: 1354907677}
   - component: {fileID: 1354907678}
+  - component: {fileID: 1354907679}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Manager
@@ -1427,6 +1428,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49a0806f0e3f92438d5880b20652fda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1354907679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1354907670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e9f1563848bb5f4b8e49db1df480513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1413776198
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,26 +1531,6 @@ Prefab:
     - target: {fileID: 4495557214021450, guid: 7170c6174a786974d9b31ab2ad73a67b, type: 2}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495557214021450, guid: 7170c6174a786974d9b31ab2ad73a67b, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495557214021450, guid: 7170c6174a786974d9b31ab2ad73a67b, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4446197290403658, guid: 7170c6174a786974d9b31ab2ad73a67b, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0.94
-      objectReference: {fileID: 0}
-    - target: {fileID: 4446197290403658, guid: 7170c6174a786974d9b31ab2ad73a67b, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4446197290403658, guid: 7170c6174a786974d9b31ab2ad73a67b, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7170c6174a786974d9b31ab2ad73a67b, type: 2}

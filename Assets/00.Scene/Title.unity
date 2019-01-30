@@ -1026,6 +1026,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 985259061}
+  - component: {fileID: 985259062}
   - component: {fileID: 985259060}
   m_Layer: 0
   m_Name: AudioManager
@@ -1142,6 +1143,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &985259062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 985259059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65028e7952aadc748ba642020d54a6d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_asBgm: {fileID: 0}
 --- !u!1 &1498178549
 GameObject:
   m_ObjectHideFlags: 0
@@ -1153,7 +1166,6 @@ GameObject:
   - component: {fileID: 1498178550}
   - component: {fileID: 1498178552}
   - component: {fileID: 1498178553}
-  - component: {fileID: 1498178555}
   - component: {fileID: 1498178554}
   m_Layer: 0
   m_Name: GameManager
@@ -1223,17 +1235,6 @@ MonoBehaviour:
   ios_banner_id: 
   android_interstitial_id: ca-app-pub-3940256099942544/1033173712
   ios_interstitial_id: 
---- !u!114 &1498178555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1498178549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65028e7952aadc748ba642020d54a6d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1511413042
 GameObject:
   m_ObjectHideFlags: 0

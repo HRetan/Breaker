@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4077031705477452}
   - component: {fileID: 212076441571234594}
-  - component: {fileID: 114604212277597296}
   - component: {fileID: 61832670637980028}
   - component: {fileID: 50659496769487476}
+  - component: {fileID: 114778798267330174}
   m_Layer: 0
   m_Name: Item(Blue)
   m_TagString: Untagged
@@ -88,7 +88,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &114604212277597296
+--- !u!114 &114778798267330174
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,11 +96,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1946014379259656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67e6618371a87224dac010cbb8e0e7b1, type: 3}
+  m_Script: {fileID: 11500000, guid: a1744f66750eb74488a14cc1dc544f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eState: 5
-  fSpeed: 5
+  eState: 7
+  fSpeed: 0.3
 --- !u!212 &212076441571234594
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -7,6 +7,8 @@ public class BlockController : MonoBehaviour {
   
     private float fSpeed = 5f;
 
+    public AudioClip m_acEffectSound;
+
     private SpriteRenderer sprite;
     private BoxCollider2D boxColl;
     private BlockManager blockManager;
@@ -17,6 +19,7 @@ public class BlockController : MonoBehaviour {
     private int m_iBlockID = 0;
     private int m_iIndex = 0;
     private int m_iBlockLife = 1;
+    [SerializeField] private int m_iItemID = 0;
 
     // Use this for initialization
     void Start () {
@@ -26,6 +29,7 @@ public class BlockController : MonoBehaviour {
         color = new Color();
         color = sprite.color;
         blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+        m_iItemID = Random.Range(0, 50);
     }
 
     // Update is called once per frame
@@ -57,6 +61,9 @@ public class BlockController : MonoBehaviour {
     {
         if(coll.gameObject.tag == "Ball" || coll.gameObject.tag == "Bullet")
         {
+            if (m_acEffectSound != null)
+                AudioSource.PlayClipAtPoint(m_acEffectSound, transform.position);
+
             BlockState();
 
             if (coll.gameObject.tag == "Bullet")
@@ -103,27 +110,14 @@ public class BlockController : MonoBehaviour {
         switch (m_iBlockID)
         {
             case 0:
-                break;
             case 1:
-                CreateItem("Item(Blue)", 5);
-                break;
             case 2:
-                CreateItem("Item(Brown)", 0);
-                break;
             case 3:
-                CreateItem("Item(Purple)", 1);
-                break;
             case 4:
-                CreateItem("Item(Red)", 4);
-                break;
             case 5:
-                CreateItem("Item(Yellow)", 2);
-                break;
             case 6:
-                CreateItem("Item(Green)", 3);
-                break;
             case 7:
-                CreateItem("Item(Pink)", 6);
+                ItemManager.GetInstance.CreateItem(m_iItemID, trans.position);
                 break;
             case 8:
                 DamageBlock();
@@ -140,7 +134,7 @@ public class BlockController : MonoBehaviour {
         GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/" + strName)) as GameObject;
         item.name = strName;
         item.transform.position = trans.position;
-        item.GetComponent<ItemManager>().SetState(iIndex);
+        //item.GetComponent<ItemManager>().SetState(iIndex);
     }
 
     void DamageBlock()

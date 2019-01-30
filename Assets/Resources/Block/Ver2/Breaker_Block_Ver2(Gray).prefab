@@ -78,9 +78,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55fcdaefc7938dc43802f3102ed6f7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_iBlockID: 0
-  m_iIndex: 0
-  m_iBlockLife: 1
+  m_acEffectSound: {fileID: 8300000, guid: 5b7bf36a47f3c5444b27d506fb3150fe, type: 3}
+  m_iItemID: 0
 --- !u!212 &212932199080751648
 SpriteRenderer:
   m_ObjectHideFlags: 1

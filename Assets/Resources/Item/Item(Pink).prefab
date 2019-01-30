@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4180449936456598}
   - component: {fileID: 212151793525752398}
-  - component: {fileID: 114659579314978760}
   - component: {fileID: 61066223339079188}
   - component: {fileID: 50399950163272938}
+  - component: {fileID: 114727291063244478}
   m_Layer: 0
   m_Name: Item(Pink)
   m_TagString: Untagged
@@ -88,7 +88,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &114659579314978760
+--- !u!114 &114727291063244478
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,11 +96,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1542245452175430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67e6618371a87224dac010cbb8e0e7b1, type: 3}
+  m_Script: {fileID: 11500000, guid: a1744f66750eb74488a14cc1dc544f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eState: 6
-  fSpeed: 5
+  eState: 7
+  fSpeed: 0.3
 --- !u!212 &212151793525752398
 SpriteRenderer:
   m_ObjectHideFlags: 1
