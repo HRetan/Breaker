@@ -16,10 +16,11 @@ public class ItemController : MonoBehaviour {
         SKYBLUE,
         NOITEM
     }
+    public AudioClip m_acEffectSound;
+
     private BallController goBall;
     private PlayerController goBar;
 
-    [SerializeField]
     private ITEMSTATE eState = ITEMSTATE.NOITEM;
     private Transform trans;
 
@@ -48,6 +49,9 @@ public class ItemController : MonoBehaviour {
     {
         if (coll.tag == "Player")
         {
+            if (m_acEffectSound != null)
+                AudioSource.PlayClipAtPoint(m_acEffectSound, transform.position);
+
             ItemApply();
             Destroy(gameObject);
         }
@@ -95,22 +99,22 @@ public class ItemController : MonoBehaviour {
         switch (state)
         {
             case 0:
-                eState = ITEMSTATE.BROWN;
+                eState = ITEMSTATE.BLUE;
                 break;
             case 1:
-                eState = ITEMSTATE.PURPLE;
+                eState = ITEMSTATE.BROWN;
                 break;
             case 2:
-                eState = ITEMSTATE.YELLOW;
+                eState = ITEMSTATE.PURPLE;
                 break;
             case 3:
-                eState = ITEMSTATE.GREEN;
-                break;
-            case 4:
                 eState = ITEMSTATE.RED;
                 break;
+            case 4:
+                eState = ITEMSTATE.YELLOW;
+                break;
             case 5:
-                eState = ITEMSTATE.BLUE;
+                eState = ITEMSTATE.GREEN;
                 break;
             case 6:
                 eState = ITEMSTATE.PINK;
