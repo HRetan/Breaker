@@ -13,7 +13,7 @@ enum BALLSTATE
 
 enum BALLITEM
 {
-    CLONE,
+    GRAP,
     PENETRATE,
     ITEMEND
 }
@@ -199,7 +199,7 @@ public class BallController : MonoBehaviour
 
     float SetAngle(Collision2D coll)
     {
-        if (coll.gameObject.tag == "Player" && m_tState[(int)BALLITEM.CLONE].bIsPlay)
+        if (coll.gameObject.tag == "Player" && m_tState[(int)BALLITEM.GRAP].bIsPlay)
         {
             m_fColX = Mathf.Abs(BarTrans.position.x - coll.contacts[0].point.x);
             if (BarTrans.position.x >= coll.contacts[0].point.x)

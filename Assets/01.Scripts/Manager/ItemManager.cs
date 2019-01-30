@@ -53,6 +53,9 @@ public class ItemManager : MonoBehaviour
             case 6:
                 strName = "Item(Pink)";
                 break;
+            case 7:
+                strName = "Item(SkyBlue)";
+                break;
             default:
                 return;
         }

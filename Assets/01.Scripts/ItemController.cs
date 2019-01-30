@@ -13,6 +13,7 @@ public class ItemController : MonoBehaviour {
         RED,
         BLUE,
         PINK,
+        SKYBLUE,
         NOITEM
     }
     private BallController goBall;
@@ -61,24 +62,27 @@ public class ItemController : MonoBehaviour {
         switch (eState)
         {
             case ITEMSTATE.BROWN:
-                goBar.SetSize(new Vector3(0.5f, 0f, 0f));
+                goBall.SetSpeed(-1f);
                 break;
             case ITEMSTATE.PURPLE:
-                goBall.SetItemPlay(0);
-                break;
-            case ITEMSTATE.YELLOW:
-                goBall.CreateBall();
-                break;
-            case ITEMSTATE.GREEN:
-                goBar.SetSize(new Vector3(-0.5f, 0f, 0f));
-                break;
-            case ITEMSTATE.RED:
-                goBall.SetSpeed(1f);
-                break;
-            case ITEMSTATE.BLUE:
                 goBall.SetItemPlay(1);
                 break;
+            case ITEMSTATE.YELLOW:
+                goBar.SetSize(new Vector3(-0.5f, 0f, 0f));
+                break;
+            case ITEMSTATE.GREEN:
+                goBall.CreateBall();
+                break;
+            case ITEMSTATE.RED:
+                goBar.SetSize(new Vector3(0.5f, 0f, 0f));
+                break;
+            case ITEMSTATE.BLUE:
+                goBall.SetSpeed(1f);
+                break;
             case ITEMSTATE.PINK:
+                goBall.SetItemPlay(0);
+                break;
+            case ITEMSTATE.SKYBLUE:
                 goBar.SetBulletPlay();
                 break;
         }
@@ -110,6 +114,9 @@ public class ItemController : MonoBehaviour {
                 break;
             case 6:
                 eState = ITEMSTATE.PINK;
+                break;
+            case 7:
+                eState = ITEMSTATE.SKYBLUE;
                 break;
         }
     }
