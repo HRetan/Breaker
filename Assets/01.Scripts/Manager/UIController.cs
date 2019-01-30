@@ -18,7 +18,6 @@ public class UIController : MonoBehaviour
             if (Instance == null)
             {
                 Instance = FindObjectOfType(typeof(UIController)) as UIController;
-
                 if (Instance == null)
                 {
                     Debug.LogError("UIController     생성 실패");
@@ -29,6 +28,10 @@ public class UIController : MonoBehaviour
     }
 
     static private string w_strBlockPath = "Block/Ver2/Breaker_Block_Ver2";
+
+    private void Awake()
+    {
+    }
 
     public string GetPath()
     {

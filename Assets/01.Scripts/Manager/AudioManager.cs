@@ -5,17 +5,25 @@ using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour {
 
+    public static AudioManager Instance = null;
+
     [SerializeField] private AudioSource m_asBgm;
     [SerializeField] private Scene m_Scene;
+
+    void Awake()
+    {
+        if (Instance != null)
+            Destroy(this.gameObject);
+
+        Instance = this;
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     // Use this for initialization
     void Start () {
         m_Scene = SceneManager.GetActiveScene();
         if (GetComponent<AudioSource>() != null)
             m_asBgm = GetComponent<AudioSource>();
-
-        DontDestroyOnLoad(this);
-
     }
 
     // Update is called once per frame
