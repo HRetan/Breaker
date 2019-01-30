@@ -37,8 +37,6 @@ public class ToolManager : MonoBehaviour {
                 m_listTile.Add(tile);
             }
         }
-
-        SaveNLoad.GetInstance.SavePos();
     }
 	
 	// Update is called once per frame
