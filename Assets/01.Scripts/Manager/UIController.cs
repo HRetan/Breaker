@@ -107,6 +107,15 @@ public class UIController : MonoBehaviour
         m_bUI = true;
     }
 
+    public void ReadLoadFilePath()
+    {
+        Debug.Log("로드 추가");
+        InputField ttName = GameObject.Find("InputField").GetComponent<InputField>();
+        ttName.text = SaveNLoad.GetInstance.GetStaticFileName();
+        Debug.Log(ttName.text);
+        Debug.Log(SaveNLoad.GetInstance.GetStaticFileName());
+    }
+
     private void LoadApply()
     {
         Text ttName = GameObject.Find("LoadName").GetComponent<Text>();

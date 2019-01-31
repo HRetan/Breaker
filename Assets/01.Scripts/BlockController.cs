@@ -7,7 +7,7 @@ public class BlockController : MonoBehaviour {
   
     private float fSpeed = 5f;
 
-    public AudioClip m_acEffectSound;
+    private AudioSource m_asSound;
 
     private SpriteRenderer sprite;
     private BoxCollider2D boxColl;
@@ -26,6 +26,7 @@ public class BlockController : MonoBehaviour {
         sprite = GetComponent<SpriteRenderer>();
         boxColl = GetComponent<BoxCollider2D>();
         trans = GetComponent<Transform>();
+        m_asSound = GetComponent<AudioSource>();
         color = new Color();
         color = sprite.color;
         blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
@@ -61,8 +62,7 @@ public class BlockController : MonoBehaviour {
     {
         if(coll.gameObject.tag == "Ball" || coll.gameObject.tag == "Bullet")
         {
-            if (m_acEffectSound != null)
-                AudioSource.PlayClipAtPoint(m_acEffectSound, transform.position);
+            m_asSound.Play();
 
             BlockState();
 

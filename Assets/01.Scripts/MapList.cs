@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MapList : MonoBehaviour
 {
@@ -51,12 +52,17 @@ public class MapList : MonoBehaviour
 
         goFile.transform.SetParent(GameObject.Find("Contents").transform);
         goFile.name = strName;
+        Debug.Log(goFile.name);
         goFile.GetComponentInChildren<Text>().text = strName;
         goFile.transform.localScale = new Vector3(1, 1, 1);
         m_listFileOb.Add(goFile);
 
         goFile.GetComponent<Button>().onClick.AddListener(() => SaveNLoad.GetInstance.SetStaticFileName(goFile.name));
         goFile.GetComponent<Button>().onClick.AddListener(() => FileIndex(iIndex));
+
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MapTool"))
+            goFile.GetComponent<Button>().onClick.AddListener(() => UIController.GetInstance.ReadLoadFilePath());
+
     }
 
     void FileIndex(int iIndex)
