@@ -4,17 +4,30 @@ using UnityEngine;
 
 public class ToolManager : MonoBehaviour {
 
+    enum CATEGORY
+    {
+        BRICK,
+        ITEM,
+        NOCATEGORY
+    }
+
     private float fX;
     private float fY;
     [SerializeField]
     private int m_iBlockNum = 0;
+    private int m_iItemNum = 0;
 
     private GameObject goTileManager;
+    private GameObject m_goBlockScroll;
+    private GameObject m_goItemScroll;
+
 
     [SerializeField]
     private List<GameObject> m_listBlock;
 
     private List<GameObject> m_listTile = new List<GameObject>();
+
+    private CATEGORY m_eCategory = CATEGORY.BRICK;
 
     // Use this for initialization
     void Start()
@@ -37,10 +50,15 @@ public class ToolManager : MonoBehaviour {
                 m_listTile.Add(tile);
             }
         }
+
+        m_goBlockScroll = GameObject.Find("BlockScroll");
+        m_goItemScroll = GameObject.Find("ItemScroll");
+        m_goItemScroll.SetActive(false);
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         //Index Pos 저장용
         if (Input.GetKeyDown(KeyCode.F9))
             SaveNLoad.GetInstance.SavePos();
@@ -57,13 +75,27 @@ public class ToolManager : MonoBehaviour {
                 if (mouseCol == null)
                     return;
 
-                if (mouseCol.gameObject.tag == "Tile")
+                if (m_eCategory == CATEGORY.BRICK)
                 {
-                    GameObject goBlock = mouseCol.gameObject.GetComponent<TileManager>().CreateBlock(m_iBlockNum);
-                    if (goBlock != null)
-                        m_listBlock.Add(goBlock);
-                    else
-                        m_listBlock.Remove(goBlock);
+                    if (mouseCol.gameObject.tag == "Tile")
+                    {
+                        GameObject goBlock = mouseCol.gameObject.GetComponent<TileManager>().CreateBlock(m_iBlockNum);
+                        if (goBlock != null)
+                            m_listBlock.Add(goBlock);
+                        else
+                            m_listBlock.Remove(goBlock);
+                    }
+                }
+                else if(m_eCategory == CATEGORY.ITEM)
+                {
+                    if (mouseCol.gameObject.tag == "Block")
+                    {
+                        //GameObject goBlock = mouseCol.gameObject.GetComponent<TileManager>().CreateBlock(m_iItemNum);
+                        //if (goBlock != null)
+                        //    m_listBlock.Add(goBlock);
+                        //else
+                        //    m_listBlock.Remove(goBlock);
+                    }
                 }
             }
         }
@@ -84,6 +116,16 @@ public class ToolManager : MonoBehaviour {
         m_iBlockNum = iBlockNum;
     }
 
+    public int GetItemNum()
+    {
+        return m_iItemNum;
+    }
+
+    public void SetItemNum(int iItemNum)
+    {
+        m_iItemNum = iItemNum;
+    }
+
     public void RemoveList(GameObject goBlock)
     {
         m_listBlock.Remove(goBlock);
@@ -97,5 +139,19 @@ public class ToolManager : MonoBehaviour {
     public List<GameObject> GetListTile()
     {
         return m_listTile;
+    }
+
+    public void SetBrick()
+    {
+        m_eCategory = CATEGORY.BRICK;
+        m_goBlockScroll.SetActive(true);
+        m_goItemScroll.SetActive(false);
+    }
+
+    public void SetItem()
+    {
+        m_eCategory = CATEGORY.ITEM;
+        m_goBlockScroll.SetActive(false);
+        m_goItemScroll.SetActive(true);
     }
 }

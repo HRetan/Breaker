@@ -38,15 +38,16 @@ public class ScrollUI : MonoBehaviour {
             m_rtBlock[i] = GameObject.Find("Block_" + iIndex.ToString()).GetComponent<Button>();
             m_rtBlock[i].onClick.AddListener(() => FindScrollBlock(iIndex2));
         }
-        m_rtPanel = GameObject.Find("ScrollPanel").GetComponent<RectTransform>();
-        m_rtCenter = GameObject.Find("CenterToCompare").GetComponent<RectTransform>();
+        
+        m_rtPanel = GameObject.Find("BlockScrollPanel").GetComponent<RectTransform>();
+        m_rtCenter = GameObject.Find("BlockCenterToCompare").GetComponent<RectTransform>();
         m_rtSelectBlock = GameObject.Find("SelectBlock").GetComponent<RectTransform>();
 
         int bttnLenght = m_rtBlock.Length;
         m_fDis = new float[bttnLenght];
 
         m_iBttnDis = (int)Mathf.Abs(m_rtBlock[1].GetComponent<RectTransform>().anchoredPosition.x - m_rtBlock[0].GetComponent<RectTransform>().anchoredPosition.x);
-        m_scToolManager = GetComponent<ToolManager>();
+        m_scToolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
 	}
 
     // Update is called once per frame
