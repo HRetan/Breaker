@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class BlockController : MonoBehaviour {
-  
+public class BlockController : MonoBehaviour
+{
+
     private float fSpeed = 5f;
 
     private AudioSource m_asSound;
@@ -21,8 +22,14 @@ public class BlockController : MonoBehaviour {
     private int m_iBlockLife = 1;
     [SerializeField] private int m_iItemID = 0;
 
+    void Awake()
+    {
+        m_iItemID = Random.Range(0, 50);  
+    }
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         sprite = GetComponent<SpriteRenderer>();
         boxColl = GetComponent<BoxCollider2D>();
         trans = GetComponent<Transform>();
@@ -30,11 +37,11 @@ public class BlockController : MonoBehaviour {
         color = new Color();
         color = sprite.color;
         blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
-        m_iItemID = Random.Range(0, 50);
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         if (UIController.GetInstance.GetUI())
             return;
 
@@ -42,13 +49,13 @@ public class BlockController : MonoBehaviour {
 
         if (m_iBlockLife <= 0)
         {
-            if(boxColl.enabled)
-            boxColl.enabled = false;
+            if (boxColl.enabled)
+                boxColl.enabled = false;
 
             fTime += Time.deltaTime * fSpeed;
 
             color.a = Mathf.Lerp(1, 0, fTime);
-            
+
             if (fTime >= 1f)
             {
                 blockManager.GetListBlock().Remove(this.gameObject);
@@ -56,11 +63,11 @@ public class BlockController : MonoBehaviour {
                 Destroy(this.gameObject);
             }
         }
-	}
+    }
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if(coll.gameObject.tag == "Ball" || coll.gameObject.tag == "Bullet")
+        if (coll.gameObject.tag == "Ball" || coll.gameObject.tag == "Bullet")
         {
             m_asSound.Play();
 
@@ -129,17 +136,9 @@ public class BlockController : MonoBehaviour {
         }
     }
 
-    void CreateItem(string strName, int iIndex)
-    {
-        GameObject item = MonoBehaviour.Instantiate(Resources.Load("Item/" + strName)) as GameObject;
-        item.name = strName;
-        item.transform.position = trans.position;
-        //item.GetComponent<ItemManager>().SetState(iIndex);
-    }
-
     void DamageBlock()
     {
-        if(m_iBlockLife == 1)
+        if (m_iBlockLife == 1)
         {
             Sprite spt = Resources.Load(UIController.GetInstance.GetPath() + "(SkyBlue)_Damage", typeof(Sprite)) as Sprite;
             gameObject.GetComponent<SpriteRenderer>().sprite = spt;
@@ -153,7 +152,7 @@ public class BlockController : MonoBehaviour {
 
     public void SetBlockID(int iBlockID)
     {
-        m_iBlockID = iBlockID;  
+        m_iBlockID = iBlockID;
     }
 
     public int GetIndex()
@@ -174,5 +173,15 @@ public class BlockController : MonoBehaviour {
     public void SetLife(int iLife)
     {
         m_iBlockLife = iLife;
+    }
+
+    public void SetItemID(int iItemID)
+    {
+        m_iItemID = iItemID;
+    }
+
+    public int GetItemID()
+    {
+        return m_iItemID;
     }
 }

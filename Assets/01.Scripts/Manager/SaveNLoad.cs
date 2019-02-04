@@ -9,11 +9,13 @@ using LitJson;
 public class Map
 {
     public int blockID;
+    public int itemID;
     public int iIndex;
 
-    public Map(int ID, int Index)
+    public Map(int ID, int item, int Index)
     {
         blockID = ID;
+        itemID = item;
         iIndex = Index;
     }
 }
@@ -129,14 +131,13 @@ public class SaveNLoad : MonoBehaviour
     {
         List<Map> m_listMap = new List<Map>();
 
-        ToolManager m_toolManager;
+        List<GameObject> m_listBlock = GameObject.Find("ToolManager").GetComponent<ToolManager>().GetListBlock();
 
-        m_toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
-
-        for (int i = 0; i < m_toolManager.GetListBlock().Count; ++i)
+        for (int i = 0; i < m_listBlock.Count; ++i)
         {
-            Transform ts = m_toolManager.GetListBlock()[i].GetComponent<Transform>();
-            m_listMap.Add(new Map(m_toolManager.GetListBlock()[i].GetComponent<BlockController>().GetBlockID(), m_toolManager.GetListBlock()[i].GetComponent<BlockController>().GetIndex()));
+            m_listMap.Add(new Map(m_listBlock[i].GetComponent<BlockController>().GetBlockID()
+                , m_listBlock[i].GetComponent<BlockController>().GetItemID()
+                , m_listBlock[i].GetComponent<BlockController>().GetIndex()));
         }
 
         JsonData mapJson = JsonMapper.ToJson(m_listMap);
@@ -181,7 +182,10 @@ public class SaveNLoad : MonoBehaviour
 
         for (int i = 0; i < mapData.Count; ++i)
         {
-            m_blockManager.CreateBlock(goBlockManager, m_listPos[int.Parse(mapData[i]["iIndex"].ToString())], int.Parse(mapData[i]["blockID"].ToString()));
+            m_blockManager.CreateBlock(goBlockManager
+                , m_listPos[int.Parse(mapData[i]["iIndex"].ToString())]
+                , int.Parse(mapData[i]["blockID"].ToString())
+                , int.Parse(mapData[i]["itemID"].ToString()));
         }
 
     }
@@ -214,7 +218,10 @@ public class SaveNLoad : MonoBehaviour
 
         for (int i = 0; i < mapData.Count; ++i)
         {
-            m_blockManager.CreateBlock(goBlockManager, m_listPos[int.Parse(mapData[i]["iIndex"].ToString())], int.Parse(mapData[i]["blockID"].ToString()));
+            m_blockManager.CreateBlock(goBlockManager
+                , m_listPos[int.Parse(mapData[i]["iIndex"].ToString())]
+                , int.Parse(mapData[i]["blockID"].ToString())
+                , int.Parse(mapData[i]["itemID"].ToString()));
         }
 
     }

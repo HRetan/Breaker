@@ -6,6 +6,7 @@ public class TileManager : MonoBehaviour {
 
     private GameObject m_goTool;
     private GameObject m_goBlock = null;
+    
     private int m_iBlockNum = 0;
     private int m_iIndex = 0;
 
@@ -35,7 +36,6 @@ public class TileManager : MonoBehaviour {
     {
         if (m_goBlock != null)
             return;
-
         CheckBlockId();
 
         //충돌처리 꺼주고 저장할 때 다시 켜준다
@@ -119,12 +119,24 @@ public class TileManager : MonoBehaviour {
             case 12:
                 m_goBlock = null;
                 break;
-         
         }
+    }
+
+    public void SetItemID(int iItemNum)
+    {
+        if (m_goBlock == null)
+            return;
+
+        m_goBlock.GetComponent<BlockController>().SetItemID(iItemNum);
     }
 
     public void SetIndex(int iIndex)
     {
         m_iIndex = iIndex;
+    }
+
+    public int GetIndex()
+    {
+        return m_iIndex;   
     }
 }

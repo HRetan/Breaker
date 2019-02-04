@@ -27,6 +27,7 @@ public class ToolManager : MonoBehaviour {
 
     private List<GameObject> m_listTile = new List<GameObject>();
 
+    [SerializeField]
     private CATEGORY m_eCategory = CATEGORY.BRICK;
 
     // Use this for initialization
@@ -75,9 +76,9 @@ public class ToolManager : MonoBehaviour {
                 if (mouseCol == null)
                     return;
 
-                if (m_eCategory == CATEGORY.BRICK)
+                if (mouseCol.gameObject.tag == "Tile")
                 {
-                    if (mouseCol.gameObject.tag == "Tile")
+                    if (m_eCategory == CATEGORY.BRICK)
                     {
                         GameObject goBlock = mouseCol.gameObject.GetComponent<TileManager>().CreateBlock(m_iBlockNum);
                         if (goBlock != null)
@@ -85,16 +86,9 @@ public class ToolManager : MonoBehaviour {
                         else
                             m_listBlock.Remove(goBlock);
                     }
-                }
-                else if(m_eCategory == CATEGORY.ITEM)
-                {
-                    if (mouseCol.gameObject.tag == "Block")
+                    else if (m_eCategory == CATEGORY.ITEM)
                     {
-                        //GameObject goBlock = mouseCol.gameObject.GetComponent<TileManager>().CreateBlock(m_iItemNum);
-                        //if (goBlock != null)
-                        //    m_listBlock.Add(goBlock);
-                        //else
-                        //    m_listBlock.Remove(goBlock);
+                        mouseCol.gameObject.GetComponent<TileManager>().SetItemID(m_iItemNum);
                     }
                 }
             }
