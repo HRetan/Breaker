@@ -166,7 +166,6 @@ public class SaveNLoad : MonoBehaviour
 
         strJson = File.ReadAllText(strPath);
 
-
 #elif UNITY_ANDROID
         WWW reader = new WWW(strPath);
         while(!reader.isDone) {}
