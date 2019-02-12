@@ -19,17 +19,25 @@ public class MapList : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SaveNLoad.GetInstance.FindFileStage(m_listFile);
-        for (int i = 0; i < m_listFile.Count; ++i)
+        if (gameObject.name == "MapList")
         {
-            CreateFile(m_listFile[i], i);
-        }
+            SaveNLoad.GetInstance.FindFileStage(m_listFile);
 
-        if (m_listFile.Count != 0)
+            for (int i = 0; i < m_listFile.Count; ++i)
+            {
+                CreateFile(m_listFile[i], i);
+            }
+
+            if (m_listFile.Count != 0)
+            {
+                SaveNLoad.GetInstance.SetStaticFileName(m_listFileOb[m_iFileIndex].name);
+                m_goSelector = Instantiate(Resources.Load("UI/FileSelector")) as GameObject;
+                MoveSelector(m_goSelector);
+            }
+        }
+        else
         {
-            SaveNLoad.GetInstance.SetStaticFileName(m_listFileOb[m_iFileIndex].name);
-            m_goSelector = Instantiate(Resources.Load("UI/FileSelector")) as GameObject;
-            MoveSelector(m_goSelector);
+            StartCoroutine(NetWorkManager.Instance.AllMapLoad());
         }
     }
 
@@ -62,7 +70,6 @@ public class MapList : MonoBehaviour
 
         if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MapTool"))
             goFile.GetComponent<Button>().onClick.AddListener(() => UIController.GetInstance.ReadLoadFilePath());
-
     }
 
     void FileIndex(int iIndex)

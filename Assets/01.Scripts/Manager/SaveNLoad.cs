@@ -372,4 +372,9 @@ public class SaveNLoad : MonoBehaviour
     {
         w_strFileName = strFileName;
     }
+
+    public List<Vector2> GetListPos()
+    {
+        return m_listPos;
+    }
 }

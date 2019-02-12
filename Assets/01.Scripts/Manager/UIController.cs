@@ -284,14 +284,26 @@ public class UIController : MonoBehaviour
         GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/MapList")) as GameObject;
         m_bUI = true;
 
-        goDynamic.name = "dynamicUI";
+        goDynamic.name = "MyMapList";
 
         GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
         GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene(SaveNLoad.GetInstance.GetStaticFileName()));
         GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
     }
 
-   public void EnableSelector()
+    public void ServerMapList()
+    {
+        GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/NetMapList")) as GameObject;
+        m_bUI = true;
+
+        goDynamic.name = "NetMapList";
+
+        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene(SaveNLoad.GetInstance.GetStaticFileName()));
+        GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
+    }
+
+    public void EnableSelector()
     {
 
     }

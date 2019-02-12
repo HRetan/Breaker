@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class WorldScript : MonoBehaviour {
 
+    int m_iTest = 0;
+
     void Awake()
     {
         QualitySettings.vSyncCount = 0; // vsync 사용안함 
@@ -13,11 +15,10 @@ public class WorldScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
+	
 	}
 }
