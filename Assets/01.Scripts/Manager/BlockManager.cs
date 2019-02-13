@@ -9,15 +9,25 @@ public class BlockManager : MonoBehaviour
     private List<GameObject> m_listBlock;
     [SerializeField]
     private int m_iBlockCount = 0;
+    private int m_iStyle = 0;
+
+    private bool m_bIsPlay = false;
+    private float m_fTime = 0f;
     public ScoreUI m_scScore;
 
+    private void Awake()
+    {
+        m_iStyle = StageManager.GetInstance.GetStyle();
+    }
     // Use this for initialization
     void Start()
     {
-        if(StageManager.GetInstance.GetStage())
+        if (m_iStyle == 0)
             SaveNLoad.GetInstance.LoadMap(SaveNLoad.GetInstance.GetStaticFileName());
-        else
+        else if (m_iStyle == 1)
             SaveNLoad.GetInstance.LoadUserMap(SaveNLoad.GetInstance.GetStaticFileName());
+        else
+            StartCoroutine(NetWorkManager.Instance.LoadNetUserMap());
 
         SkinManager.GetInstance.MySkin();
         m_scScore = FindObjectOfType(typeof(ScoreUI)) as ScoreUI;
@@ -29,18 +39,33 @@ public class BlockManager : MonoBehaviour
         if (UIController.GetInstance.GetUI())
             return;
 
-        if(m_iBlockCount == 0)
+        if (m_fTime <= 1f)
         {
-            if (StageManager.GetInstance.GetStage())
-            {
-                m_scScore.StarCheck();
-                UIController.GetInstance.ResultUI(m_iBlockCount, m_scScore.GetStarCount(), m_scScore.GetScore());
-            }
-            else
-                UIController.GetInstance.ResultUI(m_iBlockCount, m_scScore.GetScore());
-
+            m_fTime += Time.deltaTime;
         }
+        else
+            m_bIsPlay = true;
 
+
+        if(m_iBlockCount == 0 && m_bIsPlay)
+        {
+            Debug.Log("벌써 들어온다고?!");
+            switch(m_iStyle)
+            {
+                case 0:
+                    int iIndex = SaveNLoad.GetInstance.GetStaticStageNum();
+                    m_scScore.StarCheck();
+                    UIController.GetInstance.ResultUI(m_iBlockCount, m_scScore.GetStarCount()
+                        , m_scScore.GetScore(), StageManager.GetInstance.GetStageList()[iIndex - 1].iScore);
+                    break;
+                case 1:
+                    UIController.GetInstance.ResultUI(m_iBlockCount, m_scScore.GetScore());
+                    break;
+                case 2:
+                    UIController.GetInstance.ResultUI(m_iBlockCount, m_scScore.GetScore(), NetWorkManager.Instance.GetPreScore());
+                    break;
+            }
+        }
     }
 
     void SetBlock(GameObject goBlock, string strName, int iLife, int iCount, int iItemID)

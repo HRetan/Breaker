@@ -4,6 +4,7 @@ using UnityEngine;
 using LitJson;
 using System.IO;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class PlayerMap
 {
@@ -15,6 +16,9 @@ public class PlayerMap
 public class NetWorkManager : MonoBehaviour {
 
     public static NetWorkManager Instance = null;
+
+    public static string m_strID = "";
+    public static int m_iPreScore = 0;
 
     void Awake()
     {
@@ -35,7 +39,6 @@ public class NetWorkManager : MonoBehaviour {
 
     public IEnumerator AllMapLoad()
     {
-        Debug.Log("들어온다");
         string strUrl = "http://54.180.153.218:7436/api/maps";
         WWW www = new WWW(strUrl);
         yield return www;
@@ -53,7 +56,6 @@ public class NetWorkManager : MonoBehaviour {
 
     public IEnumerator SearchMapLoad(string strUserName)
     {
-        Debug.Log("들어온다");
         string strUrl = "http://54.180.153.218:7436/api/maps?owner=" + strUserName;
         WWW www = new WWW(strUrl);
         yield return www;
@@ -114,16 +116,53 @@ public class NetWorkManager : MonoBehaviour {
     IEnumerator SendCheck(WWW data)
     {
         yield return data; // Wait until the download is done 
-        if (data.error != null)
+        if (data.error == null)
         {
-            Debug.Log("There was an error sending request: " + data.error);
+            BlockManager m_blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+            ScoreUI scoreUI = GameObject.Find("ScoreUI").GetComponent<ScoreUI>();
+            List<Vector2> listPos = SaveNLoad.GetInstance.GetListPos();
+
+            JsonData mapData = JsonMapper.ToObject(data.text);
+
+            GameObject goBlockManager = new GameObject("BlockManager");
+            m_iPreScore = int.Parse(mapData["bestScore"]["score"].ToString());
+            scoreUI.SetScore(m_iPreScore);
+
+            Debug.Log(mapData.Count);
+            for (int i = 0; i < mapData.Count; ++i)
+            {
+                m_blockManager.CreateBlock(goBlockManager
+                    , listPos[int.Parse(mapData["mapData"][i]["iIndex"].ToString())]
+                    , int.Parse(mapData["mapData"][i]["blockID"].ToString())
+                    , 8);
+            }
         }
         else
         {
-            Debug.Log("WWW Request: " + data.text);
+            Debug.Log("Net Load Failed");
         }
     }
 
+    public IEnumerator PutNetData(string strID, string strScore)
+    {
+        string strTest = "{\"bestScore\":{\"user\":\"Kairencer\",\"score\":\"" + strScore + "\"}}";
+
+        byte[] body = System.Text.Encoding.UTF8.GetBytes(strTest);
+
+        UnityWebRequest www = UnityWebRequest.Put("http://54.180.153.218:7436/api/maps/" + strID, body);
+
+        www.SetRequestHeader("Content-Type", "application/json");
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Upload complete!");
+        }
+    }
 
     void CreateFile(int iIndex)
     {
@@ -138,40 +177,30 @@ public class NetWorkManager : MonoBehaviour {
             + "\r\nOwner " + playerMap.Owner + "\r\nCount\r\nBest Score\r\nBest User";
         goFile.transform.localScale = new Vector3(1, 1, 1);
 
-        goFile.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(LoadNetUserMap(m_listPlayerMap[iIndex].Id)));
+        goFile.GetComponent<Button>().onClick.AddListener(() => SetID(m_listPlayerMap[iIndex].Id));
     }
     
-    public IEnumerator LoadNetUserMap(string strID)
+    public IEnumerator LoadNetUserMap()
     {
-        Debug.Log("들어오11나");
-        string strUrl = "http://54.180.153.218:7436/api/maps/" + strID;
+        string strUrl = "http://54.180.153.218:7436/api/maps/" + m_strID;
+        Debug.Log(strUrl);
         WWW www = new WWW(strUrl);
+        
+        yield return StartCoroutine(SendCheck(www));
+    }
 
-        StartCoroutine(SendCheck(www));
-        yield return www;
+    public void SetID(string ID)
+    {
+        m_strID = ID;
+    }
 
-        if (www.error == null)
-        {
-            BlockManager m_blockManager;
-            List<Vector2> listPos = SaveNLoad.GetInstance.GetListPos();
+    public string GetID()
+    {
+        return m_strID;
+    }
 
-            m_blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
-
-            JsonData mapData = JsonMapper.ToObject(www.text);
-
-            GameObject goBlockManager = new GameObject("BlockManager");
-
-            for (int i = 0; i < mapData.Count; ++i)
-            {
-                m_blockManager.CreateBlock(goBlockManager
-                    , listPos[int.Parse(mapData[i]["iIndex"].ToString())]
-                    , int.Parse(mapData[i]["blockID"].ToString())
-                    , 8);
-            }
-        }
-        else
-        {
-            Debug.Log("Net Load Failed");
-        }
+    public int GetPreScore()
+    {
+        return m_iPreScore;
     }
 }

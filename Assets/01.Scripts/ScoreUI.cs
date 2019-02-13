@@ -16,9 +16,14 @@ public class ScoreUI : MonoBehaviour {
     private int m_iBlockCount;
 
     private int m_iStar = 3;
+    private int m_iStyle = 0;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+        m_iStyle = StageManager.GetInstance.GetStyle();
+    }
+    // Use this for initialization
+    void Start () {
         m_scBlockManager = FindObjectOfType(typeof(BlockManager)) as BlockManager;
         m_tmpScore = GameObject.Find("Score(Point)").GetComponent<TextMeshProUGUI>();
         m_tmpMaxScore = GameObject.Find("MaxScore(Point)").GetComponent<TextMeshProUGUI>();
@@ -68,8 +73,19 @@ public class ScoreUI : MonoBehaviour {
         return m_iStar;
     }
 
-    public int GetScore()
+    public int GetMaxScore()
     {
         return m_iMaxScore;
     }
+
+    public int GetScore()
+    {
+        return m_iScore;
+    }
+
+    public void SetScore(int iMaxScore)
+    {
+        m_iMaxScore = iMaxScore;
+    }
+
 }

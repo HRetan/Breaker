@@ -34,10 +34,18 @@ public class StageManager : MonoBehaviour {
         public int iScore;
     }
 
+    public enum PLAYSTYLE
+    {
+        STAGE,
+        MYMAP,
+        SERVER
+    }
+
     [SerializeField]
     static private List<Stage> m_listStage = new List<Stage>();
 
     public static bool w_bStage = false;
+    public static PLAYSTYLE w_eStyle = PLAYSTYLE.STAGE;
 
 	// Use this for initialization
 	public void Initialize (List<GameObject> listBlock) {
@@ -79,6 +87,20 @@ public class StageManager : MonoBehaviour {
         return w_bStage;
     }
 
+    public int GetStyle()
+    {
+        switch(w_eStyle)
+        {
+            case PLAYSTYLE.STAGE:
+                return 0;
+            case PLAYSTYLE.MYMAP:
+                return 1;
+            case PLAYSTYLE.SERVER:
+                return 2;
+        }
+        return 0;
+    }
+
     public void SetAddStageList(int iIndex, bool isCheck, int iBlockIndex, int iStarCount, int iScore, GameObject goBlock)
     {
         m_listStage[iIndex].IsOpen = isCheck;
@@ -112,6 +134,7 @@ public class StageManager : MonoBehaviour {
     public void PlayGameScene(int iIndex)
     {
         w_bStage = true;
+        w_eStyle = PLAYSTYLE.STAGE;
         if (!m_listStage[iIndex - 1].IsOpen)
             return;
 
@@ -123,7 +146,15 @@ public class StageManager : MonoBehaviour {
     public void PlayGameScene(string strName)
     {
         w_bStage = false;
+        w_eStyle = PLAYSTYLE.MYMAP;
+
         SaveNLoad.GetInstance.SetStaticFileName(strName);
+        UIController.GetInstance.SceneChangeSelectStage();
+    }
+
+    public void PlayGameScene()
+    {
+        w_eStyle = PLAYSTYLE.SERVER;
         UIController.GetInstance.SceneChangeSelectStage();
     }
 }

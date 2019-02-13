@@ -189,32 +189,47 @@ public class UIController : MonoBehaviour
             Debug.Log("파일 삭제 실패");
     }
 
-    public void ClearGame(int iBlockCount, int iScore)
+    public void ClearGame(int iBlockCount, int iScore, int iPreScore = 0)
     {
-        if (StageManager.GetInstance.GetStage())
+        int iStyle = StageManager.GetInstance.GetStyle();
+
+        switch(iStyle)
         {
-            if (iBlockCount == 0)
-            {
-                int iIndex = SaveNLoad.GetInstance.GetStaticStageNum();
+            case 0:
+                if (iBlockCount == 0)
+                {
+                    int iIndex = SaveNLoad.GetInstance.GetStaticStageNum();
 
-                StageManager.GetInstance.GetStageList()[iIndex].IsOpen = true;
+                    StageManager.GetInstance.GetStageList()[iIndex].IsOpen = true;
 
-                if (StageManager.GetInstance.GetStageList()[iIndex - 1].iScore <= iScore)
-                    StageManager.GetInstance.GetStageList()[iIndex - 1].iScore = iScore;
+                    if (iPreScore <= iScore)
+                        StageManager.GetInstance.GetStageList()[iIndex - 1].iScore = iScore;
 
-                SaveNLoad.GetInstance.SaveStage();
-            }
-            SceneChangeStart();
-        }
-        else
-        {
+                    SaveNLoad.GetInstance.SaveStage();
+                }
+                SceneChangeStart();
+                break;
+            case 1:
             SceneChangeUserMap();
+                break;
+            case 2:
+                if (iBlockCount == 0)
+                {
+                    Debug.Log("결과");
+                    if (iPreScore <= iScore)
+                    {
+                    Debug.Log("PreScore : " + iPreScore + " Score : " + iScore);
+                        StartCoroutine(NetWorkManager.Instance.PutNetData(NetWorkManager.Instance.GetID(), iScore.ToString()));
+                    }
+                }
+                SceneChangeUserMap();
+                break;
         }
     }
 
-    public void ClearGame(int iBlockCount, int iStarCount, int iScore)
+    public void ClearGame(int iBlockCount, int iStarCount, int iScore, int iPreScore = 0)
     {
-        if (StageManager.GetInstance.GetStage())
+        if (StageManager.GetInstance.GetStyle() == 0)
         {
             if (iBlockCount == 0)
             {
@@ -224,20 +239,20 @@ public class UIController : MonoBehaviour
 
                 if(StageManager.GetInstance.GetStageList()[iIndex - 1].iStarCount <= iStarCount)
                  StageManager.GetInstance.GetStageList()[iIndex - 1].iStarCount = iStarCount;
-                if (StageManager.GetInstance.GetStageList()[iIndex - 1].iScore <= iScore)
+                if (iPreScore <= iScore)
                     StageManager.GetInstance.GetStageList()[iIndex - 1].iScore = iScore;
 
                 SaveNLoad.GetInstance.SaveStage();
             }
             SceneChangeStart();
         }
-        else
+        else if(StageManager.GetInstance.GetStyle() == 1)
         {
             SceneChangeUserMap();
         }
     }
 
-    public void ResultUI(int iBlockCount, int iStarCount, int iScore)
+    public void ResultUI(int iBlockCount, int iStarCount, int iScore, int iPreScore = 0)
     {
         GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/GameOverUI")) as GameObject;
         m_bUI = true;
@@ -249,10 +264,10 @@ public class UIController : MonoBehaviour
         else
             GameObject.Find("Result").GetComponent<Text>().text = "Failed";
 
-        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount, iStarCount, iScore));
+        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount, iStarCount, iScore, iPreScore));
     }
 
-    public void ResultUI(int iBlockCount, int iScore)
+    public void ResultUI(int iBlockCount, int iScore, int iPreScore = 0)
     {
         GameObject goDynamic = MonoBehaviour.Instantiate(Resources.Load("UI/GameOverUI")) as GameObject;
         m_bUI = true;
@@ -264,7 +279,7 @@ public class UIController : MonoBehaviour
         else
             GameObject.Find("Result").GetComponent<Text>().text = "Failed";
 
-        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount, iScore));
+        GameObject.Find("Check").GetComponent<Button>().onClick.AddListener(() => ClearGame(iBlockCount, iScore, iPreScore));
     }
 
     public void MenuUI()
@@ -299,7 +314,7 @@ public class UIController : MonoBehaviour
         goDynamic.name = "NetMapList";
 
         GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
-        GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene(SaveNLoad.GetInstance.GetStaticFileName()));
+        GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene());
         GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
     }
 

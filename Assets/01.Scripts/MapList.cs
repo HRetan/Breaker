@@ -19,7 +19,7 @@ public class MapList : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (gameObject.name == "MapList")
+        if (gameObject.name == "MyMapList")
         {
             SaveNLoad.GetInstance.FindFileStage(m_listFile);
 
