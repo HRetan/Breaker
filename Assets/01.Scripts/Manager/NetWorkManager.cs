@@ -96,11 +96,22 @@ public class NetWorkManager : MonoBehaviour {
 
     public IEnumerator SaveNetData(string strTitle)
     {
-        string strPath = Application.streamingAssetsPath + "/" + strTitle + ".json";
+        List<Map> m_listMap = new List<Map>();
 
-        string strJson = string.Empty;
+        List<GameObject> m_listBlock = GameObject.Find("ToolManager").GetComponent<ToolManager>().GetListBlock();
 
-        strJson = File.ReadAllText(strPath);
+        for (int i = 0; i < m_listBlock.Count; ++i)
+        {
+            m_listMap.Add(new Map(m_listBlock[i].GetComponent<BlockController>().GetBlockID()
+                , m_listBlock[i].GetComponent<BlockController>().GetItemID()
+                , m_listBlock[i].GetComponent<BlockController>().GetIndex()));
+        }
+
+        JsonData mapJson = JsonMapper.ToJson(m_listMap);
+
+        string strJson = mapJson.ToJson();
+        Debug.Log(strJson);
+
         string strTest = "{\"title\":\"" + strTitle+ "\", \"owner\":\"retan\",\"mapData\":" + strJson + "}";
 
         Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -108,9 +119,23 @@ public class NetWorkManager : MonoBehaviour {
 
         byte[] body = System.Text.Encoding.UTF8.GetBytes(strTest);
         WWW www = new WWW("http://54.180.153.218:7436/api/maps", body, dic);
-        StartCoroutine(SendCheck(www));
+        StartCoroutine(SendCheck2(www));
         yield return www;
 
+    }
+
+    IEnumerator SendCheck2(WWW data)
+    {
+        yield return data; // Wait until the download is done 
+
+        if (data.error == null)
+        {
+            Debug.Log(data.text);
+        }
+        else
+        {
+            Debug.Log("Net Load Failed");
+        }
     }
 
     IEnumerator SendCheck(WWW data)

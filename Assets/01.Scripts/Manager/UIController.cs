@@ -137,6 +137,7 @@ public class UIController : MonoBehaviour
         Text ttName = GameObject.Find("SaveName").GetComponent<Text>();
 
         SaveNLoad.GetInstance.SaveMap(ttName.text);
+        StartCoroutine(NetWorkManager.Instance.SaveNetData(ttName.text));
         Destroy(GameObject.Find("dynamicUI"));
         m_bUI = false;
     }
