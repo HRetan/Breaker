@@ -11,6 +11,21 @@ public class PlayerMap
     public string Id;
     public string Title;
     public string Owner;
+    public string BestScore;
+    public string BestUser;
+
+    public PlayerMap()
+    {
+    }
+
+    public PlayerMap(string id, string title, string owner, string bestScore, string bestUser)
+    {
+        Id = id;
+        Title = title;
+        Owner = owner;
+        BestScore = bestScore;
+        BestUser = bestUser;
+    }
 }
 
 public class NetWorkManager : MonoBehaviour {
@@ -79,11 +94,11 @@ public class NetWorkManager : MonoBehaviour {
 
         for(int i = 0; i < jsonvale.Count; ++i)
         {
-            PlayerMap playermap = new PlayerMap();
-
-            playermap.Id = jsonvale[i]["_id"].ToString();
-            playermap.Title = jsonvale[i]["title"].ToString();
-            playermap.Owner = jsonvale[i]["owner"].ToString();
+            PlayerMap playermap = new PlayerMap(jsonvale[i]["_id"].ToString(),
+                jsonvale[i]["title"].ToString(),
+                jsonvale[i]["owner"].ToString(),
+                jsonvale[i]["bestScore"]["score"].ToString(),
+                jsonvale[i]["bestScore"]["user"].ToString());
 
             m_listPlayerMap.Add(playermap);
 
@@ -103,16 +118,16 @@ public class NetWorkManager : MonoBehaviour {
         for (int i = 0; i < m_listBlock.Count; ++i)
         {
             m_listMap.Add(new Map(m_listBlock[i].GetComponent<BlockController>().GetBlockID()
-                , m_listBlock[i].GetComponent<BlockController>().GetItemID()
-                , m_listBlock[i].GetComponent<BlockController>().GetIndex()));
+                , m_listBlock[i].GetComponent<BlockController>().GetIndex()
+                , m_listBlock[i].GetComponent<BlockController>().GetItemID()));
         }
 
         JsonData mapJson = JsonMapper.ToJson(m_listMap);
 
-        string strJson = mapJson.ToJson();
+        string strJson = mapJson.ToString();
         Debug.Log(strJson);
 
-        string strTest = "{\"title\":\"" + strTitle+ "\", \"owner\":\"retan\",\"mapData\":" + strJson + "}";
+        string strTest = "{\"title\":\"" + strTitle + "\", \"owner\":\"retan\",\"mapData\":" + strJson + "}";
 
         Dictionary<string, string> dic = new Dictionary<string, string>();
         dic.Add("Content-Type", "application/json");
@@ -121,7 +136,6 @@ public class NetWorkManager : MonoBehaviour {
         WWW www = new WWW("http://54.180.153.218:7436/api/maps", body, dic);
         StartCoroutine(SendCheck2(www));
         yield return www;
-
     }
 
     IEnumerator SendCheck2(WWW data)
@@ -159,7 +173,7 @@ public class NetWorkManager : MonoBehaviour {
                 m_blockManager.CreateBlock(goBlockManager
                     , listPos[int.Parse(mapData["mapData"][i]["iIndex"].ToString())]
                     , int.Parse(mapData["mapData"][i]["blockID"].ToString())
-                    , 8);
+                    , int.Parse(mapData["mapData"][i]["itemID"].ToString())); //아이템 ID 넘길것
             }
         }
         else
@@ -198,8 +212,8 @@ public class NetWorkManager : MonoBehaviour {
         goFile.transform.SetParent(GameObject.Find("Contents").transform);
         goFile.name = "Data";
 
-        goFile.GetComponentInChildren<Text>().text = "No \r\nTitle " + playerMap.Title
-            + "\r\nOwner " + playerMap.Owner + "\r\nCount\r\nBest Score\r\nBest User";
+        goFile.GetComponentInChildren<Text>().text = "No \r\n제목 " + playerMap.Title
+            + "\r\nOwner " + playerMap.Owner + "\r\nCount\r\nBest Score " + playerMap.BestScore + "\r\nBest User " + playerMap.BestUser;
         goFile.transform.localScale = new Vector3(1, 1, 1);
 
         goFile.GetComponent<Button>().onClick.AddListener(() => SetID(m_listPlayerMap[iIndex].Id));

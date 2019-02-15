@@ -15,7 +15,7 @@ public class NetworkTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        StartCoroutine(Upload());
+        StartCoroutine(SaveNetData());
         //SaveNetData();
     }
 
@@ -49,6 +49,7 @@ public class NetworkTest : MonoBehaviour {
         string strJson = string.Empty;
         
         strJson = File.ReadAllText(strPath);
+        Debug.Log(strJson);
         string strTest = "{\"title\":\"title123\", \"owner\":\"retan\",\"mapData\":" + strJson + "}";
 
         Dictionary<string, string> dic = new Dictionary<string, string>();

@@ -6,17 +6,18 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using LitJson;
 
+[System.Serializable]
 public class Map
 {
     public int blockID;
-    public int itemID;
     public int iIndex;
+    public int itemID;
 
-    public Map(int ID, int item, int Index)
+    public Map(int ID, int Index, int item)
     {
         blockID = ID;
-        itemID = item;
         iIndex = Index;
+        itemID = item;
     }
 }
 
@@ -136,8 +137,8 @@ public class SaveNLoad : MonoBehaviour
         for (int i = 0; i < m_listBlock.Count; ++i)
         {
             m_listMap.Add(new Map(m_listBlock[i].GetComponent<BlockController>().GetBlockID()
-                , m_listBlock[i].GetComponent<BlockController>().GetItemID()
-                , m_listBlock[i].GetComponent<BlockController>().GetIndex()));
+                , m_listBlock[i].GetComponent<BlockController>().GetIndex()
+                , m_listBlock[i].GetComponent<BlockController>().GetItemID()));
         }
 
         JsonData mapJson = JsonMapper.ToJson(m_listMap);
