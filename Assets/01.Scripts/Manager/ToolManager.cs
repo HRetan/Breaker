@@ -24,6 +24,7 @@ public class ToolManager : MonoBehaviour {
 
     [SerializeField]
     private List<GameObject> m_listBlock;
+    private List<GameObject> m_listItem;
 
     private List<GameObject> m_listTile = new List<GameObject>();
 
@@ -123,6 +124,16 @@ public class ToolManager : MonoBehaviour {
     public void RemoveList(GameObject goBlock)
     {
         m_listBlock.Remove(goBlock);
+    }
+
+    public void AddItemList(GameObject goItem)
+    {
+        m_listItem.Add(goItem);
+    }
+
+    public void RemoveItemList(GameObject goBlock)
+    {
+        m_listItem.Remove(goBlock);
     }
 
     public List<GameObject> GetListBlock()

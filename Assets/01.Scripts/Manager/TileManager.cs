@@ -6,6 +6,7 @@ public class TileManager : MonoBehaviour {
 
     private GameObject m_goTool;
     private GameObject m_goBlock = null;
+    private GameObject m_goItem = null;
     
     private int m_iBlockNum = 0;
     private int m_iIndex = 0;
@@ -46,6 +47,8 @@ public class TileManager : MonoBehaviour {
             m_goBlock.GetComponent<BlockController>().SetIndex(m_iIndex);
             m_goBlock.GetComponent<BoxCollider2D>().enabled = false;
         }
+
+        CheckItemID(8);
     }
 
     void ChangeObjectBlock()
@@ -122,11 +125,74 @@ public class TileManager : MonoBehaviour {
         }
     }
 
+    void CheckItemID(int itemID)
+    {
+        switch (itemID)
+        {
+            case 0:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Orange)")) as GameObject;
+                m_goItem.name = "ItemImage(Orange)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+            case 1:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Blue)")) as GameObject;
+                m_goItem.name = "ItemImage(Blue)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                m_goItem.transform.position = transform.position;
+                break;
+            case 2:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Red)")) as GameObject;
+                m_goItem.name = "ItemImage(Red)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+            case 3:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Yellow)")) as GameObject;
+                m_goItem.name = "ItemImage(Yellow)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+            case 4:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(SkyBlue)")) as GameObject;
+                m_goItem.name = "ItemImage(SkyBlue)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+            case 5:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Green)")) as GameObject;
+                m_goItem.name = "ItemImage(Green)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+            case 6:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Pink)")) as GameObject;
+                m_goItem.name = "ItemImage(Pink)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+            case 7:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Purple)")) as GameObject;
+                m_goItem.name = "ItemImage(Purple)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+            case 8:
+                m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Random)")) as GameObject;
+                m_goItem.name = "ItemImage(Random)";
+                m_goItem.transform.parent = m_goBlock.transform;
+                break;
+        }
+
+        if (m_goItem != null)
+        {
+            m_goItem.transform.position = m_goBlock.transform.position;
+            m_goItem.transform.localScale = new Vector3(0.3f, 0.4f);
+        }
+    }
+
     public void SetItemID(int iItemNum)
     {
         if (m_goBlock == null)
             return;
 
+        Destroy(m_goItem);
+        m_goTool.GetComponent<ToolManager>().RemoveList(m_goItem);
+
+        CheckItemID(iItemNum);
         m_goBlock.GetComponent<BlockController>().SetItemID(iItemNum);
     }
 
