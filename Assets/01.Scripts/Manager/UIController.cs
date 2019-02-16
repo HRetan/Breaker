@@ -89,7 +89,7 @@ public class UIController : MonoBehaviour
         goUI = MonoBehaviour.Instantiate(Resources.Load("UI/SaveUI")) as GameObject;
         goUI.name = "dynamicUI";
 
-        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
         GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => SaveApply());
 
         m_bUI = true;
@@ -101,7 +101,7 @@ public class UIController : MonoBehaviour
         goUI = MonoBehaviour.Instantiate(Resources.Load("UI/LoadUI")) as GameObject;
         goUI.name = "dynamicUI";
 
-        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
         GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => LoadApply());
 
         m_bUI = true;
@@ -126,9 +126,9 @@ public class UIController : MonoBehaviour
         m_bUI = false;
     }
 
-    public void DestroyUI()
+    public void DestroyUI(string strName)
     {
-        Destroy(GameObject.Find("dynamicUI"));
+        Destroy(GameObject.Find(strName));
         m_bUI = false;
     }
 
@@ -160,7 +160,7 @@ public class UIController : MonoBehaviour
 
         m_bUI = true;
 
-        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goDynamic.name));
         GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => EndGame());
     }
 
@@ -292,7 +292,7 @@ public class UIController : MonoBehaviour
 
         GameObject.Find("Menu").GetComponent<Button>().onClick.AddListener(() => SceneChangeStart());
         GameObject.Find("Retry").GetComponent<Button>().onClick.AddListener(() => SceneChangeSelectStage());
-        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goDynamic.name));
     }
 
     public void MapList()
@@ -302,7 +302,7 @@ public class UIController : MonoBehaviour
 
         goDynamic.name = "MyMapList";
 
-        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goDynamic.name));
         GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene(SaveNLoad.GetInstance.GetStaticFileName()));
         GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
     }
@@ -314,7 +314,7 @@ public class UIController : MonoBehaviour
 
         goDynamic.name = "NetMapList";
 
-        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI());
+        GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goDynamic.name));
         GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene());
         GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
     }

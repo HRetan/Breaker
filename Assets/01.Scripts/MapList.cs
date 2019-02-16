@@ -6,6 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class MapList : MonoBehaviour
 {
+    enum SearchType
+    {
+        TITLE,
+        OWNER,
+        END
+    }
 
     private List<string> m_listFile = new List<string>();
     private List<GameObject> m_listFileOb = new List<GameObject>();
@@ -15,6 +21,9 @@ public class MapList : MonoBehaviour
     private int m_iFileIndex = 0;
     [SerializeField]
     private int m_iCurIndex = 0;
+    private SearchType m_eSearchType = SearchType.TITLE;
+
+    public Text m_goSearchText;
 
     // Use this for initialization
     void Start()
@@ -83,5 +92,29 @@ public class MapList : MonoBehaviour
         goSelector.name = "FileSelector";
         goSelector.GetComponent<RectTransform>().position = m_listFileOb[m_iFileIndex].GetComponent<RectTransform>().position;
         goSelector.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+    }
+
+    public void TitleCheck(bool bIsTitle)
+    {
+        if (bIsTitle)
+            m_eSearchType = SearchType.TITLE;
+    }
+
+    public void OwnerCheck(bool bIsOnwer)
+    {
+        if (bIsOnwer)
+            m_eSearchType = SearchType.OWNER;
+    }
+
+    public void SearchBtn()
+    {
+        if(m_eSearchType == SearchType.TITLE)
+        {
+
+        }
+        else if(m_eSearchType == SearchType.OWNER)
+        {
+            StartCoroutine(NetWorkManager.Instance.SearchMapLoad(m_goSearchText.text));
+        }
     }
 }

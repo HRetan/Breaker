@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour {
                 UIController.GetInstance.MenuUI();
             else
             {
-                UIController.GetInstance.DestroyUI();
+                //UIController.GetInstance.DestroyUI();
                 Debug.Log("종료");
             }
         }

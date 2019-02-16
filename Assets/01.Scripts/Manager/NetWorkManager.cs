@@ -46,7 +46,8 @@ public class NetWorkManager : MonoBehaviour {
     }
 
     private List<PlayerMap> m_listPlayerMap = new List<PlayerMap>();
-
+    private List<GameObject> m_listFile = new List<GameObject>();
+    
     public List<PlayerMap> GetListPlayerMap()
     {
         return m_listPlayerMap;
@@ -89,6 +90,15 @@ public class NetWorkManager : MonoBehaviour {
     void ProcessJson(string strJson)
     {
         m_listPlayerMap.Clear();
+
+        if(m_listFile.Count != 0)
+        {
+            for(int i = 0; i < m_listFile.Count; ++i)
+            {
+                Destroy(m_listFile[i]);
+            }
+            m_listFile.Clear();
+        }
 
         JsonData jsonvale = JsonMapper.ToObject(strJson);
 
@@ -217,6 +227,7 @@ public class NetWorkManager : MonoBehaviour {
         goFile.transform.localScale = new Vector3(1, 1, 1);
 
         goFile.GetComponent<Button>().onClick.AddListener(() => SetID(m_listPlayerMap[iIndex].Id));
+        m_listFile.Add(goFile);
     }
     
     public IEnumerator LoadNetUserMap()
