@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class WorldScript : MonoBehaviour {
 
-    int m_iTest = 0;
 
     void Awake()
     {

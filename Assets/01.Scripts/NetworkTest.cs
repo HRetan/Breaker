@@ -11,7 +11,6 @@ using Newtonsoft.Json;
 
 public class NetworkTest : MonoBehaviour {
 
-    private PlayerMap m_player = new PlayerMap();
 
 	// Use this for initialization
 	void Start () {

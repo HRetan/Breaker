@@ -16,12 +16,11 @@ public class ScoreUI : MonoBehaviour {
     private int m_iBlockCount;
 
     private int m_iStar = 3;
-    private int m_iStyle = 0;
 
     private void Awake()
     {
-        m_iStyle = StageManager.GetInstance.GetStyle();
     }
+
     // Use this for initialization
     void Start () {
         m_scBlockManager = FindObjectOfType(typeof(BlockManager)) as BlockManager;
