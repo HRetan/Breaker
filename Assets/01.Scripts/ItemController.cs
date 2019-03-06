@@ -18,6 +18,7 @@ public class ItemController : MonoBehaviour {
     }
     public AudioClip m_acEffectSound;
 
+    [SerializeField]
     private BallController goBall;
     private PlayerController goBar;
 
@@ -53,6 +54,7 @@ public class ItemController : MonoBehaviour {
                 AudioSource.PlayClipAtPoint(m_acEffectSound, transform.position);
 
             ItemApply();
+            //Debug.Log("아이템 충돌 : " + gameObject.name);
             Destroy(gameObject);
         }
         else if (coll.tag == "DeadZone")

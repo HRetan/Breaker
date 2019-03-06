@@ -30,6 +30,11 @@ public class ItemManager : MonoBehaviour
         GameObject item = null;
         string strName = "";
 
+        if(iIndex >= 8)
+        {
+            iIndex = Random.Range(0, 50);
+        }
+
         switch(iIndex)
         {
             case 0:

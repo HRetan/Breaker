@@ -101,6 +101,8 @@ public class BlockManager : MonoBehaviour
             blockID = Random.Range(0, 10);
         }
 
+        //Debug.Log("블락생성 아이템 아이디 : " + iItemID);
+
         switch (blockID)
         {
             case 0:
@@ -180,6 +182,7 @@ public class BlockManager : MonoBehaviour
             case 7:
                 return 2;
         }
+        //Debug.Log("아이템ID" + Random.Range(0, 50));
 
         return Random.Range(0, 50);
     }

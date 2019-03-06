@@ -36,6 +36,8 @@ public class BallController : MonoBehaviour
     private static int m_iBallLive = 1;
     private static int w_iBallAtk = 1;
     private static int w_iCount = 0;
+    [SerializeField] private static List<GameObject> w_listBall = new List<GameObject>();
+
 
     private float fMoveSpeed = 5f;
     private Transform trans;
@@ -76,6 +78,8 @@ public class BallController : MonoBehaviour
             m_tState[i].bIsPlay = false;
             m_tState[i].fTime = 0f;
         }
+
+        w_listBall.Add(gameObject);
     }
 
     // Use this for initialization
@@ -104,7 +108,7 @@ public class BallController : MonoBehaviour
         {
             if (m_tState[i].bIsPlay)
             {
-                if (m_tState[i].fTime >= 10f)
+                if (m_tState[i].fTime >= 4f)
                 {
                     m_tState[i].bIsPlay = false;
                     m_tState[i].fTime = 0f;
@@ -252,7 +256,11 @@ public class BallController : MonoBehaviour
                 m_iBallLive = 1;
             }
             else
+            {
+                w_listBall.Remove(this.gameObject);
+                //Debug.Log("삭제후 볼 갯수 : " + w_listBall.Count);
                 Destroy(this.gameObject);
+            }
         }
     }
 
@@ -271,7 +279,6 @@ public class BallController : MonoBehaviour
         goBall[1].transform.rotation = Quaternion.Euler(trans.rotation.x, trans.rotation.y, trans.rotation.z - 45f);
         goBall[0].GetComponent<BallController>().vecDir = goBall[0].transform.rotation * vecDir;
         goBall[1].GetComponent<BallController>().vecDir = goBall[1].transform.rotation * vecDir;
-
     }
 
     void CloneVar(GameObject goBall, BallController ballCon)
@@ -301,7 +308,12 @@ public class BallController : MonoBehaviour
 
     public void SetItemPlay(int iIndex)
     {
-        m_tState[iIndex].bIsPlay = true;
+       // Debug.Log("볼 갯수 : " + w_listBall.Count);
+        for(int i = 0; i < w_listBall.Count; ++i)
+        {
+           // Debug.Log(i);
+            w_listBall[i].GetComponent<BallController>().m_tState[iIndex].bIsPlay = true;
+        }
     }
 
     public int GetBallAtk()

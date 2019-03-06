@@ -243,8 +243,8 @@ PlayerSettings:
   AndroidTargetArchitectures: 5
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: "C:/Users/\uC774\uC6A9\uD6C8/Desktop/\uC0C8 \uD3F4\uB354 (2)/brickBreakerMaster.keystore"
-  AndroidKeyaliasName: mainbreaker
+  AndroidKeystoreName: "C:/Users/\uC774\uC6A9\uD6C8/Desktop/\uC0C8 \uD3F4\uB354 (2)/BreakerMaster.keystore"
+  AndroidKeyaliasName: mainkey
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 1
   AndroidIsGame: 1

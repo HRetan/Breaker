@@ -24,7 +24,7 @@ public class BlockController : MonoBehaviour
 
     void Awake()
     {
-        m_iItemID = Random.Range(0, 50);  
+        m_iItemID = 8;  
     }
 
     // Use this for initialization

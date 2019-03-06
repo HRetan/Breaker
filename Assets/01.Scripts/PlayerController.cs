@@ -68,12 +68,12 @@ public class PlayerController : MonoBehaviour
 
         if(m_bBullet)
         {
-            if(m_fBulletTime >= 1f)
+            if(m_fBulletTime >= 0.3f)
             {
                 m_fBulletTime = 0;
                 CreateBullet();
             }
-            if(m_fItem >= 10f)
+            if(m_fItem >= 3f)
             {
                 m_fItem = 0f;
                 m_bBullet = false;
