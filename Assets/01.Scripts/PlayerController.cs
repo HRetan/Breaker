@@ -118,9 +118,9 @@ public class PlayerController : MonoBehaviour
 
     public void SetSize(Vector3 vSize)
     {
-        if (transform.localScale.x == 3f)
+        if (transform.localScale.x == 1.4f)
             return;
-        if (transform.localScale.x == 0.5f)
+        if (transform.localScale.x == 0.8f)
             return;
 
         transform.localScale += vSize;

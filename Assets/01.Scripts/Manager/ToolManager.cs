@@ -36,7 +36,7 @@ public class ToolManager : MonoBehaviour {
     {
         goTileManager = new GameObject("TileManager");
 
-        for (int i = 0; i < 25; ++i)
+        for (int i = 0; i < 26; ++i)
         {
             for (int j = 0; j < 11; ++j)
             {
@@ -97,7 +97,7 @@ public class ToolManager : MonoBehaviour {
         //세이브 파일 생성
         if (Input.GetKeyDown(KeyCode.F6))
         {
-            SaveNLoad.GetInstance.SaveMap("Stage" + SaveNLoad.GetInstance.GetStaticStageNum().ToString());
+            SaveNLoad.GetInstance.SavePos();
         }
     }
 

@@ -53,6 +53,7 @@ public class NetWorkManager : MonoBehaviour {
         return m_listPlayerMap;
     }
 
+    //모든 맵리스트 불러오기
     public IEnumerator AllMapLoad()
     {
         string strUrl = "http://54.180.153.218:7436/api/maps";
@@ -69,7 +70,7 @@ public class NetWorkManager : MonoBehaviour {
             Debug.Log("Error" + www.error);
         }
     }
-
+    //유저명으로 맵리스트 불러오기
     public IEnumerator SearchMapLoad(string strUserName)
     {
         string strUrl = "http://54.180.153.218:7436/api/maps?owner=" + strUserName;
@@ -118,7 +119,7 @@ public class NetWorkManager : MonoBehaviour {
         Debug.Log("오브젝트 수 : " + m_listPlayerMap.Count);
     }
 
-
+    //맵 저장
     public IEnumerator SaveNetData(string strTitle)
     {
         List<Map> m_listMap = new List<Map>();
@@ -191,7 +192,7 @@ public class NetWorkManager : MonoBehaviour {
             Debug.Log("Net Load Failed");
         }
     }
-
+    //최고 점수 변경
     public IEnumerator PutNetData(string strID, string strScore)
     {
         string strTest = "{\"bestScore\":{\"user\":\"Kairencer\",\"score\":\"" + strScore + "\"}}";
@@ -213,6 +214,7 @@ public class NetWorkManager : MonoBehaviour {
         }
     }
 
+    //맵리스트 파일 생성
     void CreateFile(int iIndex)
     {
         Debug.Log("파일 생성");
@@ -230,6 +232,7 @@ public class NetWorkManager : MonoBehaviour {
         m_listFile.Add(goFile);
     }
     
+    //유저 맵 실행
     public IEnumerator LoadNetUserMap()
     {
         string strUrl = "http://54.180.153.218:7436/api/maps/" + m_strID;

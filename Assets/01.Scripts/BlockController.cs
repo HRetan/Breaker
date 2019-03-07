@@ -15,6 +15,7 @@ public class BlockController : MonoBehaviour
     private BlockManager blockManager;
     private Transform trans;
     private Color color;
+    private ScoreUI m_scScoreUI;
     private float fTime;
 
     private int m_iBlockID = 0;
@@ -37,6 +38,7 @@ public class BlockController : MonoBehaviour
         color = new Color();
         color = sprite.color;
         blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+        m_scScoreUI = GameObject.Find("ScoreUI").GetComponent<ScoreUI>();
     }
 
     // Update is called once per frame
@@ -74,7 +76,10 @@ public class BlockController : MonoBehaviour
             BlockState();
 
             if (coll.gameObject.tag == "Bullet")
+            {
+                m_scScoreUI.ScoreCheck(1);
                 Destroy(coll.gameObject);
+            }
         }
     }
 

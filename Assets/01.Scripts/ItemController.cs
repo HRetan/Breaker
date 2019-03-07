@@ -74,13 +74,13 @@ public class ItemController : MonoBehaviour {
                 goBall.SetItemPlay(1);
                 break;
             case ITEMSTATE.YELLOW:
-                goBar.SetSize(new Vector3(-0.5f, 0f, 0f));
+                goBar.SetSize(new Vector3(-0.2f, 0f, 0f));
                 break;
             case ITEMSTATE.GREEN:
                 goBall.CreateBall();
                 break;
             case ITEMSTATE.RED:
-                goBar.SetSize(new Vector3(0.5f, 0f, 0f));
+                goBar.SetSize(new Vector3(0.2f, 0f, 0f));
                 break;
             case ITEMSTATE.BLUE:
                 goBall.SetSpeed(1f);

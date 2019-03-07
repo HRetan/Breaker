@@ -107,6 +107,34 @@ public class UIController : MonoBehaviour
         m_bUI = true;
     }
 
+    public void InputTextUI(string strStyle)
+    {
+        GameObject goUI;
+        goUI = MonoBehaviour.Instantiate(Resources.Load("UI/DynamicUI")) as GameObject;
+        goUI.name = "dynamicUI";
+
+        if(strStyle == "Save")
+        {
+            GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
+            GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => SaveApply());
+        }
+        else if(strStyle == "Load")
+        {
+            GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
+            GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => LoadApply());
+        }
+        else if(strStyle == "Modify")
+        {
+            GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
+        }
+        else if (strStyle == "Delete")
+        {
+            GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
+        }
+
+        m_bUI = true;
+    }
+
     public void ReadLoadFilePath()
     {
         Debug.Log("로드 추가");
@@ -118,7 +146,7 @@ public class UIController : MonoBehaviour
 
     private void LoadApply()
     {
-        Text ttName = GameObject.Find("LoadName").GetComponent<Text>();
+        Text ttName = GameObject.Find("TextName").GetComponent<Text>();
         //Debug.Log(ttName.text);
 
         SaveNLoad.GetInstance.LoadToolMap(ttName.text);
@@ -134,12 +162,24 @@ public class UIController : MonoBehaviour
 
     public void SaveApply()
     {
-        Text ttName = GameObject.Find("SaveName").GetComponent<Text>();
+        Text ttName = GameObject.Find("TextName").GetComponent<Text>();
 
         SaveNLoad.GetInstance.SaveMap(ttName.text);
         StartCoroutine(NetWorkManager.Instance.SaveNetData(ttName.text));
         Destroy(GameObject.Find("dynamicUI"));
         m_bUI = false;
+    }
+
+    public void ServerModify(string strPassword)
+    {
+        //선택한 MapData의 패스워드와 입력한 패스워드가 같을 때 실행
+        //ToolManager에서 실행 여부를 통해 확인후 불러오기 실행
+    }
+
+    public void ServerDelete(string strPassword)
+    {
+        //선택한 MapData의 패스워드와 입력한 패스워드가 같을 때 실행
+        //같은면 삭제
     }
 
     public void SetUI(bool bUI)
@@ -316,7 +356,8 @@ public class UIController : MonoBehaviour
 
         GameObject.Find("Return").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goDynamic.name));
         GameObject.Find("Play").GetComponent<Button>().onClick.AddListener(() => StageManager.GetInstance.PlayGameScene());
-        GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => DeleteFile(SaveNLoad.GetInstance.GetStaticFileName()));
+        GameObject.Find("Delete").GetComponent<Button>().onClick.AddListener(() => InputTextUI("Delete"));
+        GameObject.Find("Modify").GetComponent<Button>().onClick.AddListener(() => InputTextUI("Modify"));
     }
 
     public void EnableSelector()
