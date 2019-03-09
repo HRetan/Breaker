@@ -32,8 +32,9 @@ public class NetWorkManager : MonoBehaviour {
 
     public static NetWorkManager Instance = null;
 
-    public static string m_strID = "";
+    public static string w_strID = "";
     public static int m_iPreScore = 0;
+    public static bool w_bIsNet = false;
 
     void Awake()
     {
@@ -117,6 +118,56 @@ public class NetWorkManager : MonoBehaviour {
         }
 
         Debug.Log("오브젝트 수 : " + m_listPlayerMap.Count);
+    }
+
+    void ProcessJson(string strJson, string strTitle)
+    {
+        m_listPlayerMap.Clear();
+
+        if (m_listFile.Count != 0)
+        {
+            for (int i = 0; i < m_listFile.Count; ++i)
+            {
+                Destroy(m_listFile[i]);
+            }
+            m_listFile.Clear();
+        }
+
+        JsonData jsonvale = JsonMapper.ToObject(strJson);
+
+        for (int i = 0; i < jsonvale.Count; ++i)
+        {
+            PlayerMap playermap = new PlayerMap(jsonvale[i]["_id"].ToString(),
+                jsonvale[i]["title"].ToString(),
+                jsonvale[i]["owner"].ToString(),
+                jsonvale[i]["bestScore"]["score"].ToString(),
+                jsonvale[i]["bestScore"]["user"].ToString());
+
+            m_listPlayerMap.Add(playermap);
+
+            if(strTitle.Equals(jsonvale[i]["title"].ToString(), System.StringComparison.OrdinalIgnoreCase))
+                CreateFile(i);
+
+        }
+
+        Debug.Log("오브젝트 수 : " + m_listPlayerMap.Count);
+    }
+
+    public IEnumerator TitleMapsSearch(string strTitle)
+    {
+        string strUrl = "http://54.180.153.218:7436/api/maps";
+        WWW www = new WWW(strUrl);
+        yield return www;
+
+        if (www.error == null)
+        {
+            Debug.Log(www.text);
+            ProcessJson(www.text, strTitle);
+        }
+        else
+        {
+            Debug.Log("Error" + www.error);
+        }
     }
 
     //맵 저장
@@ -235,25 +286,106 @@ public class NetWorkManager : MonoBehaviour {
     //유저 맵 실행
     public IEnumerator LoadNetUserMap()
     {
-        string strUrl = "http://54.180.153.218:7436/api/maps/" + m_strID;
+        string strUrl = "http://54.180.153.218:7436/api/maps/" + w_strID;
         Debug.Log(strUrl);
         WWW www = new WWW(strUrl);
         
         yield return StartCoroutine(SendCheck(www));
     }
 
+    public IEnumerator DeleteMap(string strPassword)
+    {
+        string strUrl = "http://54.180.153.218:7436/api/maps/" + w_strID;
+
+        UnityWebRequest www = UnityWebRequest.Delete(strUrl);
+
+        www.SetRequestHeader("Password", strPassword);
+        
+        yield return www;
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Delete complete!");
+        }
+    }
+
+    public IEnumerator ModifyMap(string strPassword)
+    {
+        string strUrl = "http://54.180.153.218:7436/api/maps/" + w_strID;
+        Debug.Log(strUrl);
+        UnityWebRequest www = UnityWebRequest.Get(strUrl);
+
+        www.SetRequestHeader("Password", strPassword);
+
+        yield return www.SendWebRequest();
+        
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            w_bIsNet = true;
+            UIController.GetInstance.SceneChangeMapTool();
+        }
+    }
+
+    public IEnumerator LoadMapTool()
+    {
+        string strUrl = "http://54.180.153.218:7436/api/maps/" + w_strID;
+        Debug.Log(strUrl);
+
+        UnityWebRequest www = UnityWebRequest.Get(strUrl);
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Load Succeed");
+            ToolManager m_toolManager;
+
+            m_toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
+            JsonData mapData = JsonMapper.ToObject(www.downloadHandler.text);
+
+            Debug.Log(mapData.ToJson());
+            //무슨 오류????
+            for (int i = 0; i < mapData.Count; ++i)
+            {
+                Debug.Log(mapData["mapData"][i]["iIndex"].ToString());
+                TileManager tile = GameObject.Find("MapTile(White)" + mapData["mapData"][i]["iIndex"].ToString()).GetComponent<TileManager>();
+                GameObject goBlock = tile.CreateBlock(int.Parse(mapData["mapData"][i]["blockID"].ToString()));
+                tile.SetItemID(int.Parse(mapData["mapData"][i]["itemID"].ToString()));
+
+                m_toolManager.GetListBlock().Add(goBlock);
+            }
+        }
+    }
+
     public void SetID(string ID)
     {
-        m_strID = ID;
+        w_strID = ID;
     }
 
     public string GetID()
     {
-        return m_strID;
+        return w_strID;
     }
 
     public int GetPreScore()
     {
         return m_iPreScore;
+    }
+
+    public bool GetNet()
+    {
+        return w_bIsNet;
     }
 }

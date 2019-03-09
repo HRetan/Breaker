@@ -126,10 +126,14 @@ public class UIController : MonoBehaviour
         else if(strStyle == "Modify")
         {
             GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
+            GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => ServerModify());
         }
         else if (strStyle == "Delete")
         {
+            InputField ttName = GameObject.Find("InputField").GetComponent<InputField>();
+            ttName.contentType = InputField.ContentType.Password;
             GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
+            GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => ServerDelete());
         }
 
         m_bUI = true;
@@ -170,16 +174,26 @@ public class UIController : MonoBehaviour
         m_bUI = false;
     }
 
-    public void ServerModify(string strPassword)
+    public void ServerModify()
     {
         //선택한 MapData의 패스워드와 입력한 패스워드가 같을 때 실행
         //ToolManager에서 실행 여부를 통해 확인후 불러오기 실행
+        Text ttName = GameObject.Find("TextName").GetComponent<Text>();
+
+        StartCoroutine(NetWorkManager.Instance.ModifyMap(ttName.text));
+        Destroy(GameObject.Find("dynamicUI"));
+        m_bUI = false;
     }
 
-    public void ServerDelete(string strPassword)
+    public void ServerDelete()
     {
         //선택한 MapData의 패스워드와 입력한 패스워드가 같을 때 실행
         //같은면 삭제
+        Text ttName = GameObject.Find("TextName").GetComponent<Text>();
+
+        StartCoroutine(NetWorkManager.Instance.DeleteMap(ttName.text));
+        Destroy(GameObject.Find("dynamicUI"));
+        m_bUI = false;
     }
 
     public void SetUI(bool bUI)

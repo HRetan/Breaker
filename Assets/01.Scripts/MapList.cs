@@ -77,7 +77,7 @@ public class MapList : MonoBehaviour
         goFile.GetComponent<Button>().onClick.AddListener(() => SaveNLoad.GetInstance.SetStaticFileName(goFile.name));
         goFile.GetComponent<Button>().onClick.AddListener(() => FileIndex(iIndex));
 
-        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MapTool"))
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MapTool"))
             goFile.GetComponent<Button>().onClick.AddListener(() => UIController.GetInstance.ReadLoadFilePath());
     }
 
@@ -110,7 +110,7 @@ public class MapList : MonoBehaviour
     {
         if(m_eSearchType == SearchType.TITLE)
         {
-
+            StartCoroutine(NetWorkManager.Instance.TitleMapsSearch(m_goSearchText.text));
         }
         else if(m_eSearchType == SearchType.OWNER)
         {

@@ -44,7 +44,7 @@ public class ToolManager : MonoBehaviour {
                 fY = (0.245f / 2) + (i * 0.245f);
 
                 GameObject tile = MonoBehaviour.Instantiate(Resources.Load("Tile/MapTile(White)")) as GameObject;
-                tile.name = "MapTile(White)" + (i * 11 +j);
+                tile.name = "MapTile(White)" + (i * 11 + j);
                 tile.transform.parent = goTileManager.transform;
                 tile.transform.position = new Vector2(fX - 2.67f, fY - 3.0f);
                 tile.GetComponent<TileManager>().SetIndex(i * 11 + j);
@@ -56,6 +56,11 @@ public class ToolManager : MonoBehaviour {
         m_goBlockScroll = GameObject.Find("BlockScroll");
         m_goItemScroll = GameObject.Find("ItemScroll");
         m_goItemScroll.SetActive(false);
+
+        if (NetWorkManager.Instance.GetNet())
+        {
+            StartCoroutine(NetWorkManager.Instance.LoadMapTool());
+        }
 
     }
 
