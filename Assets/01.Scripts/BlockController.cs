@@ -37,8 +37,8 @@ public class BlockController : MonoBehaviour
         m_asSound = GetComponent<AudioSource>();
         color = new Color();
         color = sprite.color;
-        blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
         m_scScoreUI = GameObject.Find("ScoreUI").GetComponent<ScoreUI>();
+        blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
     }
 
     // Update is called once per frame

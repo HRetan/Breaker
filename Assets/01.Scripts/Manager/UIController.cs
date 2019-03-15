@@ -55,6 +55,7 @@ public class UIController : MonoBehaviour
     public void SceneChangeTitle()
     {
         SceneManager.LoadScene("Title");
+        NetWorkManager.Instance.SetNet(false);
     }
 
     public void SceneChangeStart()
@@ -90,7 +91,7 @@ public class UIController : MonoBehaviour
         goUI.name = "dynamicUI";
 
         GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
-        GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => SaveApply());
+        //GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => SaveApply());
 
         m_bUI = true;
     }
@@ -113,12 +114,7 @@ public class UIController : MonoBehaviour
         goUI = MonoBehaviour.Instantiate(Resources.Load("UI/DynamicUI")) as GameObject;
         goUI.name = "dynamicUI";
 
-        if(strStyle == "Save")
-        {
-            GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
-            GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => SaveApply());
-        }
-        else if(strStyle == "Load")
+        if(strStyle == "Load")
         {
             GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
             GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => LoadApply());
@@ -137,6 +133,19 @@ public class UIController : MonoBehaviour
         }
 
         m_bUI = true;
+    }
+
+    public void OnSaveUI()
+    {
+        GameObject goUI;
+        goUI = MonoBehaviour.Instantiate(Resources.Load("UI/PasswordUI")) as GameObject;
+        goUI.name = "PasswordUI";
+        
+        GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
+        GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => SaveApply());
+
+        m_bUI = true;
+
     }
 
     public void ReadLoadFilePath()
@@ -166,12 +175,24 @@ public class UIController : MonoBehaviour
 
     public void SaveApply()
     {
-        Text ttName = GameObject.Find("TextName").GetComponent<Text>();
+        Text[] text = new Text[4];
 
-        SaveNLoad.GetInstance.SaveMap(ttName.text);
-        StartCoroutine(NetWorkManager.Instance.SaveNetData(ttName.text));
-        Destroy(GameObject.Find("dynamicUI"));
+        text[0] = GameObject.Find("Text(Title)").GetComponent<Text>();
+        text[1] = GameObject.Find("Text(NickName)").GetComponent<Text>();
+        text[2] = GameObject.Find("Text(Password)").GetComponent<Text>();
+        text[3] = GameObject.Find("Text(Confirm)").GetComponent<Text>();
+
+        if (text[2].text != text[3].text || text[2].text == "")
+        {
+            SendMessage("실패");
+            return;
+        }
+
+        SaveNLoad.GetInstance.SaveMap(text[0].text);
+        StartCoroutine(NetWorkManager.Instance.SaveNetData(text[0].text, text[1].text));
+        Destroy(GameObject.Find("PasswordUI"));
         m_bUI = false;
+        SceneChangeUserMap();
     }
 
     public void ServerModify()

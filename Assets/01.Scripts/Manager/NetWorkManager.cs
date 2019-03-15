@@ -171,7 +171,7 @@ public class NetWorkManager : MonoBehaviour {
     }
 
     //맵 저장
-    public IEnumerator SaveNetData(string strTitle)
+    public IEnumerator SaveNetData(string strTitle, string strNickName)
     {
         List<Map> m_listMap = new List<Map>();
 
@@ -189,7 +189,7 @@ public class NetWorkManager : MonoBehaviour {
         string strJson = mapJson.ToString();
         Debug.Log(strJson);
 
-        string strTest = "{\"title\":\"" + strTitle + "\", \"owner\":\"retan\",\"mapData\":" + strJson + "}";
+        string strTest = "{\"title\":\"" + strTitle + "\", \"owner\":\"" + strNickName + "\",\"mapData\":" + strJson + "}";
 
         Dictionary<string, string> dic = new Dictionary<string, string>();
         dic.Add("Content-Type", "application/json");
@@ -296,7 +296,6 @@ public class NetWorkManager : MonoBehaviour {
     public IEnumerator DeleteMap(string strPassword)
     {
         string strUrl = "http://54.180.153.218:7436/api/maps/" + w_strID;
-
         UnityWebRequest www = UnityWebRequest.Delete(strUrl);
 
         www.SetRequestHeader("Password", strPassword);
@@ -387,5 +386,10 @@ public class NetWorkManager : MonoBehaviour {
     public bool GetNet()
     {
         return w_bIsNet;
+    }
+
+    public void SetNet(bool bIsNet)
+    {
+        w_bIsNet = bIsNet;
     }
 }
