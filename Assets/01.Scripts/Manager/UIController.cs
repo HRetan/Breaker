@@ -121,6 +121,8 @@ public class UIController : MonoBehaviour
         }
         else if(strStyle == "Modify")
         {
+            InputField ttName = GameObject.Find("InputField").GetComponent<InputField>();
+            ttName.contentType = InputField.ContentType.Password;
             GameObject.Find("Cancel").GetComponent<Button>().onClick.AddListener(() => DestroyUI(goUI.name));
             GameObject.Find("Apply").GetComponent<Button>().onClick.AddListener(() => ServerModify());
         }
@@ -175,31 +177,41 @@ public class UIController : MonoBehaviour
 
     public void SaveApply()
     {
-        Text[] text = new Text[4];
-
-        text[0] = GameObject.Find("Text(Title)").GetComponent<Text>();
-        text[1] = GameObject.Find("Text(NickName)").GetComponent<Text>();
-        text[2] = GameObject.Find("Text(Password)").GetComponent<Text>();
-        text[3] = GameObject.Find("Text(Confirm)").GetComponent<Text>();
-
-        if (text[2].text != text[3].text || text[2].text == "")
+        if (!NetWorkManager.Instance.GetNet())
         {
-            SendMessage("실패");
-            return;
-        }
+            Text[] text = new Text[2];
 
-        SaveNLoad.GetInstance.SaveMap(text[0].text);
-        StartCoroutine(NetWorkManager.Instance.SaveNetData(text[0].text, text[1].text));
-        Destroy(GameObject.Find("PasswordUI"));
-        m_bUI = false;
-        SceneChangeUserMap();
+            text[0] = GameObject.Find("Text(Title)").GetComponent<Text>();
+            text[1] = GameObject.Find("Text(NickName)").GetComponent<Text>();
+
+            InputField[] password = new InputField[2];
+
+            password[0] = GameObject.Find("Password").GetComponent<InputField>();
+            password[1] = GameObject.Find("ConfirmCheck").GetComponent<InputField>();
+
+            if (password[0].text != password[1].text || password[0].text == "")
+            {
+                SendMessage("실패");
+                return;
+            }
+
+            SaveNLoad.GetInstance.SaveMap(text[0].text);
+            StartCoroutine(NetWorkManager.Instance.SaveNetData(text[0].text, text[1].text, password[0].text));
+            Destroy(GameObject.Find("PasswordUI"));
+            m_bUI = false;
+            SceneChangeUserMap();
+        }
+        else
+        {
+            StartCoroutine(NetWorkManager.Instance.PutModifyMap());
+        }
     }
 
     public void ServerModify()
     {
         //선택한 MapData의 패스워드와 입력한 패스워드가 같을 때 실행
         //ToolManager에서 실행 여부를 통해 확인후 불러오기 실행
-        Text ttName = GameObject.Find("TextName").GetComponent<Text>();
+        InputField ttName = GameObject.Find("InputField").GetComponent<InputField>();
 
         StartCoroutine(NetWorkManager.Instance.ModifyMap(ttName.text));
         Destroy(GameObject.Find("dynamicUI"));
@@ -210,7 +222,7 @@ public class UIController : MonoBehaviour
     {
         //선택한 MapData의 패스워드와 입력한 패스워드가 같을 때 실행
         //같은면 삭제
-        Text ttName = GameObject.Find("TextName").GetComponent<Text>();
+        InputField ttName = GameObject.Find("InputField").GetComponent<InputField>();
 
         StartCoroutine(NetWorkManager.Instance.DeleteMap(ttName.text));
         Destroy(GameObject.Find("dynamicUI"));

@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour {
 
+    public static int w_iItemNum = 0;
+
     private GameObject m_goTool;
     private GameObject m_goBlock = null;
     private GameObject m_goItem = null;
     
     private int m_iBlockNum = 0;
+    private int m_iItemNum = 0;
     private int m_iIndex = 0;
 
 	// Use this for initialization
 	void Start () {
         m_goTool = GameObject.Find("ToolManager");
+        w_iItemNum = 8;
 	}
 	
 	// Update is called once per frame
@@ -48,7 +52,7 @@ public class TileManager : MonoBehaviour {
             m_goBlock.GetComponent<BoxCollider2D>().enabled = false;
         }
 
-        CheckItemID(8);
+        CheckItemID(w_iItemNum);
     }
 
     void ChangeObjectBlock()
@@ -65,6 +69,8 @@ public class TileManager : MonoBehaviour {
             m_goBlock.GetComponent<BlockController>().SetIndex(m_iIndex);
             m_goBlock.GetComponent<BoxCollider2D>().enabled = false;
         }
+
+        CheckItemID(w_iItemNum);
     }
 
     void CheckBlockId()
@@ -138,7 +144,6 @@ public class TileManager : MonoBehaviour {
                 m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Blue)")) as GameObject;
                 m_goItem.name = "ItemImage(Blue)";
                 m_goItem.transform.parent = m_goBlock.transform;
-                m_goItem.transform.position = transform.position;
                 break;
             case 2:
                 m_goItem = MonoBehaviour.Instantiate(Resources.Load("Item/ItemSprite/ItemImage(Red)")) as GameObject;
@@ -188,6 +193,7 @@ public class TileManager : MonoBehaviour {
     {
         if (m_goBlock == null)
             return;
+        w_iItemNum = iItemNum;
 
         Destroy(m_goItem);
         m_goTool.GetComponent<ToolManager>().RemoveList(m_goItem);
@@ -204,5 +210,10 @@ public class TileManager : MonoBehaviour {
     public int GetIndex()
     {
         return m_iIndex;   
+    }
+
+    public void SetItemIndex(int iIndex)
+    {
+        m_iItemNum = iIndex;
     }
 }

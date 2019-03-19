@@ -231,7 +231,7 @@ public class BallController : MonoBehaviour
 
         angle = Mathf.Atan2(vecDir.y, vecDir.x) * 180f / Mathf.PI;
 
-        if (Mathf.Abs(angle) >= 170 || Mathf.Abs(angle) <= 10)
+        if (Mathf.Abs(angle) >= 160 || Mathf.Abs(angle) <= 20)
         {
             if (angle < 0)
             {
@@ -308,7 +308,7 @@ public class BallController : MonoBehaviour
 
     public void SetItemPlay(int iIndex)
     {
-       // Debug.Log("볼 갯수 : " + w_listBall.Count);
+       Debug.Log("볼 갯수 : " + w_listBall.Count);
         for(int i = 0; i < w_listBall.Count; ++i)
         {
            // Debug.Log(i);
@@ -324,5 +324,10 @@ public class BallController : MonoBehaviour
     public void SetBallLife()
     {
         m_iBallLive = 1;
+    }
+
+    public void SetListBall()
+    {
+        w_listBall.Clear();
     }
 }

@@ -24,8 +24,10 @@ public class PlayerController : MonoBehaviour
     private GameObject[] m_goBulletPoint = new GameObject[2];
 
     private bool m_bBullet = false;
+    private bool m_bSize = false;
     private float m_fBulletTime = 0f;
     private float m_fItem = 0f;
+    private float m_fSizeTime = 0f;
 
     // Use this for initialization
     void Start()
@@ -81,6 +83,18 @@ public class PlayerController : MonoBehaviour
             m_fBulletTime += Time.deltaTime;
             m_fItem += Time.deltaTime;
         }
+
+        if(m_bSize)
+        {
+            if (m_fSizeTime >= 3f)
+            {
+                m_fSizeTime = 0f;
+                transform.localScale = new Vector3(1f, 0.8f, 0f);
+                m_bSize = false;
+            }
+
+            m_fSizeTime += Time.deltaTime;
+        }
     }
 
     void OnCollisionStay2D(Collision2D coll)
@@ -124,6 +138,8 @@ public class PlayerController : MonoBehaviour
             return;
 
         transform.localScale += vSize;
+        m_bSize = true;
+        m_fSizeTime = 0f;
     }
 
     public void LeftMoveOn()

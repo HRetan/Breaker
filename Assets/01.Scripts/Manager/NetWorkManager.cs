@@ -35,6 +35,7 @@ public class NetWorkManager : MonoBehaviour {
     public static string w_strID = "";
     public static int m_iPreScore = 0;
     public static bool w_bIsNet = false;
+    public static string w_strPwd = "";
 
     void Awake()
     {
@@ -171,7 +172,7 @@ public class NetWorkManager : MonoBehaviour {
     }
 
     //맵 저장
-    public IEnumerator SaveNetData(string strTitle, string strNickName)
+    public IEnumerator SaveNetData(string strTitle, string strNickName, string strPassword)
     {
         List<Map> m_listMap = new List<Map>();
 
@@ -189,7 +190,7 @@ public class NetWorkManager : MonoBehaviour {
         string strJson = mapJson.ToString();
         Debug.Log(strJson);
 
-        string strTest = "{\"title\":\"" + strTitle + "\", \"owner\":\"" + strNickName + "\",\"mapData\":" + strJson + "}";
+        string strTest = "{\"title\":\"" + strTitle + "\", \"owner\":\"" + strNickName + "\",\"mapData\":" + strJson + ",\"password\":\""+ strPassword + "\"}";
 
         Dictionary<string, string> dic = new Dictionary<string, string>();
         dic.Add("Content-Type", "application/json");
@@ -250,8 +251,8 @@ public class NetWorkManager : MonoBehaviour {
 
         byte[] body = System.Text.Encoding.UTF8.GetBytes(strTest);
 
-        UnityWebRequest www = UnityWebRequest.Put("http://54.180.153.218:7436/api/maps/" + strID, body);
-
+        UnityWebRequest www = UnityWebRequest.Put("http://54.180.153.218:7436/api/maps/score/" + strID, body);
+        
         www.SetRequestHeader("Content-Type", "application/json");
         yield return www.SendWebRequest();
 
@@ -297,10 +298,8 @@ public class NetWorkManager : MonoBehaviour {
     {
         string strUrl = "http://54.180.153.218:7436/api/maps/" + w_strID;
         UnityWebRequest www = UnityWebRequest.Delete(strUrl);
-
-        www.SetRequestHeader("Password", strPassword);
-        
-        yield return www;
+        www.SetRequestHeader("password", strPassword);
+        yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)
         {
@@ -309,6 +308,7 @@ public class NetWorkManager : MonoBehaviour {
         else
         {
             Debug.Log("Delete complete!");
+            StartCoroutine(AllMapLoad());
         }
     }
 
@@ -318,8 +318,6 @@ public class NetWorkManager : MonoBehaviour {
         Debug.Log(strUrl);
         UnityWebRequest www = UnityWebRequest.Get(strUrl);
 
-        www.SetRequestHeader("Password", strPassword);
-
         yield return www.SendWebRequest();
         
         if (www.isNetworkError || www.isHttpError)
@@ -328,8 +326,64 @@ public class NetWorkManager : MonoBehaviour {
         }
         else
         {
-            w_bIsNet = true;
-            UIController.GetInstance.SceneChangeMapTool();
+            if (GetPassword(www.downloadHandler.text) == strPassword)
+            {
+                w_bIsNet = true;
+                w_strPwd = strPassword;
+                UIController.GetInstance.SceneChangeMapTool();
+            }
+            else
+            {
+                Debug.Log("비밀번호가 틀렸습니다");
+            }
+        }
+    }
+
+    string GetPassword(string text)
+    {
+        JsonData jsonvale = JsonMapper.ToObject(text);
+
+        return jsonvale["password"].ToString();
+    }
+
+    public IEnumerator PutModifyMap()
+    {
+        List<Map> m_listMap = new List<Map>();
+
+        List<GameObject> m_listBlock = GameObject.Find("ToolManager").GetComponent<ToolManager>().GetListBlock();
+
+        for (int i = 0; i < m_listBlock.Count; ++i)
+        {
+            m_listMap.Add(new Map(m_listBlock[i].GetComponent<BlockController>().GetBlockID()
+                , m_listBlock[i].GetComponent<BlockController>().GetIndex()
+                , m_listBlock[i].GetComponent<BlockController>().GetItemID()));
+        }
+
+        JsonData mapJson = JsonMapper.ToJson(m_listMap);
+
+        string strJson = mapJson.ToString();
+        Debug.Log(strJson);
+
+        string strTest = "{\"mapData\":" + strJson + "}";
+
+        Dictionary<string, string> dic = new Dictionary<string, string>();
+        dic.Add("Content-Type", "application/json");
+
+        byte[] body = System.Text.Encoding.UTF8.GetBytes(strTest);
+
+        UnityWebRequest www = UnityWebRequest.Put("http://54.180.153.218:7436/api/maps/" + w_strID, body);
+
+        www.SetRequestHeader("Content-Type", "application/json");
+        www.SetRequestHeader("password", w_strPwd);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Upload complete!");
         }
     }
 

@@ -50,6 +50,8 @@ public class BlockManager : MonoBehaviour
         if(m_iBlockCount == 0 && m_bIsPlay)
         {
             Debug.Log("벌써 들어온다고?!");
+            GameObject.Find("Breaker_Ball(Red)").GetComponent<BallController>().SetListBall();
+
             switch(m_iStyle)
             {
                 case 0:
@@ -98,7 +100,7 @@ public class BlockManager : MonoBehaviour
 
         if(blockID == 11)
         {
-            blockID = Random.Range(0, 10);
+            blockID = Random.Range(0, 7);
         }
 
         //Debug.Log("블락생성 아이템 아이디 : " + iItemID);
