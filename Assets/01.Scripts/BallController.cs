@@ -311,7 +311,6 @@ public class BallController : MonoBehaviour
        Debug.Log("볼 갯수 : " + w_listBall.Count);
         for(int i = 0; i < w_listBall.Count; ++i)
         {
-           // Debug.Log(i);
             w_listBall[i].GetComponent<BallController>().m_tState[iIndex].bIsPlay = true;
         }
     }
@@ -329,5 +328,21 @@ public class BallController : MonoBehaviour
     public void SetListBall()
     {
         w_listBall.Clear();
+    }
+
+    public void SetBallSpeedLevel(int iLevel)
+    {
+        switch(iLevel)
+        {
+            case 1:
+                fMoveSpeed = 5f;
+                break;
+            case 2:
+                fMoveSpeed = 6f;
+                break;
+            case 3:
+                fMoveSpeed = 7f;
+                break;
+        }
     }
 }

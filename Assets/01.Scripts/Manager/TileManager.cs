@@ -58,7 +58,7 @@ public class TileManager : MonoBehaviour {
     void ChangeObjectBlock()
     {
         Destroy(m_goBlock);
-        m_goTool.GetComponent<ToolManager>().RemoveList(m_goBlock);
+        ToolManager.GetInstance.RemoveList(m_goBlock);
 
         CheckBlockId();
 
@@ -133,6 +133,9 @@ public class TileManager : MonoBehaviour {
 
     void CheckItemID(int itemID)
     {
+        if (m_iBlockNum == 12)
+            return;
+
         switch (itemID)
         {
             case 0:
@@ -196,8 +199,8 @@ public class TileManager : MonoBehaviour {
         w_iItemNum = iItemNum;
 
         Destroy(m_goItem);
-        m_goTool.GetComponent<ToolManager>().RemoveList(m_goItem);
-
+        ToolManager.GetInstance.RemoveList(m_goItem);
+        
         CheckItemID(iItemNum);
         m_goBlock.GetComponent<BlockController>().SetItemID(iItemNum);
     }

@@ -47,7 +47,7 @@ public class ScrollUI : MonoBehaviour {
         m_fDis = new float[bttnLenght];
 
         m_iBttnDis = (int)Mathf.Abs(m_rtBlock[1].GetComponent<RectTransform>().anchoredPosition.x - m_rtBlock[0].GetComponent<RectTransform>().anchoredPosition.x);
-        m_scToolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
+        m_scToolManager = ToolManager.GetInstance;
 	}
 
     // Update is called once per frame

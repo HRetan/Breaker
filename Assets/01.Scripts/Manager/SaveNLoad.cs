@@ -135,7 +135,7 @@ public class SaveNLoad : MonoBehaviour
     {
         List<Map> m_listMap = new List<Map>();
 
-        List<GameObject> m_listBlock = GameObject.Find("ToolManager").GetComponent<ToolManager>().GetListBlock();
+        List<GameObject> m_listBlock = ToolManager.GetInstance.GetListBlock();
 
         for (int i = 0; i < m_listBlock.Count; ++i)
         {
@@ -234,9 +234,7 @@ public class SaveNLoad : MonoBehaviour
     //2.네트워크를 통해 세이브 로드하는 Func을 새로 만든다.
     public void LoadToolMap(string strFileName)
     {
-        ToolManager m_toolManager;
-
-        m_toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
+        List<GameObject> m_listBlock = ToolManager.GetInstance.GetListBlock();
 
         string strPath = Application.persistentDataPath + "/" + strFileName + ".json";
 
@@ -254,31 +252,31 @@ public class SaveNLoad : MonoBehaviour
 
         JsonData mapData = JsonMapper.ToObject(strJson);
 
-        if (m_toolManager.GetListBlock().Count != 0)
+        if (m_listBlock.Count != 0)
         {
-            for(int i = 0; i < m_toolManager.GetListBlock().Count; ++i)
+            for(int i = 0; i < m_listBlock.Count; ++i)
             {
-                Destroy(m_toolManager.GetListBlock()[i]);
+                Destroy(m_listBlock[i]);
             }
-            m_toolManager.GetListBlock().Clear();
+            m_listBlock.Clear();
         }
 
         for (int i = 0; i < mapData.Count; ++i)
         {
             GameObject goBlock = GameObject.Find("MapTile(White)" + mapData[i]["iIndex"].ToString()).GetComponent<TileManager>().CreateBlock(int.Parse(mapData[i]["blockID"].ToString()));
-            m_toolManager.GetListBlock().Add(goBlock);
+            m_listBlock.Add(goBlock);
         }
     }
 
     public void SavePos()
     {
         BlockPos save = new BlockPos();
-        ToolManager toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
+        List<GameObject> listTile = ToolManager.GetInstance.GetListTile();
 
-        for (int i = 0; i < toolManager.GetListTile().Count; ++i)
+        for (int i = 0; i < listTile.Count; ++i)
         {
-            save.posX.Add(toolManager.GetListTile()[i].transform.position.x);
-            save.posY.Add(toolManager.GetListTile()[i].transform.position.y);
+            save.posX.Add(listTile[i].transform.position.x);
+            save.posY.Add(listTile[i].transform.position.y);
         }
 
         BinaryFormatter bf = new BinaryFormatter();

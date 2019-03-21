@@ -47,7 +47,7 @@ public class ItemScrollUI : MonoBehaviour {
         m_fDis = new float[bttnLenght];
 
         m_iBttnDis = (int)Mathf.Abs(m_rtItem[1].GetComponent<RectTransform>().anchoredPosition.x - m_rtItem[0].GetComponent<RectTransform>().anchoredPosition.x);
-        m_scToolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
+        m_scToolManager = ToolManager.GetInstance;
     }
 	
 	// Update is called once per frame

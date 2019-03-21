@@ -1,8 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ToolManager : MonoBehaviour {
+
+    private static ToolManager Instance = null;
+
+    public static ToolManager GetInstance
+    {
+        get
+        {
+            if (Instance == null)
+            {
+                Instance = FindObjectOfType(typeof(ToolManager)) as ToolManager;
+                if (Instance == null)
+                {
+                    Debug.LogError("UIController     생성 실패");
+                }
+            }
+            return Instance;
+        }
+    }
+
+    enum SPEED_LEVEL
+    {
+        LEVEL_ONE,
+        LEVEL_TWO,
+        LEVEL_THREE,
+        LEVEL_NONE
+    }
 
     enum CATEGORY
     {
@@ -20,7 +47,7 @@ public class ToolManager : MonoBehaviour {
     private GameObject goTileManager;
     private GameObject m_goBlockScroll;
     private GameObject m_goItemScroll;
-
+    private TextMeshProUGUI m_textCount; 
 
     [SerializeField]
     private List<GameObject> m_listBlock;
@@ -31,10 +58,14 @@ public class ToolManager : MonoBehaviour {
     [SerializeField]
     private CATEGORY m_eCategory = CATEGORY.BRICK;
 
+    [SerializeField]
+    private SPEED_LEVEL m_eSpeed = SPEED_LEVEL.LEVEL_NONE;
+
     // Use this for initialization
     void Start()
     {
         goTileManager = new GameObject("TileManager");
+        m_textCount = GameObject.Find("CountText").GetComponent<TextMeshProUGUI>();
 
         for (int i = 0; i < 26; ++i)
         {
@@ -91,6 +122,7 @@ public class ToolManager : MonoBehaviour {
                             m_listBlock.Add(goBlock);
                         else
                             m_listBlock.Remove(goBlock);
+                        m_textCount.text = m_listBlock.Count.ToString();
                     }
                     else if (m_eCategory == CATEGORY.ITEM)
                     {
@@ -163,5 +195,36 @@ public class ToolManager : MonoBehaviour {
         m_eCategory = CATEGORY.ITEM;
         m_goBlockScroll.SetActive(false);
         m_goItemScroll.SetActive(true);
+    }
+
+    public void SetLevel(int iLevel)
+    {
+        switch (iLevel)
+        {
+            case 0:
+                m_eSpeed = SPEED_LEVEL.LEVEL_ONE;
+                break;
+            case 1:
+                m_eSpeed = SPEED_LEVEL.LEVEL_TWO;
+                break;
+            case 2:
+                m_eSpeed = SPEED_LEVEL.LEVEL_THREE;
+                break;
+        }
+    }
+
+    public int GetLevel()
+    {
+        switch (m_eSpeed)
+        {
+            case SPEED_LEVEL.LEVEL_ONE:
+                return 1;
+            case SPEED_LEVEL.LEVEL_TWO:
+                return 2;
+            case SPEED_LEVEL.LEVEL_THREE:
+                return 3;
+        }
+
+        return 0;
     }
 }

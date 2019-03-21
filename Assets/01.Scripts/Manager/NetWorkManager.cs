@@ -49,7 +49,8 @@ public class NetWorkManager : MonoBehaviour {
 
     private List<PlayerMap> m_listPlayerMap = new List<PlayerMap>();
     private List<GameObject> m_listFile = new List<GameObject>();
-    
+
+
     public List<PlayerMap> GetListPlayerMap()
     {
         return m_listPlayerMap;
@@ -176,7 +177,7 @@ public class NetWorkManager : MonoBehaviour {
     {
         List<Map> m_listMap = new List<Map>();
 
-        List<GameObject> m_listBlock = GameObject.Find("ToolManager").GetComponent<ToolManager>().GetListBlock();
+        List<GameObject> m_listBlock = ToolManager.GetInstance.GetListBlock();
 
         for (int i = 0; i < m_listBlock.Count; ++i)
         {
@@ -350,7 +351,7 @@ public class NetWorkManager : MonoBehaviour {
     {
         List<Map> m_listMap = new List<Map>();
 
-        List<GameObject> m_listBlock = GameObject.Find("ToolManager").GetComponent<ToolManager>().GetListBlock();
+        List<GameObject> m_listBlock = ToolManager.GetInstance.GetListBlock();
 
         for (int i = 0; i < m_listBlock.Count; ++i)
         {
@@ -403,9 +404,8 @@ public class NetWorkManager : MonoBehaviour {
         else
         {
             Debug.Log("Load Succeed");
-            ToolManager m_toolManager;
 
-            m_toolManager = GameObject.Find("ToolManager").GetComponent<ToolManager>();
+            List<GameObject> listBlock = ToolManager.GetInstance.GetListBlock();
             JsonData mapData = JsonMapper.ToObject(www.downloadHandler.text);
 
             Debug.Log(mapData.ToJson());
@@ -417,7 +417,7 @@ public class NetWorkManager : MonoBehaviour {
                 GameObject goBlock = tile.CreateBlock(int.Parse(mapData["mapData"][i]["blockID"].ToString()));
                 tile.SetItemID(int.Parse(mapData["mapData"][i]["itemID"].ToString()));
 
-                m_toolManager.GetListBlock().Add(goBlock);
+                listBlock.Add(goBlock);
             }
         }
     }
@@ -446,4 +446,5 @@ public class NetWorkManager : MonoBehaviour {
     {
         w_bIsNet = bIsNet;
     }
+
 }
